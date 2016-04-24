@@ -14,8 +14,9 @@ use Hborras\TwitterAdsSDK\TwitterAdsException;
 class LineItem extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/line_items';
-    const RESOURCE = 'accounts/{account_id}/line_items/{id}';
-    const RESOURCE_STATS = 'stats/accounts/{account_id}/line_items/{id}';
+    const RESOURCE            = 'accounts/{account_id}/line_items/{id}';
+
+    const ENTITY = "LINE_ITEM";
 
     /** Read Only */
     protected $id;
@@ -72,7 +73,7 @@ class LineItem extends Analytics
      * current line item.
      *
      * @param string $id
-     * @param array  $params
+     * @param array $params
      *
      * @return Cursor
      *
