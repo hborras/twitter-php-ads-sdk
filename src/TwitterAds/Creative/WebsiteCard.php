@@ -1,0 +1,156 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: hborras
+ * Date: 17/04/16
+ * Time: 22:41.
+ */
+namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
+
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+
+class WebsiteCard extends Resource
+{
+    const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/website';
+    const RESOURCE = 'accounts/{account_id}/cards/website/{id}';
+
+    /** Read Only */
+    protected $id;
+    protected $preview_url;
+    protected $created_at;
+    protected $updated_at;
+    protected $deleted;
+
+    protected $properties = [
+        'name',
+        'website_title',
+        'website_url',
+        'image_media_id',
+    ];
+
+    /** Writable */
+    protected $name;
+    protected $website_title;
+    protected $website_url;
+    protected $image_media_id;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * @param array $properties
+     */
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWebsiteTitle()
+    {
+        return $this->website_title;
+    }
+
+    /**
+     * @param mixed $website_title
+     */
+    public function setWebsiteTitle($website_title)
+    {
+        $this->website_title = $website_title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWebsiteUrl()
+    {
+        return $this->website_url;
+    }
+
+    /**
+     * @param mixed $website_url
+     */
+    public function setWebsiteUrl($website_url)
+    {
+        $this->website_url = $website_url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImageMediaId()
+    {
+        return $this->image_media_id;
+    }
+
+    /**
+     * @param mixed $image_media_id
+     */
+    public function setImageMediaId($image_media_id)
+    {
+        $this->image_media_id = $image_media_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPreviewUrl()
+    {
+        return $this->preview_url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+}

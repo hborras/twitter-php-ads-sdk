@@ -1,0 +1,139 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: hborras
+ * Date: 3/04/16
+ * Time: 11:59.
+ */
+namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
+
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+
+class PromotedAccount extends Resource
+{
+    const RESOURCE_COLLECTION = 'accounts/{account_id}/promoted_accounts';
+    const RESOURCE = 'accounts/{account_id}/promoted_accounts/{id}';
+    const RESOURCE_STATS = 'stats/accounts/{account_id}/promoted_accounts/{id}';
+
+    /** Read Only */
+    protected $id;
+    protected $approval_status;
+    protected $created_at;
+    protected $updated_at;
+    protected $deleted;
+
+    protected $properties = [
+        'line_item_id',
+        'user_id',
+        'paused',
+    ];
+
+    /** Writable */
+    protected $line_item_id;
+    protected $user_id;
+    protected $paused;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApprovalStatus()
+    {
+        return $this->approval_status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLineItemId()
+    {
+        return $this->line_item_id;
+    }
+
+    /**
+     * @param mixed $line_item_id
+     */
+    public function setLineItemId($line_item_id)
+    {
+        $this->line_item_id = $line_item_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param mixed $user_id
+     */
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaused()
+    {
+        return $this->paused;
+    }
+
+    /**
+     * @param mixed $paused
+     */
+    public function setPaused($paused)
+    {
+        $this->paused = $paused;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * @param array $properties
+     */
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
+    }
+}
