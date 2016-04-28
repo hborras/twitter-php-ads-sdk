@@ -13,16 +13,17 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
+use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 class Account extends Resource
 {
-    const RESOURCE_REPLACE = '{account_id}';
-    const RESOURCE_COLLECTION = 'accounts';
-    const RESOURCE = 'accounts/{account_id}';
-    const FEATURES = 'accounts/{account_id}/features';
-    const APP_LISTS = 'accounts/{account_id}/app_lists';
-    const SCOPED_TIMELINE = 'accounts/{account_id}/scoped_timeline';
+    const RESOURCE_REPLACE          = '{account_id}';
+    const RESOURCE_COLLECTION       = 'accounts';
+    const RESOURCE                  = 'accounts/{account_id}';
+    const FEATURES                  = 'accounts/{account_id}/features';
+    const APP_LISTS                 = 'accounts/{account_id}/app_lists';
+    const SCOPED_TIMELINE           = 'accounts/{account_id}/scoped_timeline';
     const AUTHENTICATED_USER_ACCESS = 'accounts/{account_id}/authenticated_user_access';
 
     private $twitterAds;
@@ -39,6 +40,7 @@ class Account extends Resource
 
     public function __construct(TwitterAds $twitterAds)
     {
+        parent::__construct();
         $this->twitterAds = $twitterAds;
     }
 
@@ -47,7 +49,7 @@ class Account extends Resource
      *
      * @return Cursor
      */
-    public function all($params = array())
+    public function all($params = [])
     {
         $resource = self::RESOURCE_COLLECTION;
         $request = $this->twitterAds->get($resource, $params);
@@ -63,7 +65,7 @@ class Account extends Resource
      *
      * @return $this
      */
-    public function load($id, $params = array())
+    public function load($id, $params = [])
     {
         $resource = str_replace(self::RESOURCE_REPLACE, $id, self::RESOURCE);
         $request = $this->twitterAds->get($resource, $params);
@@ -78,7 +80,7 @@ class Account extends Resource
      *
      * @return $this
      */
-    public function reload($params = array())
+    public function reload($params = [])
     {
         if ($this->getId() == '') {
             return $this;
@@ -117,7 +119,7 @@ class Account extends Resource
      * @param array $params
      * @return PromotableUser|Cursor
      */
-    public function getPromotableUsers($id = '', $params = array())
+    public function getPromotableUsers($id = '', $params = [])
     {
         $promotableUserClass = new PromotableUser();
 
@@ -132,9 +134,10 @@ class Account extends Resource
      * @param array $params
      * @return FundingInstrument|Cursor
      */
-    public function getFundingInstruments($id = '', $params = array())
+    public function getFundingInstruments($id = '', $params = [])
     {
         $fundingInstrumentClass = new FundingInstrument();
+
         return $fundingInstrumentClass->loadResource($this, $id, $params);
     }
 
@@ -146,7 +149,7 @@ class Account extends Resource
      * @param array $params
      * @return Campaign|Cursor
      */
-    public function getCampaigns($id = '', $params = array())
+    public function getCampaigns($id = '', $params = [])
     {
         $campaignClass = new Campaign();
 
@@ -161,7 +164,7 @@ class Account extends Resource
      * @param array $params
      * @return LineItem|Cursor
      */
-    public function getLineItems($id = '', $params = array())
+    public function getLineItems($id = '', $params = [])
     {
         $lineItemsClass = new LineItem();
 
@@ -176,21 +179,34 @@ class Account extends Resource
      * @param array $params
      * @return AppList|Cursor
      */
-    public function getAppLists($id = '', $params = array())
+    public function getAppLists($id = '', $params = [])
     {
         $appListsClass = new AppList();
 
         return $appListsClass->loadResource($this, $id, $params);
     }
 
-    public function getTailoredAudiences()
+
+    public function getTailoredAudiences($id = '',  $params = [])
     {
-        //TODO: In the future
+        // TODO: Finish this
+        /*$tailoredAudiencesClass = new TailoredAudience();
+
+        return $tailoredAudiencesClass->loadResource($this, $id, $params);*/
     }
 
-    public function getVideos()
+    /**
+     * Returns a collection of videos available to the current account.
+     *
+     * @param string $id
+     * @param array $params
+     * @return Cursor|Video
+     */
+    public function getVideos($id = '', $params = [])
     {
-        //TODO: In the future
+        $videoClass = new Video();
+
+        return $videoClass->loadResource($this, $id, $params);
     }
 
     /**

@@ -43,7 +43,7 @@ abstract class Resource
      *
      * @return Cursor
      */
-    public function all($params = array())
+    public function all($params = [])
     {
         $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE_COLLECTION);
         $request = $this->account->getTwitterAds()->get($resource, $params);
@@ -143,7 +143,7 @@ abstract class Resource
         }
     }
 
-    public function loadResource(Account $account, $id = '', $params = array())
+    public function loadResource(Account $account, $id = '', $params = [])
     {
         $this->setAccount($account);
         $account->validateLoaded();

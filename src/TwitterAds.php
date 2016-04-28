@@ -341,7 +341,6 @@ class TwitterAds extends Config
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
 
         if ($this->getLastHttpCode() > 399) {
-            //throw new TwitterAdsException();
             // TODO: Finish Exception Management
             switch ($this->getLastHttpCode()) {
                 case 400:

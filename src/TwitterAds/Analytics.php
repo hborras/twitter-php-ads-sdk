@@ -26,13 +26,13 @@ class Analytics extends Resource
      * @param $metricGroups
      * @param $params
      */
-    public function stats($metricGroups, $params = array())
+    public function stats($metricGroups, $params = [])
     {
         return $this->all_stats($this->getAccount(), [$this->getId()], $metricGroups, $params);
     }
 
 
-    public static function all_stats(Account $account, $ids, $metricGroups, $params = array())
+    public static function all_stats(Account $account, $ids, $metricGroups, $params = [])
     {
         $endTime = isset($params['end_time']) ? $params['end_time'] : new \DateTime('now');
         $endTime->setTime($endTime->format('H'), 0, 0);
