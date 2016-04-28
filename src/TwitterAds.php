@@ -6,6 +6,7 @@
  */
 namespace Hborras\TwitterAdsSDK;
 
+use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\Util\JsonDecoder;
@@ -17,12 +18,12 @@ use Hborras\TwitterAdsSDK\Util\JsonDecoder;
  */
 class TwitterAds extends Config
 {
-    const API_VERSION = '1';
-    const API_HOST = 'https://ads-api.twitter.com';
+    const API_VERSION      = '1';
+    const API_HOST         = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
-    const API_HOST_OAUTH = 'https://api.twitter.com';
-    const UPLOAD_HOST = 'https://upload.twitter.com';
-    const UPLOAD_CHUNK = 40960; // 1024 * 40
+    const API_HOST_OAUTH   = 'https://api.twitter.com';
+    const UPLOAD_HOST      = 'https://upload.twitter.com';
+    const UPLOAD_CHUNK     = 40960; // 1024 * 40
 
     /** @var  string Method used for the request */
     private $method;
@@ -44,11 +45,11 @@ class TwitterAds extends Config
     /**
      * Constructor.
      *
-     * @param string      $consumerKey      The Application Consumer Key
-     * @param string      $consumerSecret   The Application Consumer Secret
-     * @param string|null $oauthToken       The Client Token (optional)
+     * @param string $consumerKey The Application Consumer Key
+     * @param string $consumerSecret The Application Consumer Secret
+     * @param string|null $oauthToken The Client Token (optional)
      * @param string|null $oauthTokenSecret The Client Token Secret (optional)
-     * @param bool        $sandbox          The Sandbox environment (optional)
+     * @param bool $sandbox The Sandbox environment (optional)
      */
     public function __construct($consumerKey, $consumerSecret, $oauthToken = null, $oauthTokenSecret = null, $sandbox = false)
     {
@@ -129,7 +130,7 @@ class TwitterAds extends Config
      * Make URLs for user browser navigation.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return string
      */
@@ -146,11 +147,9 @@ class TwitterAds extends Config
      * Make /oauth/* requests to the API.
      *
      * @param string $path
-     * @param array  $parameters
-     *
+     * @param array $parameters
      * @return array
-     *
-     * @throws TwitterAdsException
+     * @throws Exception
      */
     public function oauth($path, array $parameters = [])
     {
@@ -161,7 +160,7 @@ class TwitterAds extends Config
         $result = $this->oAuthRequest($url, 'POST', $parameters);
 
         if ($this->getLastHttpCode() != 200) {
-            throw new TwitterAdsException($result);
+            throw new Exception($result);
         }
 
         parse_str($result, $response);
@@ -174,7 +173,7 @@ class TwitterAds extends Config
      * Make /oauth2/* requests to the API.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
@@ -202,7 +201,7 @@ class TwitterAds extends Config
      * Make GET requests to the API.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
@@ -215,7 +214,7 @@ class TwitterAds extends Config
      * Make POST requests to the API.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
@@ -228,7 +227,7 @@ class TwitterAds extends Config
      * Make DELETE requests to the API.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
@@ -241,7 +240,7 @@ class TwitterAds extends Config
      * Make PUT requests to the API.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
@@ -254,8 +253,8 @@ class TwitterAds extends Config
      * Upload media to upload.twitter.com.
      *
      * @param string $path
-     * @param array  $parameters
-     * @param bool   $chunked
+     * @param array $parameters
+     * @param bool $chunked
      *
      * @return array|object
      */
@@ -272,7 +271,7 @@ class TwitterAds extends Config
      * Private method to upload media (not chunked) to upload.twitter.com.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
@@ -289,35 +288,50 @@ class TwitterAds extends Config
      * Private method to upload media (chunked) to upload.twitter.com.
      *
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
     private function uploadMediaChunked($path, $parameters)
     {
         // Init
-        $init = $this->http('POST', self::UPLOAD_HOST, $path, [
-            'command' => 'INIT',
-            'media_type' => $parameters['media_type'],
-            'total_bytes' => filesize($parameters['media']),
-        ]);
+        $init = $this->http(
+            'POST',
+            self::UPLOAD_HOST,
+            $path,
+            [
+                'command' => 'INIT',
+                'media_type' => $parameters['media_type'],
+                'total_bytes' => filesize($parameters['media']),
+            ]
+        );
         // Append
         $segment_index = 0;
         $media = fopen($parameters['media'], 'rb');
         while (!feof($media)) {
-            $this->http('POST', self::UPLOAD_HOST, 'media/upload', [
-                'command' => 'APPEND',
-                'media_id' => $init->media_id_string,
-                'segment_index' => $segment_index++,
-                'media_data' => base64_encode(fread($media, self::UPLOAD_CHUNK)),
-            ]);
+            $this->http(
+                'POST',
+                self::UPLOAD_HOST,
+                'media/upload',
+                [
+                    'command' => 'APPEND',
+                    'media_id' => $init->media_id_string,
+                    'segment_index' => $segment_index++,
+                    'media_data' => base64_encode(fread($media, self::UPLOAD_CHUNK)),
+                ]
+            );
         }
         fclose($media);
         // Finalize
-        $finalize = $this->http('POST', self::UPLOAD_HOST, 'media/upload', [
-            'command' => 'FINALIZE',
-            'media_id' => $init->media_id_string,
-        ]);
+        $finalize = $this->http(
+            'POST',
+            self::UPLOAD_HOST,
+            'media/upload',
+            [
+                'command' => 'FINALIZE',
+                'media_id' => $init->media_id_string,
+            ]
+        );
 
         return $finalize;
     }
@@ -326,7 +340,7 @@ class TwitterAds extends Config
      * @param string $method
      * @param string $host
      * @param string $path
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return array|object
      */
@@ -339,32 +353,37 @@ class TwitterAds extends Config
         $this->response->setApiPath($path);
         $result = $this->oAuthRequest($url, $method, $parameters);
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
-
+        $this->response->setBody($response);
         if ($this->getLastHttpCode() > 399) {
             // TODO: Finish Exception Management
             switch ($this->getLastHttpCode()) {
                 case 400:
+                    throw new BadRequest($response->errors);
                     break;
                 case 401:
+                    throw new NotAuthorized($response->errors);
                     break;
                 case 403:
+                    throw new Forbidden($response->errors);
                     break;
                 case 404:
+                    throw new NotFound($response->errors);
                     break;
                 case 429:
+                    throw new RateLimit($response->errors, $this->response->getsHeaders());
                     break;
                 case 500:
+                    throw new ServerError($response->errors);
                     break;
                 case 503:
+                    throw new ServiceUnavailable($response->errors, $this->response->getsHeaders());
+                    break;
+                default:
+                    throw new ServerError($response->errors);
                     break;
             }
-            if ($response->errors) {
-                foreach ($response->errors as $error) {
-                    var_dump($error);
-                }
-            }
         }
-        $this->response->setBody($response);
+
 
         return $response;
     }
@@ -374,7 +393,7 @@ class TwitterAds extends Config
      *
      * @param string $url
      * @param string $method
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return string
      *
@@ -403,7 +422,7 @@ class TwitterAds extends Config
      * @param string $url
      * @param string $method
      * @param string $authorization
-     * @param array  $postfields
+     * @param array $postfields
      *
      * @return string
      *
