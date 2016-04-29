@@ -1,5 +1,5 @@
-Getting Started |Build Status| |Scrutinizer Status| | Issues | | Tweet |
-------------------------------------------------------------------------
+Getting Started |Build Status| |Scrutinizer Status|
+---------------------------------------------------
 
 Installation
 ''''''''''''
