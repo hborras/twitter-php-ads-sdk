@@ -196,7 +196,7 @@ abstract class Resource
     /**
      * @param Account $account
      */
-    public function setAccount($account)
+    public function setAccount($account = null)
     {
         $this->account = $account;
     }

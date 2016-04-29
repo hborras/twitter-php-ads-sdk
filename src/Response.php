@@ -39,7 +39,7 @@ class Response
     /**
      * @param array|object $body
      */
-    public function setBody($body)
+    public function setBody($body = null)
     {
         $this->body = $body;
     }

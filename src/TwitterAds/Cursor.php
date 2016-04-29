@@ -10,7 +10,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds;
 class Cursor
 {
     private $account;
-    /** @var resource  */
+    /** @var Resource  */
     private $resource;
     private $params;
     private $next_cursor = null;
@@ -61,7 +61,7 @@ class Cursor
     }
 
     /**
-     * @return Resource
+     * @return Resource | 0
      */
     public function next()
     {
@@ -82,9 +82,10 @@ class Cursor
     }
 
     /**
+     * @param array $params
      * @return Cursor
      */
-    public function fetchNext()
+    public function fetchNext($params = [])
     {
         $params['cursor'] = $this->next_cursor;
         switch ($this->account->getTwitterAds()->getMethod()) {

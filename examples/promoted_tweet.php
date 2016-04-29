@@ -1,6 +1,8 @@
 <?php
 
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Tweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\WebsiteCard;
@@ -19,7 +21,9 @@ $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS
 // load up the account instance, campaign and line item
 /** @var Account $account */
 $account = $twitterAds->getAccounts(ACCOUNT_ID);
+/** @var Campaign $campaign */
 $campaign = $account->getCampaigns()->first();
+/** @var LineItem $lineItem */
 $lineItem = $account->getLineItems(null, ['campaign_ids' => $campaign->getId()])->next();
 
 // create request for a simple nullcasted tweet

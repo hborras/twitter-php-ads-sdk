@@ -185,6 +185,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTargetingCriterias($lineItem)
     {
+        /** @var Cursor $cursor */
         $cursor = $lineItem->getTargetingCriteria();
         $this->assertInstanceOf(Cursor::class, $cursor);
         return $cursor;
