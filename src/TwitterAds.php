@@ -363,29 +363,21 @@ class TwitterAds extends Config
         if ($this->getLastHttpCode() > 399) {
             switch ($this->getLastHttpCode()) {
                 case 400:
-                    throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, $response->errors);
-                    break;
+                    throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $response->errors);
                 case 401:
-                    throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, $response->errors);
-                    break;
+                    throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, null, $response->errors);
                 case 403:
-                    throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, $response->errors);
-                    break;
+                    throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, null, $response->errors);
                 case 404:
-                    throw new NotFound(TwitterAdsException::NOT_FOUND, 404, $response->errors);
-                    break;
+                    throw new NotFound(TwitterAdsException::NOT_FOUND, 404, null, $response->errors);
                 case 429:
-                    throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, $response->errors, $this->response->getsHeaders());
-                    break;
+                    throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, null, $response->errors, $this->response->getsHeaders());
                 case 500:
-                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, $response->errors);
-                    break;
+                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
                 case 503:
-                    throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, $response->errors, $this->response->getsHeaders());
-                    break;
+                    throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $response->errors, $this->response->getsHeaders());
                 default:
-                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, $response->errors);
-                    break;
+                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
             }
         }
 
