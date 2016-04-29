@@ -341,7 +341,7 @@ class TwitterAds extends Config
      * @param string $host
      * @param string $path
      * @param array $parameters
-     * @return array|object
+     * @return resource
      * @throws BadRequest
      * @throws Forbidden
      * @throws NotAuthorized
@@ -537,7 +537,7 @@ class TwitterAds extends Config
     /**
      * Return current response. Allows inheritance.
      *
-     * @return string
+     * @return Response
      */
     public function getResponse()
     {

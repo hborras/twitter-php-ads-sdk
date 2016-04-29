@@ -15,7 +15,7 @@ const ACCESS_TOKEN_SECRET = 'your access token secret';
 const ACCOUNT_ID = 'account id';
 
 // Create twitter ads client
-$twitterAds = new TwitterAds(CONSUMER_KEY,CONSUMER_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET);
+$twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 // Retrieve account information
 $account = $twitterAds->getAccounts(ACCOUNT_ID);
