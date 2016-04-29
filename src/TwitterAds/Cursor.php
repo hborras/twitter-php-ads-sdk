@@ -37,7 +37,7 @@ class Cursor
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function count()
     {

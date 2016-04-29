@@ -2,13 +2,7 @@
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\TargetingCriteria;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Tweet;
-use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
-use Hborras\TwitterAdsSDK\TwitterAds\Creative\WebsiteCard;
-use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
 
 require '../autoload.php';
 
@@ -37,7 +31,7 @@ $stats = $lineItem->stats($metrics);
 
 // Fetching stats for multiple line items
 $ids = array_map(
-    function ($o) {
+    function($o) {
         return $o->getId();
     },
     $lineItems->getCollection()

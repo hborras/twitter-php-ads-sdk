@@ -55,10 +55,10 @@ abstract class Resource
     /**
      * Returns an object instance for a given resource.
      *
-     * @param $id
+     * @param string $id
      * @param $params
      *
-     * @return resource
+     * @return Resource
      */
     public function load($id, $params = [])
     {
@@ -74,7 +74,7 @@ abstract class Resource
      *
      * @param $params
      *
-     * @return resource
+     * @return Resource
      *
      * @throws TwitterAdsException
      */
