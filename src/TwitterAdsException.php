@@ -36,33 +36,33 @@ class TwitterAdsException extends \Exception
 
 class BadRequest extends TwitterAdsException
 {
-    public function __construct($errors)
+    public function __construct($message, $code, Exception $previous = null, $errors)
     {
-        parent::__construct(TwitterAdsException::BAD_REQUEST, 400, null, $errors);
+        parent::__construct($message, $code, null, $errors);
     }
 }
 
 class NotAuthorized extends TwitterAdsException
 {
-    public function __construct($errors)
+    public function __construct($message, $code, Exception $previous = null, $errors)
     {
-        parent::__construct(TwitterAdsException::NOT_AUTHORIZED, 401, null, $errors);
+        parent::__construct($message, $code, null, $errors);
     }
 }
 
 class Forbidden extends TwitterAdsException
 {
-    public function __construct($errors)
+    public function __construct($message, $code, Exception $previous = null, $errors)
     {
-        parent::__construct(TwitterAdsException::FORBIDDEN, 403, null, $errors);
+        parent::__construct($message, $code, null, $errors);
     }
 }
 
 class NotFound extends TwitterAdsException
 {
-    public function __construct($errors)
+    public function __construct($message, $code, Exception $previous = null, $errors)
     {
-        parent::__construct(TwitterAdsException::NOT_FOUND, 404, null, $errors);
+        parent::__construct($message, $code, null, $errors);
     }
 }
 
@@ -71,9 +71,9 @@ class RateLimit extends TwitterAdsException
     private $retryAfter;
     private $resetAt;
 
-    public function __construct($errors, $headers)
+    public function __construct($message, $code, Exception $previous = null, $errors, $headers)
     {
-        parent::__construct(TwitterAdsException::RATE_LIMIT, 429, null, $errors);
+        parent::__construct($message, $code, null, $errors);
         $this->retryAfter = $headers['retry-after'];
         $this->resetAt = $headers['rate_limit_reset'];
     }
@@ -97,9 +97,9 @@ class RateLimit extends TwitterAdsException
 
 class ServerError extends TwitterAdsException
 {
-    public function __construct($errors)
+    public function __construct($message, $code, Exception $previous = null, $errors)
     {
-        parent::__construct(TwitterAdsException::SERVER_ERROR, 500, null, $errors);
+        parent::__construct($message, $code, null, $errors);
     }
 }
 
@@ -107,9 +107,9 @@ class ServiceUnavailable extends TwitterAdsException
 {
     private $retryAfter;
 
-    public function __construct($errors, $headers)
+    public function __construct($message, $code, Exception $previous = null, $errors, $headers)
     {
-        parent::__construct(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $errors);
+        parent::__construct($message, $code, null, $errors);
         $this->retryAfter = $headers['retry-after'];
     }
 

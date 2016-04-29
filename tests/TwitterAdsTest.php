@@ -107,19 +107,4 @@ class TwitterAdsTest extends \PHPUnit_Framework_TestCase
         $url = $this->twitter->url('oauth/authorize', array('foo' => 'bar', 'baz' => 'qux'));
         $this->assertEquals('https://api.twitter.com/oauth/authorize?foo=bar&baz=qux', $url);
     }
-
-    // BUG: testing is too unreliable for now
-    // public function testSetProxy()
-    // {
-    //     $this->twitter->setProxy(array(
-    //         'CURLOPT_PROXY' => PROXY,
-    //         'CURLOPT_PROXYUSERPWD' => PROXYUSERPWD,
-    //         'CURLOPT_PROXYPORT' => PROXYPORT,
-    //     ));
-    //     $this->twitter->setTimeouts(60, 60);
-    //     $result = $this->twitter->get('account/verify_credentials');
-    //     $this->assertEquals(200, $this->twitter->getLastHttpCode());
-    //     $this->assertObjectHasAttribute('id', $result);
-    // }
-
 }

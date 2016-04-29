@@ -3,6 +3,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 use DateTime;
+use Hborras\TwitterAdsSDK\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 /**
@@ -80,7 +81,7 @@ abstract class Resource
     public function reload($params)
     {
         if (!$this->getId()) {
-            throw new TwitterAdsException();
+            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
         }
 
         $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
@@ -139,7 +140,7 @@ abstract class Resource
     public function validateLoaded()
     {
         if (!$this->getId()) {
-            throw new TwitterAdsException();
+            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
         }
     }
 

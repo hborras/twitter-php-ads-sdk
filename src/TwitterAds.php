@@ -160,7 +160,7 @@ class TwitterAds extends Config
         $result = $this->oAuthRequest($url, 'POST', $parameters);
 
         if ($this->getLastHttpCode() != 200) {
-            throw new Exception($result);
+            throw new TwitterAdsException($result, 500, null, $result);
         }
 
         parse_str($result, $response);
@@ -341,8 +341,14 @@ class TwitterAds extends Config
      * @param string $host
      * @param string $path
      * @param array $parameters
-     *
      * @return array|object
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
      */
     private function http($method, $host, $path, array $parameters)
     {
@@ -355,35 +361,33 @@ class TwitterAds extends Config
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
         if ($this->getLastHttpCode() > 399) {
-            // TODO: Finish Exception Management
             switch ($this->getLastHttpCode()) {
                 case 400:
-                    throw new BadRequest($response->errors);
+                    throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, $response->errors);
                     break;
                 case 401:
-                    throw new NotAuthorized($response->errors);
+                    throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, $response->errors);
                     break;
                 case 403:
-                    throw new Forbidden($response->errors);
+                    throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, $response->errors);
                     break;
                 case 404:
-                    throw new NotFound($response->errors);
+                    throw new NotFound(TwitterAdsException::NOT_FOUND, 404, $response->errors);
                     break;
                 case 429:
-                    throw new RateLimit($response->errors, $this->response->getsHeaders());
+                    throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, $response->errors, $this->response->getsHeaders());
                     break;
                 case 500:
-                    throw new ServerError($response->errors);
+                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, $response->errors);
                     break;
                 case 503:
-                    throw new ServiceUnavailable($response->errors, $this->response->getsHeaders());
+                    throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, $response->errors, $this->response->getsHeaders());
                     break;
                 default:
-                    throw new ServerError($response->errors);
+                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, $response->errors);
                     break;
             }
         }
-
 
         return $response;
     }
@@ -479,7 +483,7 @@ class TwitterAds extends Config
 
         // Throw exceptions on cURL errors.
         if (curl_errno($curlHandle) > 0) {
-            throw new TwitterAdsException(curl_error($curlHandle), curl_errno($curlHandle));
+            throw new TwitterAdsException(curl_error($curlHandle), curl_errno($curlHandle), null, null);
         }
 
         $this->response->setHttpCode(curl_getinfo($curlHandle, CURLINFO_HTTP_CODE));

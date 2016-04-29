@@ -189,10 +189,7 @@ class Account extends Resource
 
     public function getTailoredAudiences($id = '',  $params = [])
     {
-        // TODO: Finish this
-        /*$tailoredAudiencesClass = new TailoredAudience();
-
-        return $tailoredAudiencesClass->loadResource($this, $id, $params);*/
+        // TODO: Next Release
     }
 
     /**
