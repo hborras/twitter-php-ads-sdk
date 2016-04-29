@@ -9,6 +9,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 class LineItem extends Analytics
@@ -75,7 +76,7 @@ class LineItem extends Analytics
      * @param string $id
      * @param array $params
      *
-     * @return Cursor
+     * @return Cursor | Resource
      *
      * @throws TwitterAdsException
      */
