@@ -361,27 +361,41 @@ class TwitterAds extends Config
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
         if ($this->getLastHttpCode() > 399) {
-            switch ($this->getLastHttpCode()) {
-                case 400:
-                    throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $response->errors);
-                case 401:
-                    throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, null, $response->errors);
-                case 403:
-                    throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, null, $response->errors);
-                case 404:
-                    throw new NotFound(TwitterAdsException::NOT_FOUND, 404, null, $response->errors);
-                case 429:
-                    throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, null, $response->errors, $this->response->getsHeaders());
-                case 500:
-                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
-                case 503:
-                    throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $response->errors, $this->response->getsHeaders());
-                default:
-                    throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
-            }
+            $this->manageErrors($response);
         }
 
         return $response;
+    }
+
+    /**
+     * @param $response
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     */
+    private function manageErrors($response){
+        switch ($this->getLastHttpCode()) {
+            case 400:
+                throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $response->errors);
+            case 401:
+                throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, null, $response->errors);
+            case 403:
+                throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, null, $response->errors);
+            case 404:
+                throw new NotFound(TwitterAdsException::NOT_FOUND, 404, null, $response->errors);
+            case 429:
+                throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, null, $response->errors, $this->response->getsHeaders());
+            case 500:
+                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
+            case 503:
+                throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $response->errors, $this->response->getsHeaders());
+            default:
+                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
+        }
     }
 
     /**
