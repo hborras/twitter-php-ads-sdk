@@ -43,7 +43,7 @@ class TargetingCriteria extends Resource
      *
      * @return Cursor
      */
-    public function all($line_item_id, $params = [])
+    public function line_item_all($line_item_id, $params = [])
     {
         $params['line_item_id'] = $line_item_id;
 

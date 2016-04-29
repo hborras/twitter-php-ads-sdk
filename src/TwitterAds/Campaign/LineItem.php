@@ -86,7 +86,7 @@ class LineItem extends Analytics
 
         $this->validateLoaded();
         if ($id == '') {
-            $cursor = $targetingCriteria->all($this->getId(), $params);
+            $cursor = $targetingCriteria->line_item_all($this->getId(), $params);
         } else {
             $cursor = $targetingCriteria->load($id, $params);
         }
