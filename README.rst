@@ -82,7 +82,3 @@ SOFTWARE.
    :target: https://travis-ci.org/hborras/twitter-php-ads-sdk
 .. |Scrutinizer Status| image:: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk/badges/quality-score.png?b=master
    :target: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk
-.. | Issues | image:: https://img.shields.io/github/issues/hborras/twitter-php-ads-sdk.svg
-   :target: https://github.com/hborras/twitter-php-ads-sdk/issues
-.. |Tweet| image:: https://img.shields.io/twitter/url/https/github.com/hborras/twitter-php-ads-sdk.svg?style=social
-   :target: https://twitter.com/intent/tweet?text=Let's try this library for your Twitter Ads API Integration #php:&url=https://github.com/hborras/twitter-php-ads-sdk
