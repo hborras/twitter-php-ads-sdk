@@ -60,7 +60,7 @@ class Account extends Resource
     /**
      * Returns an object instance for a given resource.
      *
-     * @param $id
+     * @param string $id
      * @param array $params
      *
      * @return $this
@@ -187,7 +187,7 @@ class Account extends Resource
     }
 
 
-    public function getTailoredAudiences($id = '',  $params = [])
+    public function getTailoredAudiences($id = '', $params = [])
     {
         // TODO: Next Release
     }
