@@ -13,7 +13,7 @@
     ],
     "support": {
         "source": "https://github.com/hborras/twitter-php-ads-sdk",
-        "issues": "hhttps://github.com/hborras/twitter-php-ads-sdk/issues"
+        "issues": "https://github.com/hborras/twitter-php-ads-sdk/issues"
     },
     "require": {
         "php": ">=5.5.0",
