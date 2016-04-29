@@ -17,6 +17,7 @@ const ACCOUNT_ID = 'account id';
 $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 // load up the account instance, campaign and line item
+/** @var Account $account */
 $account = $twitterAds->getAccounts(ACCOUNT_ID);
 $campaign = $account->getCampaigns()->first();
 $lineItem = $account->getLineItems(null, ['campaign_ids' => $campaign->getId()])->next();
