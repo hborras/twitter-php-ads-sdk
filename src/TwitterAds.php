@@ -8,7 +8,15 @@ namespace Hborras\TwitterAdsSDK;
 
 use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
 use Hborras\TwitterAdsSDK\Util\JsonDecoder;
 
 /**
@@ -377,7 +385,7 @@ class TwitterAds extends Config
      * @throws ServerError
      * @throws ServiceUnavailable
      */
-    private function manageErrors($response){
+    public function manageErrors($response){
         switch ($this->getLastHttpCode()) {
             case 400:
                 throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $response->errors);

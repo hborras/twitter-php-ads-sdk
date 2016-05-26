@@ -4,6 +4,7 @@
  */
 namespace Hborras\TwitterAdsSDK\Test;
 
+use Hborras\TwitterAdsSDK\Response;
 use Hborras\TwitterAdsSDK\TwitterAds;
 
 class TwitterAdsTest extends \PHPUnit_Framework_TestCase
