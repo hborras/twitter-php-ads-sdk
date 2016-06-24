@@ -229,25 +229,6 @@ class Account extends Resource
     }
 
     /**
-     * Converts this object to a functional array of attributes
-     *
-     * @return array
-    public function toArray()
-    {
-        return [
-            'id'                    => $this->getId(),
-            'salt'                  => $this->getSalt(),
-            'timezone'              => $this->getTimezone(),
-            'timezone_switch_at'    => $this->getTimezoneSwitchAt(),
-            'created_at'            => $this->getCreatedAt(),
-            'updated_at'            => $this->getUpdatedAt(),
-            'deleted'               => $this->getDeleted(),
-            'approval_status'       => $this->getApprovalStatus(),
-        ];
-    }
-     */
-
-    /**
      * @return string
      */
     public function getId()
