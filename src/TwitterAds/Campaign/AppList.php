@@ -37,6 +37,16 @@ class AppList extends Resource
         return $this->fromResponse($request->data);
     }
 
+    public function toArray()
+    {
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'apps'          => $this->getApps(),
+            'properties'    => $this->getProperties(),
+        ];
+    }
+
     /**
      * @return mixed
      */

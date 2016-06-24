@@ -30,13 +30,15 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     {
         $types = [
             'id'                    => function($v) { return is_string($v); },
+            'name'                  => function($v) { return is_string($v); },
             'salt'                  => function($v) { return is_string($v); },
             'timezone'              => function($v) { return is_string($v); },
-            'timezone_switch_at'    => function($v) { return $v instanceof \DateTimeImmutable; },
-            'created_at'            => function($v) { return $v instanceof \DateTimeImmutable; },
-            'updated_at'            => function($v) { return $v instanceof \DateTimeImmutable; },
+            'timezone_switch_at'    => function($v) { return $v instanceof \DateTimeInterface; },
+            'created_at'            => function($v) { return $v instanceof \DateTimeInterface; },
+            'updated_at'            => function($v) { return $v instanceof \DateTimeInterface; },
             'deleted'               => function($v) { return is_bool($v); },
             'approval_status'       => function($v) { return is_string($v); },
+            'properties'            => function($v) { return is_array($v); },
         ];
         $accounts = $this->twitter->getAccounts();
 

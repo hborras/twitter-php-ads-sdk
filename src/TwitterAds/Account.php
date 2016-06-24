@@ -232,7 +232,6 @@ class Account extends Resource
      * Converts this object to a functional array of attributes
      *
      * @return array
-     */
     public function toArray()
     {
         return [
@@ -246,6 +245,7 @@ class Account extends Resource
             'approval_status'       => $this->getApprovalStatus(),
         ];
     }
+     */
 
     /**
      * @return string
