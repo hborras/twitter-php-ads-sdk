@@ -257,7 +257,7 @@ class Account extends Resource
      */
     public function getTimezoneSwitchAt()
     {
-        return $this->convertDateTime($this->timezone_switch_at);
+        return $this->timezone_switch_at;
     }
 
     /**
@@ -265,7 +265,7 @@ class Account extends Resource
      */
     public function getCreatedAt()
     {
-        return $this->convertDateTime($this->created_at);
+        return $this->created_at;
     }
 
     /**
@@ -273,7 +273,7 @@ class Account extends Resource
      */
     public function getUpdatedAt()
     {
-        return $this->convertDateTime($this->updated_at);
+        return $this->updated_at;
     }
 
     /**
@@ -306,14 +306,5 @@ class Account extends Resource
     public function getName()
     {
         return $this->name;
-    }
-
-    private function convertDateTime($date)
-    {
-        if ($date instanceof \DateTimeImmutable) {
-            return $date;
-        }
-
-        return $this->toDateTimeImmutable($date);
     }
 }
