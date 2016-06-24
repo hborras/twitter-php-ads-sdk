@@ -18,6 +18,7 @@ use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 class Account extends Resource
 {
+
     const RESOURCE_REPLACE          = '{account_id}';
     const RESOURCE_COLLECTION       = 'accounts';
     const RESOURCE                  = 'accounts/{account_id}';
@@ -228,6 +229,25 @@ class Account extends Resource
     }
 
     /**
+     * Converts this object to a functional array of attributes
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id'                    => $this->getId(),
+            'salt'                  => $this->getSalt(),
+            'timezone'              => $this->getTimezone(),
+            'timezone_switch_at'    => $this->getTimezoneSwitchAt(),
+            'created_at'            => $this->getCreatedAt(),
+            'updated_at'            => $this->getUpdatedAt(),
+            'deleted'               => $this->getDeleted(),
+            'approval_status'       => $this->getApprovalStatus(),
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getId()
@@ -252,27 +272,27 @@ class Account extends Resource
     }
 
     /**
-     * @return mixed
+     * @return \DateTimeImmutable
      */
     public function getTimezoneSwitchAt()
     {
-        return $this->timezone_switch_at;
+        return $this->convertDateTime($this->timezone_switch_at);
     }
 
     /**
-     * @return mixed
+     * @return \DateTimeImmutable
      */
     public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->convertDateTime($this->created_at);
     }
 
     /**
-     * @return mixed
+     * @return \DateTimeImmutable
      */
     public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->convertDateTime($this->updated_at);
     }
 
     /**
@@ -280,7 +300,7 @@ class Account extends Resource
      */
     public function getDeleted()
     {
-        return $this->deleted;
+        return filter_var($this->deleted, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -305,5 +325,14 @@ class Account extends Resource
     public function getName()
     {
         return $this->name;
+    }
+
+    private function convertDateTime($date)
+    {
+        if ($date instanceof \DateTimeImmutable) {
+            return $date;
+        }
+
+        return $this->toDateTimeImmutable($date);
     }
 }
