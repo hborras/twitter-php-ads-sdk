@@ -7,7 +7,7 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-class Cursor
+class Cursor implements \IteratorAggregate
 {
     private $account;
     /** @var Resource  */
@@ -134,6 +134,14 @@ class Cursor
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->collection);
     }
 
     /**
