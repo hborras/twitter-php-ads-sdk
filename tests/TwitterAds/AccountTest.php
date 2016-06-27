@@ -26,6 +26,30 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->twitter = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, false);
     }
 
+    public function testAccountsCanBeConvertedToAnArray()
+    {
+        $types = [
+            'id'                    => function($v) { return is_string($v); },
+            'name'                  => function($v) { return is_string($v); },
+            'salt'                  => function($v) { return is_string($v); },
+            'timezone'              => function($v) { return is_string($v); },
+            'timezone_switch_at'    => function($v) { return $v instanceof \DateTimeInterface; },
+            'created_at'            => function($v) { return $v instanceof \DateTimeInterface; },
+            'updated_at'            => function($v) { return $v instanceof \DateTimeInterface; },
+            'deleted'               => function($v) { return is_bool($v); },
+            'approval_status'       => function($v) { return is_string($v); },
+            'properties'            => function($v) { return is_array($v); },
+        ];
+        $accounts = $this->twitter->getAccounts();
+
+        foreach($accounts as $account) {
+            $array = $account->toArray();
+            foreach ($array as $key => $value) {
+                $this->assertTrue($types[$key]($value));
+            }
+        }
+    }
+
     /**
      * @return Account|Cursor
      */
