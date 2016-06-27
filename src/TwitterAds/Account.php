@@ -18,7 +18,6 @@ use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 class Account extends Resource
 {
-
     const RESOURCE_REPLACE          = '{account_id}';
     const RESOURCE_COLLECTION       = 'accounts';
     const RESOURCE                  = 'accounts/{account_id}';
@@ -253,7 +252,7 @@ class Account extends Resource
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return mixed
      */
     public function getTimezoneSwitchAt()
     {
@@ -261,7 +260,7 @@ class Account extends Resource
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return mixed
      */
     public function getCreatedAt()
     {
@@ -269,7 +268,7 @@ class Account extends Resource
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return mixed
      */
     public function getUpdatedAt()
     {
@@ -281,7 +280,7 @@ class Account extends Resource
      */
     public function getDeleted()
     {
-        return filter_var($this->deleted, FILTER_VALIDATE_BOOLEAN);
+        return $this->deleted;
     }
 
     /**
