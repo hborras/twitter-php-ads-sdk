@@ -125,7 +125,7 @@ abstract class Resource implements Arrayable
             if (is_null($this->$property)) {
                 continue;
             }
-            if ($this->$property instanceof DateTime) {
+            if ($this->$property instanceof \DateTimeInterface) {
                 $params[$property] = $this->$property->format('c');
             } elseif (is_array($this->$property)) {
                 $params[$property] = implode(',', $this->$property);
