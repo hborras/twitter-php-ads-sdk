@@ -2,9 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use DateTime;
 use Hborras\TwitterAdsSDK\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
-use Hborras\TwitterAdsSDK\Arrayable;
 
 /**
  * Created by PhpStorm.
@@ -12,10 +12,8 @@ use Hborras\TwitterAdsSDK\Arrayable;
  * Date: 2/04/16
  * Time: 12:17.
  */
-abstract class Resource implements Arrayable
+abstract class Resource
 {
-    use \Hborras\TwitterAdsSDK\DateTime\DateTimeFormatter;
-
     const RESOURCE            = '';
     const RESOURCE_COLLECTION = '';
     const RESOURCE_ID_REPLACE = '{id}';
@@ -104,8 +102,8 @@ abstract class Resource implements Arrayable
     public function fromResponse($response)
     {
         foreach (get_object_vars($response) as $key => $value) {
-            if (($key == 'created_at' || $key == 'updated_at' || $key == 'start_time' || $key == 'end_time' || $key == 'timezone_switch_at') && !is_null($value)) {
-                $this->$key = $this->toDateTimeImmutable($value);
+            if (($key == 'created_at' || $key == 'updated_at' || $key == 'start_time' || $key == 'end_time') && !is_null($value)) {
+                $this->$key = new DateTime($value);
             } else {
                 $this->$key = $value;
             }
@@ -144,21 +142,6 @@ abstract class Resource implements Arrayable
         if (!$this->getId()) {
             throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
         }
-    }
-
-    public function toArray()
-    {
-        $data = [];
-        $vars = get_object_vars($this);
-
-        foreach ($vars as $key => $var) {
-            if ($var instanceof $this) {
-                continue;
-            }
-            $data[$key] = $var;
-        }
-
-        return $data;
     }
 
     public function loadResource(Account $account, $id = '', $params = [])
