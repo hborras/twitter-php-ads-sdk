@@ -7,6 +7,11 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidType;
 use Hborras\TwitterAdsSDK\Arrayable;
 
+/**
+ * Updates a list of user's optout status
+ *
+ * @since 2016-06-27
+ */
 final class GlobalOptOut extends Resource
 {
     const RESOURCE = 'accounts/{account_id}/tailored_audiences/{route}';
@@ -76,5 +81,13 @@ final class GlobalOptOut extends Resource
         throw new InvalidType(
             sprintf('"%s" is not a valid type for %s', $type, TailoredAudience::class)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 }

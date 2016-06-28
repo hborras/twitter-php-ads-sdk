@@ -18,12 +18,19 @@ class TailoredAudienceTest extends \PHPUnit_Framework_TestCase
         $audience->setListType('nope');
     }
 
-    public function testTailoredAudiencesCanBeAddedSuccessfully()
+    public function testTailoredAudiencesCanBeAddedFetchedAndDeletedSuccessfully()
     {
-        $this->markTestSkipped('waiting for write access to twitter ads api');
         $audience = new TailoredAudience($this->account);
         $audience->setListType(TailoredAudience::LIST_TYPE_EMAIL);
-        $audience->save();
+        $audience->setName('test audience');
+        $newAudience = $audience->save();
+
+        $fetched = (new TailoredAudience($this->account))->load($newAudience->getId());
+        $this->assertEquals($fetched->getId(), $newAudience->getId());
+        $this->assertEquals($fetched->getName(), $newAudience->getName());
+        $this->assertEquals($fetched->getListType(), $newAudience->getListType());
+
+        $fetched->delete();
     }
 
     public function testTailoredAudiencesCanBeFetched()
@@ -32,11 +39,6 @@ class TailoredAudienceTest extends \PHPUnit_Framework_TestCase
         $result = iterator_to_array($audience->all());
 
         $this->assertGreaterThan(0, $result);
-    }
-
-    public function testTailoredAudiencesCanBeRemoved()
-    {
-        $this->markTestSkipped('waiting for write access to twitter ads api');
     }
 
     protected function setUp()

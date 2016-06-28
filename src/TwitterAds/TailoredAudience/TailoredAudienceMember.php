@@ -122,4 +122,12 @@ final class TailoredAudienceMember implements Arrayable
             'expires_at'            => $this->getExpiresAt(),
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
 }

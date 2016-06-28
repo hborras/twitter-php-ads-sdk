@@ -46,6 +46,17 @@ final class TailoredAudience extends Resource
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function delete()
+    {
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
+        $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
+        $request = $this->getAccount()->getTwitterAds()->delete($resource, $this->toParams());
+        $this->fromResponse($request->data);
+    }
+
+    /**
      * @return boolean
      */
     public function isDeleted()
@@ -190,5 +201,13 @@ final class TailoredAudience extends Resource
         throw new InvalidType(
             sprintf('"%s" is not a valid type for %s', $type, TailoredAudience::class)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 }

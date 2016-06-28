@@ -67,6 +67,14 @@ final class TailoredAudienceChanges extends Resource
         $this->operation = $this->assureValidOperation($op);
     }
 
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
     private function getOperations()
     {
         return [
