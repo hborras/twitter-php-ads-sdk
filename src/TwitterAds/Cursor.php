@@ -99,7 +99,7 @@ class Cursor implements \IteratorAggregate
                 $response = $this->account->getTwitterAds()->put($this->account->getTwitterAds()->getResource(), $params);
             break;
             case 'DELETE':
-                $response = $this->account->getTwitterAds()->delete($this->account->getTwitterAds()->getResource(), $params);
+                $response = $this->account->getTwitterAds()->delete($this->account->getTwitterAds()->getResource());
             break;
             default:
                 $response = $this->account->getTwitterAds()->get($this->account->getTwitterAds()->getResource(), $params);
