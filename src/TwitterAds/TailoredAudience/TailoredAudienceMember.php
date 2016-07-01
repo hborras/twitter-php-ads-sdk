@@ -75,7 +75,7 @@ final class TailoredAudienceMember implements Arrayable
         return $this->score;
     }
 
-    public function setScore(int $score)
+    public function setScore($score)
     {
         $this->score = $score;
     }

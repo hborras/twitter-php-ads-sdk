@@ -1,6 +1,7 @@
 <?php
 
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceChanges;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
