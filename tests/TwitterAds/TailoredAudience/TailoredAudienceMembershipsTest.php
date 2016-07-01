@@ -1,0 +1,48 @@
+<?php
+
+use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMemberships;
+use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMember;
+use Hborras\TwitterAdsSDK\TwitterAds\Account;
+
+class TailoredAudienceMembershipsTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @expectedException Hborras\TwitterAdsSDK\TwitterAds\Errors\BatchLimitExceeded
+     */
+    public function testBatchWillThrowExceptionWhenTooManyMembersAreAdded()
+    {
+        $batch = new TailoredAudienceMemberships();
+
+        for ($i = 0; $i < 101; $i++) {
+            $member = new TailoredAudienceMember();
+            $member->setScore($i);
+            $batch->add($member);
+        }
+    }
+
+    public function testBatchParametersAndUrlAreSetCorrectlyForRequest()
+    {
+        $twitterAds = $this->getMockBuilder(TwitterAds::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $account = new Account($twitterAds);
+        $url = 'tailored_audience_memberships';
+
+        $batch = new TailoredAudienceMemberships($account);
+        for ($i = 0; $i < 10; $i++) {
+            $member = new TailoredAudienceMember();
+            $member->setScore($i);
+            $batch->add($member);
+        }
+
+        $data = (object)['data' => (object) []];
+        $twitterAds->expects($this->once())
+            ->method('post')
+            ->with($url, ['operation_type' => TailoredAudienceMemberships::OPERATION, 'params' => $batch->toParams()])
+            ->willReturn($data);
+
+        $batch->save();
+    }
+}
