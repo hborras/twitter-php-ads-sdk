@@ -198,7 +198,7 @@ abstract class Resource implements Arrayable
     {
         $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-        $request = $this->account->getTwitterAds()->put($resource, $this->toParams());
+        $request = $this->account->getTwitterAds()->delete($resource);
         $this->fromResponse($request->data);
     }
 
