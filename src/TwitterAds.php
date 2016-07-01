@@ -369,6 +369,7 @@ class TwitterAds extends Config
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
         if ($this->getLastHttpCode() > 399) {
+            var_dump($response);
             $this->manageErrors($response);
         }
 
