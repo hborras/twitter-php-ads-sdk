@@ -29,19 +29,20 @@ class GlobalOptOutTest extends \PHPUnit_Framework_TestCase
         $account = new Account($twitterAds);
         $url = sprintf('accounts/%s/tailored_audiences/global_opt_out', $account->getId());
 
-        $optout = new GlobalOptOut($account);
-        $optout->setListType(TailoredAudience::LIST_TYPE_EMAIL);
+        $optPut = new GlobalOptOut($account);
+        $optPut->setListType(TailoredAudience::LIST_TYPE_EMAIL);
 
         $data = (object)['data' => (object) [
             'input_file_path' => 'test',
             'list_type' => TailoredAudience::LIST_TYPE_EMAIL,
         ]];
+        
         $twitterAds->expects($this->once())
             ->method('put')
-            ->with($url, $optout->toParams())
+            ->with($url, $optPut->toParams())
             ->willReturn($data);
 
-        $optout->save();
+        $optPut->save();
     }
 
     public function testTailoredAudienceGlobalOptOutCanBeUpdatedSuccessfully()

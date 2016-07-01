@@ -25,7 +25,7 @@ final class GlobalOptOut extends Resource
 
     protected $properties = [
         'input_file_path',
-        'list type',
+        'list_type',
     ];
 
     /**
