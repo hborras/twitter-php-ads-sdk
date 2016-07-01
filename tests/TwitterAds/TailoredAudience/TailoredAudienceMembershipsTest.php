@@ -5,7 +5,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMembership
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMember;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 
-class TailoredAudienceChangesTest extends \PHPUnit_Framework_TestCase
+class TailoredAudienceMembershipsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException Hborras\TwitterAdsSDK\TwitterAds\Errors\BatchLimitExceeded
