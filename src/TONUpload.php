@@ -11,23 +11,22 @@ namespace Hborras\TwitterAdsSDK;
 
 class TONUpload
 {
-    const DEFAULT_DOMAIN = 'https://ton.twitter.com';
+    const DEFAULT_DOMAIN = 'https://ton.twitter.com/1.1/ton/bucket/ta_partner';
     const DEFAULT_RESOURCE = '/1.1/ton/bucket/';
     const DEFAULT_BUCKET = 'ta_partner';
     const MIN_FILE_SIZE = 1048576;
 
     private $filePath;
     private $fileSize;
+    /** @var TwitterAds  */
     private $twitterAds;
     private $params;
-    public $defaultExpire;
 
     public function __construct(TwitterAds $twitterAds, $filePath, $params = [])
     {
         if (! file_exists($filePath)){
             // TODO: Throw Exception
         }
-        $defaultExpire = date_create()->modify("+10 day");
         $this->filePath = $filePath;
         $this->fileSize = filesize($filePath);
         $this->twitterAds = $twitterAds;
@@ -56,10 +55,25 @@ class TONUpload
     public function perform()
     {
         if($this->fileSize < self::MIN_FILE_SIZE){
-
+            $response = $this->upload();
+            var_dump($response);
         } else {
             
         }
+    }
+
+    public function upload()
+    {
+        /** Here you can add any header you want to the request*/
+        $headers = [
+            'x-ton-expires: '.gmdate('D, d M Y H:i:s T', strtotime("+10 day")),
+            'content-type: '.$this->getContentType(),
+            'Connection: keep-alive'
+        ];
+
+        $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN, [file_get_contents($this->filePath)], $headers);
+
+        return $response;
     }
 
     /**
@@ -95,7 +109,7 @@ class TONUpload
     }
 
     /**
-     * @return mixed
+     * @return TwitterAds
      */
     public function getTwitterAds()
     {
@@ -124,21 +138,5 @@ class TONUpload
     public function setParams($params)
     {
         $this->params = $params;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBucket()
-    {
-        return $this->bucket;
-    }
-
-    /**
-     * @param mixed $bucket
-     */
-    public function setBucket($bucket)
-    {
-        $this->bucket = $bucket;
     }
 }
