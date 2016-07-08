@@ -56,7 +56,6 @@ class TONUpload
     {
         if($this->fileSize < self::MIN_FILE_SIZE){
             $response = $this->upload();
-            var_dump($response);
         } else {
             
         }
@@ -68,7 +67,8 @@ class TONUpload
         $headers = [
             'x-ton-expires: '.gmdate('D, d M Y H:i:s T', strtotime("+10 day")),
             'content-type: '.$this->getContentType(),
-            'Connection: keep-alive'
+            'Connection: keep-alive',
+            'Content-Length: '. $this->fileSize
         ];
 
         $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN, [file_get_contents($this->filePath)], $headers);
