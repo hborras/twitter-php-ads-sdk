@@ -55,7 +55,11 @@ class Request
             $defaults['oauth_token'] = $token->key;
         }
 
-        $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1($parameters[0], TRUE))]);
+        if(isset($parameters['raw'])){
+            $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1($parameters['raw'], TRUE))]);
+        } else {
+            $parameters = array_merge($defaults, $parameters);
+        }
 
         return new self($httpMethod, $httpUrl, $parameters);
     }

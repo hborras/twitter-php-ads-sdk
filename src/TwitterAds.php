@@ -458,18 +458,18 @@ class TwitterAds extends Config
     {
         /* Curl settings */
         $options = [
-             CURLOPT_VERBOSE => true,
+            CURLOPT_VERBOSE => false,
             CURLOPT_CAINFO => __DIR__.DIRECTORY_SEPARATOR.'cacert.pem',
             CURLOPT_CONNECTTIMEOUT => $this->connectionTimeout,
             CURLOPT_HEADER => true,
-            CURLOPT_HTTPHEADER => array_merge(['Accept: /', $authorization, 'Expect:'],$headers),
+            CURLOPT_HTTPHEADER => array_merge(['Accept: application/json', $authorization, 'Expect:'],$headers),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_TIMEOUT => $this->timeout,
             CURLOPT_URL => $url,
             CURLOPT_USERAGENT => $this->userAgent,
-            CURLOPT_ENCODING => 'gzip, deflate',
+            CURLOPT_ENCODING => 'gzip',
         ];
 
         if (!empty($this->proxy)) {
@@ -484,8 +484,13 @@ class TwitterAds extends Config
             case 'GET':
                 break;
             case 'POST':
-                $options[CURLOPT_CUSTOMREQUEST] = 'POST';
-                $options[CURLOPT_POSTFIELDS] = $postfields[0];
+                $options[CURLOPT_POST] = true;
+                if(isset($postfields['raw'])){
+                    $options[CURLOPT_POSTFIELDS] = $postfields['raw'];
+                } else {
+                    $options[CURLOPT_POSTFIELDS] = Util::buildHttpQuery($postfields);
+                }
+
                 break;
             case 'DELETE':
                 $options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
@@ -500,30 +505,18 @@ class TwitterAds extends Config
         }
 
         $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_VERBOSE, true);
-
-        $verbose = fopen('php://temp', 'w+');
-        curl_setopt($curlHandle, CURLOPT_STDERR, $verbose);
-
         curl_setopt_array($curlHandle, $options);
         $response = curl_exec($curlHandle);
-
         // Throw exceptions on cURL errors.
         if (curl_errno($curlHandle) > 0) {
             throw new TwitterAdsException(curl_error($curlHandle), curl_errno($curlHandle), null, null);
         }
-
         $this->response->setHttpCode(curl_getinfo($curlHandle, CURLINFO_HTTP_CODE));
         $parts = explode("\r\n\r\n", $response);
         $responseBody = array_pop($parts);
         $responseHeader = array_pop($parts);
         $this->response->setHeaders($this->parseHeaders($responseHeader));
-
         curl_close($curlHandle);
-        rewind($verbose);
-        $verboseLog = stream_get_contents($verbose);
-
-        echo $verboseLog;
         return $responseBody;
     }
 
