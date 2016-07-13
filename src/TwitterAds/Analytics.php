@@ -57,9 +57,9 @@ class Analytics extends Resource
         }
 
         $resource = str_replace(static::RESOURCE_REPLACE, $account->getId(), static::RESOURCE_STATS);
-        $request = $account->getTwitterAds()->get($resource, $params);
+        $response = $account->getTwitterAds()->get($resource, $params);
 
-        return $request->data;
+        return $response->getBody()->data;
     }
 
     public function getId()

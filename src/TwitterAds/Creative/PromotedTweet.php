@@ -48,14 +48,14 @@ class PromotedTweet extends Resource
         if ($this->getId()) {
             $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
             $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-            $request = $this->getAccount()->getTwitterAds()->put($resource, $params);
+            $response = $this->getAccount()->getTwitterAds()->put($resource, $params);
 
-            return $this->fromResponse($request->data);
+            return $this->fromResponse($response->getBody()->data);
         } else {
             $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE_COLLECTION);
-            $request = $this->getAccount()->getTwitterAds()->post($resource, $params);
+            $response = $this->getAccount()->getTwitterAds()->post($resource, $params);
 
-            return $this->fromResponse($request->data[0]);
+            return $this->fromResponse($response->getBody()->data[0]);
         }
     }
 

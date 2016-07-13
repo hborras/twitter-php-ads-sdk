@@ -1,8 +1,8 @@
 <?php
 
+use Hborras\TwitterAdsSDK\TONUpload;
 use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMemberships;
-use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMember;;
+
 
 require '../autoload.php';
 
@@ -15,8 +15,9 @@ const ACCOUNT_ID = 'account id';
 $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 try{
-    $tonUpload = new \Hborras\TwitterAdsSDK\TONUpload($twitterAds,'../list.txt');
-    $tonUpload->perform();
+    $tonUpload = new TONUpload($twitterAds,'../list.txt');
+    $location = $tonUpload->perform();
+    var_dump($location);
 } catch (Exception $e){
     var_dump($e->getCode(), $e->getMessage());
 }

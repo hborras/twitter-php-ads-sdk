@@ -2,7 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use Hborras\TwitterAdsSDK\ServerError;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\Arrayable;
 
@@ -49,9 +49,9 @@ abstract class Resource implements Arrayable
     public function all($params = [])
     {
         $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE_COLLECTION);
-        $request = $this->account->getTwitterAds()->get($resource, $params);
+        $response = $this->account->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->account, $request, $params);
+        return new Cursor($this, $this->account, $response->getBody(), $params);
     }
 
     /**
@@ -66,19 +66,17 @@ abstract class Resource implements Arrayable
     {
         $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $id, $resource);
-        $request = $this->account->getTwitterAds()->get($resource, $params);
+        $response = $this->account->getTwitterAds()->get($resource, $params);
 
-        return $this->fromResponse($request->data);
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**
      * Reloads all attributes for the current object instance from the API.
      *
      * @param $params
-     *
      * @return Resource
-     *
-     * @throws TwitterAdsException
+     * @throws ServerError
      */
     public function reload($params)
     {
@@ -88,9 +86,9 @@ abstract class Resource implements Arrayable
 
         $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-        $request = $this->account->getTwitterAds()->get($resource, $params);
+        $response = $this->account->getTwitterAds()->get($resource, $params);
 
-        return $this->fromResponse($request->data);
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**
@@ -181,13 +179,13 @@ abstract class Resource implements Arrayable
         if ($this->getId()) {
             $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
             $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-            $request = $this->account->getTwitterAds()->put($resource, $this->toParams());
+            $response = $this->account->getTwitterAds()->put($resource, $this->toParams());
         } else {
             $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE_COLLECTION);
-            $request = $this->account->getTwitterAds()->post($resource, $this->toParams());
+            $response = $this->account->getTwitterAds()->post($resource, $this->toParams());
         }
 
-        return $this->fromResponse($request->data);
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**
@@ -198,8 +196,8 @@ abstract class Resource implements Arrayable
     {
         $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-        $request = $this->account->getTwitterAds()->delete($resource);
-        $this->fromResponse($request->data);
+        $response = $this->account->getTwitterAds()->delete($resource);
+        $this->fromResponse($response->getBody()->data);
     }
 
     /**

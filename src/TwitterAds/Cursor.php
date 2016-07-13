@@ -106,7 +106,7 @@ class Cursor implements \IteratorAggregate
             break;
         }
 
-        return $this->fromResponse($response);
+        return $this->fromResponse($response->getBody());
     }
 
     /**

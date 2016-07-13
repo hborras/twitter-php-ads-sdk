@@ -18,13 +18,13 @@ class TONUpload
 
     private $filePath;
     private $fileSize;
-    /** @var TwitterAds  */
+    /** @var TwitterAds */
     private $twitterAds;
     private $params;
 
     public function __construct(TwitterAds $twitterAds, $filePath, $params = [])
     {
-        if (! file_exists($filePath)){
+        if (!file_exists($filePath)) {
             // TODO: Throw Exception
         }
         $this->filePath = $filePath;
@@ -35,15 +35,15 @@ class TONUpload
 
     public function getContentType()
     {
-        if(isset($this->contentType)){
+        if (isset($this->contentType)) {
             return $this->contentType;
         }
 
         $extension = pathinfo($this->filePath, PATHINFO_EXTENSION);
 
-        if($extension == 'csv'){
+        if ($extension == 'csv') {
             $this->contentType = 'text/csv';
-        } else if($extension == 'tsv') {
+        } else if ($extension == 'tsv') {
             $this->contentType = 'text/tab-separated-values';
         } else {
             $this->contentType = 'text/plain';
@@ -54,10 +54,11 @@ class TONUpload
 
     public function perform()
     {
-        if($this->fileSize < self::MIN_FILE_SIZE){
+        if ($this->fileSize < self::MIN_FILE_SIZE) {
             $response = $this->upload();
+            return $response->getsHeaders()['location'];
         } else {
-            
+
         }
     }
 
@@ -65,13 +66,12 @@ class TONUpload
     {
         /** Here you can add any header you want to the request*/
         $headers = [
-            'x-ton-expires: '.gmdate('D, d M Y H:i:s T', strtotime("+10 day")),
-            'content-type: '.$this->getContentType(),
-            'Content-Length: '. $this->fileSize
+            'x-ton-expires: ' . gmdate('D, d M Y H:i:s T', strtotime("+10 day")),
+            'content-type: ' . $this->getContentType(),
+            'Content-Length: ' . $this->fileSize
         ];
 
-        $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN, ['raw'=>file_get_contents($this->filePath)], $headers);
-
+        $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN, ['raw' => file_get_contents($this->filePath)], $headers);
         return $response;
     }
 

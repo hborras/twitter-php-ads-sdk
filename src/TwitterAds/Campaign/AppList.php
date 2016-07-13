@@ -32,9 +32,9 @@ class AppList extends Resource
         $params = $this->toParams();
         $params['app_store_identifiers'] = $ids;
         $params['name'] = $name;
-        $request = $this->getAccount()->getTwitterAds()->get($resource, $params);
+        $response = $this->getAccount()->getTwitterAds()->get($resource, $params);
 
-        return $this->fromResponse($request->data);
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**

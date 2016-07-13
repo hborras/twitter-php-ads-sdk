@@ -2,6 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\DateTime;
 
+use DateTime;
+use DateTimeImmutable;
+
 /**
  * A collection of helper functions for string->date conversion
  *
@@ -17,7 +20,7 @@ trait DateTimeFormatter
      */
     public function toDateTime($datestr)
     {
-        return (new \DateTime($datestr))->setTimeZone(new \DateTimeZone('UTC'));
+        return (new \DateTime($datestr))->setTimezone(new \DateTimeZone('UTC'));
     }
     /**
      * Returns an ImmutableDateTime object from a date string.
@@ -27,6 +30,6 @@ trait DateTimeFormatter
      */
     public function toDateTimeImmutable($datestr)
     {
-        return (new \DateTimeImmutable($datestr))->setTimeZone(new \DateTimeZone('UTC'));
+        return (new \DateTimeImmutable($datestr))->setTimezone(new \DateTimeZone('UTC'));
     }
 }

@@ -212,7 +212,7 @@ class TwitterAds extends Config
      * @param string $path
      * @param array $parameters
      *
-     * @return array|object
+     * @return Response
      */
     public function get($path, array $parameters = [])
     {
@@ -226,7 +226,7 @@ class TwitterAds extends Config
      * @param array $parameters
      *
      * @param array $headers
-     * @return array|object
+     * @return Response
      */
     public function post($path, array $parameters = [], array $headers = [])
     {
@@ -239,7 +239,7 @@ class TwitterAds extends Config
      * @param string $path
      * @param array $parameters
      *
-     * @return array|object
+     * @return Response
      */
     public function delete($path, array $parameters = [])
     {
@@ -252,7 +252,7 @@ class TwitterAds extends Config
      * @param string $path
      * @param array $parameters
      *
-     * @return array|object
+     * @return Response
      */
     public function put($path, array $parameters = [])
     {
@@ -351,7 +351,8 @@ class TwitterAds extends Config
      * @param string $host
      * @param string $path
      * @param array $parameters
-     * @return resource
+     * @param array $headers
+     * @return Response
      * @throws BadRequest
      * @throws Forbidden
      * @throws NotAuthorized
@@ -378,8 +379,7 @@ class TwitterAds extends Config
         if ($this->getLastHttpCode() > 399) {
             $this->manageErrors($response);
         }
-
-        return $response;
+        return $this->response;
     }
 
     /**
