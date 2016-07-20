@@ -53,9 +53,8 @@ class Account extends Resource
     public function all($params = [])
     {
         $resource = self::RESOURCE_COLLECTION;
-        $request = $this->twitterAds->get($resource, $params);
-
-        return new Cursor($this, $this, $request, $params);
+        $response = $this->twitterAds->get($resource, $params);
+        return new Cursor($this, $this, $response->getBody(), $params);
     }
 
     /**
