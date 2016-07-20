@@ -254,9 +254,9 @@ class TwitterAds extends Config
      *
      * @return Response
      */
-    public function put($path, array $parameters = [])
+    public function put($path, array $parameters = [], array $headers = [])
     {
-        return $this->http('PUT', !$this->sandbox ? self::API_HOST : self::API_HOST_SANDBOX, $path, $parameters);
+        return $this->http('PUT', !$this->sandbox ? self::API_HOST : self::API_HOST_SANDBOX, $path, $parameters, $headers);
     }
 
     /**
@@ -366,7 +366,7 @@ class TwitterAds extends Config
         $this->method = $method;
         $this->resource = $path;
         $this->resetLastResponse();
-        if($path == 'https://ton.twitter.com/1.1/ton/bucket/ta_partner'){
+        if(strpos($path, TONUpload::DEFAULT_DOMAIN) === 0) {
             $url = $path;
         } else {
             $url = sprintf('%s/%s/%s', $host, self::API_VERSION, $path);
@@ -438,8 +438,12 @@ class TwitterAds extends Config
         } else {
             $authorization = 'Authorization: Bearer '.$this->bearer;
         }
+        if(strpos($url, TONUpload::DEFAULT_DOMAIN) === 0) {
+            return $this->request($url, $method, $authorization, $parameters, $headers);
+        } else {
+            return $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters, $headers);
+        }
 
-        return $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters, $headers);
     }
 
     /**
@@ -462,14 +466,14 @@ class TwitterAds extends Config
             CURLOPT_CAINFO => __DIR__.DIRECTORY_SEPARATOR.'cacert.pem',
             CURLOPT_CONNECTTIMEOUT => $this->connectionTimeout,
             CURLOPT_HEADER => true,
-            CURLOPT_HTTPHEADER => array_merge(['Accept: application/json', $authorization, 'Expect:'],$headers),
+            CURLOPT_HTTPHEADER => array_merge(['Accept: */*', $authorization, 'Expect:'],$headers,['Connection: close']),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_TIMEOUT => $this->timeout,
             CURLOPT_URL => $url,
             CURLOPT_USERAGENT => $this->userAgent,
-            CURLOPT_ENCODING => 'gzip',
+            CURLOPT_ENCODING => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
         ];
 
         if (!empty($this->proxy)) {
@@ -497,10 +501,13 @@ class TwitterAds extends Config
                 break;
             case 'PUT':
                 $options[CURLOPT_CUSTOMREQUEST] = 'PUT';
+                if(isset($postfields['raw'])){
+                    $options[CURLOPT_POSTFIELDS] = $postfields['raw'];
+                }
                 break;
         }
 
-        if (in_array($method, ['GET', 'PUT', 'DELETE']) && !empty($postfields)) {
+        if (in_array($method, ['GET', 'PUT', 'DELETE']) && !empty($postfields) && !isset($postfields['raw'])) {
             $options[CURLOPT_URL] .= '?'.Util::buildHttpQuery($postfields);
         }
 

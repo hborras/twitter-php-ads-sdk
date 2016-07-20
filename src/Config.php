@@ -10,7 +10,7 @@ namespace Hborras\TwitterAdsSDK;
 class Config
 {
     /** @var int How long to wait for a response from the API */
-    protected $timeout = 5;
+    protected $timeout = 30;
     /** @var int how long to wait while connecting to the API */
     protected $connectionTimeout = 5;
     /**

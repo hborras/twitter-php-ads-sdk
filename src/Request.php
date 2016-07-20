@@ -57,6 +57,8 @@ class Request
 
         if(isset($parameters['raw'])){
             $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1($parameters['raw'], TRUE))]);
+        } else if(empty($parameters)){
+            $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1('', TRUE))]);
         } else {
             $parameters = array_merge($defaults, $parameters);
         }

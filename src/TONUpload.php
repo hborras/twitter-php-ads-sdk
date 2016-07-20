@@ -11,7 +11,7 @@ namespace Hborras\TwitterAdsSDK;
 
 class TONUpload
 {
-    const DEFAULT_DOMAIN = 'https://ton.twitter.com/1.1/ton/bucket/ta_partner';
+    const DEFAULT_DOMAIN = 'https://ton.twitter.com';
     const DEFAULT_RESOURCE = '/1.1/ton/bucket/';
     const DEFAULT_BUCKET = 'ta_partner';
     const MIN_FILE_SIZE = 1048576;
@@ -58,7 +58,22 @@ class TONUpload
             $response = $this->upload();
             return $response->getsHeaders()['location'];
         } else {
+            $response = $this->initChunkedUpload();
+            $responseHeaders = $response->getsHeaders();
+            $chunkSize = intval($responseHeaders['x_ton_min_chunk_size']);
+            $location = $responseHeaders['location'];
 
+            $file = fopen($this->filePath, 'rb');
+            $bytesRead = 0;
+            while (!feof($file)) {
+                $bytes = fread($file, $chunkSize);
+                $bytesStart = $bytesRead;
+                $bytesRead += strlen($bytes);
+                $this->uploadChunk($location, $chunkSize, $bytes, $bytesStart, $bytesRead);
+            }
+            fclose($file);
+
+            return $location;
         }
     }
 
@@ -71,7 +86,33 @@ class TONUpload
             'Content-Length: ' . $this->fileSize
         ];
 
-        $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN, ['raw' => file_get_contents($this->filePath)], $headers);
+        $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN.self::DEFAULT_RESOURCE.self::DEFAULT_BUCKET, ['raw' => file_get_contents($this->filePath)], $headers);
+        return $response;
+    }
+
+    public function uploadChunk($resource, $chunkSize, $bytes, $bytesStart, $bytesRead)
+    {
+        $headers = [
+            'Content-Type: ' . $this->getContentType(),
+            'Content-Range: bytes ' . $bytesStart . '-' . ($bytesRead - 1) . '/' . $this->fileSize
+        ];
+        $response = $this->getTwitterAds()->put(self::DEFAULT_DOMAIN.$resource, ['raw' => $bytes], $headers);
+
+        return $response;
+    }
+
+    public function initChunkedUpload()
+    {
+        $headers = [
+            'X-Ton-Content-Type: ' . $this->getContentType(),
+            'X-Ton-Content-Length: ' . $this->fileSize,
+            'X-Ton-Expires: ' . gmdate('D, d M Y H:i:s T', strtotime("+6 day")),
+            'Content-Type: ' . $this->getContentType(),
+            'Content-Length: ' . strval(0)
+        ];
+
+        $resource = self::DEFAULT_DOMAIN.self::DEFAULT_RESOURCE.self::DEFAULT_BUCKET. '?resumable=true';
+        $response = $this->getTwitterAds()->post($resource, [], $headers);
         return $response;
     }
 

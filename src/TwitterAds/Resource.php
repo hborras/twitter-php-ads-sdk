@@ -78,7 +78,7 @@ abstract class Resource implements Arrayable
      * @return Resource
      * @throws ServerError
      */
-    public function reload($params)
+    public function reload($params = [])
     {
         if (!$this->getId()) {
             throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
@@ -159,7 +159,7 @@ abstract class Resource implements Arrayable
         return $data;
     }
 
-    public function loadResource(Account $account, $id = '', $params = [])
+    public function  loadResource(Account $account, $id = '', $params = [])
     {
         $this->setAccount($account);
         $account->validateLoaded();
