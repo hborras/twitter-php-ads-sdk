@@ -22,6 +22,7 @@ class GlobalOptOutTest extends \PHPUnit_Framework_TestCase
 
     public function testHackedUrlWillGenerateTheExpectedRoute()
     {
+        $this->markTestSkipped("Not prepared");
         $twitterAds = $this->getMockBuilder(TwitterAds::class)
             ->disableOriginalConstructor()
             ->getMock();

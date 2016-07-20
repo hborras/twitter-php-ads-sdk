@@ -3,6 +3,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidOperation;
 
@@ -14,8 +15,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidOperation
  */
 final class TailoredAudienceChanges extends Resource
 {
-    const RESOURCE_COLLECTION = 'accounts/{account_id}/tailored_audiences_changes';
-    const RESOURCE = 'accounts/{account_id}/tailored_audiences_changes/{id}';
+    const RESOURCE_COLLECTION = 'accounts/{account_id}/tailored_audience_changes';
+    const RESOURCE = 'accounts/{account_id}/tailored_audience_changes/{id}';
 
     const ADD = 'ADD';
     const REMOVE = 'REMOVE';
@@ -23,7 +24,6 @@ final class TailoredAudienceChanges extends Resource
 
     protected $input_file_path;
     protected $tailored_audience_id;
-    protected $id;
     protected $operation;
 
     protected $properties = [
@@ -31,6 +31,39 @@ final class TailoredAudienceChanges extends Resource
         'input_file_path',
         'operation',
     ];
+
+    /** Read Only */
+    protected $id;
+    protected $state;
+
+    public function updateAudience($tailoredAudienceId, $location, $listType, $operation)
+    {
+        $params = [
+            'tailored_audience_id' => $tailoredAudienceId,
+            'input_file_path' => $location,
+            'list_type' => $listType,
+            'operation' => $operation
+        ];
+
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), TailoredAudienceChanges::RESOURCE_COLLECTION);
+
+        return $this->getAccount()->getTwitterAds()->post($resource, $params);
+    }
+
+    public function status($tailoredAudienceId)
+    {
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), TailoredAudienceChanges::RESOURCE_COLLECTION);
+        $response = $this->getAccount()->getTwitterAds()->get($resource, []);
+
+        $tailoredAudienceChanges = new Cursor($this, $this->getAccount(), $response->getBody(), []);
+
+        foreach ($tailoredAudienceChanges as $tailoredAudienceChange) {
+            if ($tailoredAudienceChange->getTailoredAudienceId() == $tailoredAudienceId) {
+                return $tailoredAudienceChange;
+            }
+        }
+        return null;
+    }
 
     public function getId()
     {
@@ -75,6 +108,14 @@ final class TailoredAudienceChanges extends Resource
         return $this->properties;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
     private function getOperations()
     {
         return [
@@ -83,6 +124,7 @@ final class TailoredAudienceChanges extends Resource
             self::REPLACE,
         ];
     }
+
     private function assureValidOperation($op)
     {
         foreach ($this->getOperations() as $allowedOp) {

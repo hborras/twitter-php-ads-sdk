@@ -50,7 +50,7 @@ class TargetingCriteria extends Resource
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE_COLLECTION);
         $request = $this->getAccount()->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->getAccount(), $request, $params);
+        return new Cursor($this, $this->getAccount(), $request->getBody(), $params);
     }
 
     /**

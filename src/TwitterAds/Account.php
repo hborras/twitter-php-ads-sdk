@@ -53,9 +53,8 @@ class Account extends Resource
     public function all($params = [])
     {
         $resource = self::RESOURCE_COLLECTION;
-        $request = $this->twitterAds->get($resource, $params);
-
-        return new Cursor($this, $this, $request, $params);
+        $response = $this->twitterAds->get($resource, $params);
+        return new Cursor($this, $this, $response->getBody(), $params);
     }
 
     /**
@@ -69,9 +68,9 @@ class Account extends Resource
     public function load($id, $params = [])
     {
         $resource = str_replace(self::RESOURCE_REPLACE, $id, self::RESOURCE);
-        $request = $this->twitterAds->get($resource, $params);
+        $response = $this->twitterAds->get($resource, $params);
 
-        return $this->fromResponse($request->data);
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**
@@ -89,8 +88,8 @@ class Account extends Resource
         $params[] = ['with_deleted' => true];
 
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::RESOURCE);
-        $request = $this->twitterAds->get($resource, $params);
-        $this->fromResponse($request->data);
+        $response = $this->twitterAds->get($resource, $params);
+        $this->fromResponse($response->getBody()->data);
 
         return $this;
     }
@@ -109,7 +108,7 @@ class Account extends Resource
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::FEATURES);
         $response = $this->twitterAds->get($resource);
 
-        return $response->data;
+        return $response->getBody()->data;
     }
 
     /**
@@ -225,7 +224,7 @@ class Account extends Resource
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::SCOPED_TIMELINE);
         $response = $this->twitterAds->get($resource, $params);
 
-        return $response->data;
+        return $response->getBody()->data;
     }
 
     /**

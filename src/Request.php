@@ -49,13 +49,19 @@ class Request
             'oauth_version' => self::$version,
             'oauth_nonce' => self::generateNonce(),
             'oauth_timestamp' => time(),
-            'oauth_consumer_key' => $consumer->key,
+            'oauth_consumer_key' => $consumer->key
         ];
         if (null !== $token) {
             $defaults['oauth_token'] = $token->key;
         }
 
-        $parameters = array_merge($defaults, $parameters);
+        if(isset($parameters['raw'])){
+            $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1($parameters['raw'], TRUE))]);
+        } else if(empty($parameters)){
+            $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1('', TRUE))]);
+        } else {
+            $parameters = array_merge($defaults, $parameters);
+        }
 
         return new self($httpMethod, $httpUrl, $parameters);
     }

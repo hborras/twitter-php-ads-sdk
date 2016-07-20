@@ -24,7 +24,7 @@ $account = $twitterAds->getAccounts(ACCOUNT_ID);
 $campaign = new Campaign($account);
 $campaign->setFundingInstrumentId($account->getFundingInstruments()->first()->getId());
 $campaign->setDailyBudgetAmountLocalMicro(1000000);
-$campaign->setName("My first campaign");
+$campaign->setName("My first campaign: ");
 $campaign->setPaused(false);
 $campaign->setStartTime(new \DateTime());
 $campaign->save();
@@ -32,7 +32,7 @@ $campaign->save();
 // Create a line item for the campaign
 $lineItem = new LineItem($account);
 $lineItem->setCampaignId($campaign->getId());
-$lineItem->setName("My first line item");
+$lineItem->setName("My first line item: ");
 $lineItem->setProductType(Enumerations::PRODUCT_PROMOTED_TWEETS);
 $lineItem->setPlacements([Enumerations::PLACEMENT_ALL_ON_TWITTER]);
 $lineItem->setObjective(Enumerations::OBJECTIVE_TWEET_ENGAGEMENTS);
