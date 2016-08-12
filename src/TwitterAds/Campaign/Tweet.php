@@ -58,13 +58,8 @@ class Tweet
         }
 
         $resource = str_replace(Resource::RESOURCE_REPLACE, $account->getId(), self::TWEET_CREATE);
-        try {
-            $response = $account->getTwitterAds()->post($resource, $params);
-        } catch( \Exception $e) {
-            print_r($e->getErrors());
-        }
-        die();
-
+        $response = $account->getTwitterAds()->post($resource, $params);
+        
         return $response->getBody()->data;
     }
 }
