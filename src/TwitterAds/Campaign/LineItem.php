@@ -30,7 +30,7 @@ class LineItem extends Analytics
         'bid_amount_local_micro',
         'name',
         'bid_type',
-        'automatically_selected_bid',
+        'automatically_select_bid',
         'product_type',
         'placements',
         'objective',
@@ -52,7 +52,7 @@ class LineItem extends Analytics
     protected $bid_amount_local_micro;
     protected $name;
     protected $bid_type;
-    protected $automatically_selected_bid;
+    protected $automatically_select_bid;
     protected $product_type;
     protected $placements;
     protected $objective;
@@ -210,17 +210,17 @@ class LineItem extends Analytics
     /**
      * @return mixed
      */
-    public function getAutomaticallySelectedBid()
+    public function getAutomaticallySelectdBid()
     {
-        return $this->automatically_selected_bid;
+        return $this->automatically_select_bid;
     }
 
     /**
-     * @param mixed $automatically_selected_bid
+     * @param mixed $automatically_select_bid
      */
-    public function setAutomaticallySelectedBid($automatically_selected_bid)
+    public function setAutomaticallySelectBid($automatically_select_bid)
     {
-        $this->automatically_selected_bid = $automatically_selected_bid;
+        $this->automatically_select_bid = $automatically_select_bid;
     }
 
     /**
