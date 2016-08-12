@@ -28,10 +28,12 @@ use GuzzleHttp;
 class TwitterAds extends Config
 {
     const API_VERSION      = '1';
+    const API_REST_VERSION = '1.1';
     const API_HOST         = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
     const API_HOST_OAUTH   = 'https://api.twitter.com';
     const UPLOAD_HOST      = 'https://upload.twitter.com';
+    const UPLOAD_PATH      = 'media/upload.json';
     const UPLOAD_CHUNK     = 40960; // 1024 * 40
 
     /** @var  string Method used for the request */
@@ -262,18 +264,17 @@ class TwitterAds extends Config
     /**
      * Upload media to upload.twitter.com.
      *
-     * @param string $path
      * @param array $parameters
      * @param bool $chunked
      *
      * @return array|object
      */
-    public function upload($path, array $parameters = [], $chunked = false)
+    public function upload(array $parameters = [], $chunked = false)
     {
         if ($chunked) {
-            return $this->uploadMediaChunked($path, $parameters);
+            return $this->uploadMediaChunked(self::UPLOAD_PATH, $parameters)->getBody();
         } else {
-            return $this->uploadMediaNotChunked($path, $parameters);
+            return $this->uploadMediaNotChunked(self::UPLOAD_PATH, $parameters)->getBody();
         }
     }
 
@@ -369,7 +370,11 @@ class TwitterAds extends Config
         if(strpos($path, TONUpload::DEFAULT_DOMAIN) === 0) {
             $url = $path;
         } else {
-            $url = sprintf('%s/%s/%s', $host, self::API_VERSION, $path);
+            if($host == self::UPLOAD_HOST){
+                $url = sprintf('%s/%s/%s', $host, self::API_REST_VERSION, $path);
+            } else {
+                $url = sprintf('%s/%s/%s', $host, self::API_VERSION, $path);
+            }
         }
 
         $this->response->setApiPath($path);

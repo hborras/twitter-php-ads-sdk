@@ -7,6 +7,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Tweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\WebsiteCard;
+use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
 
 require '../autoload.php';
 
@@ -44,7 +45,8 @@ $lineItem->setPaused(false);
 $lineItem->save();
 
 // create request for a simple nullcasted tweet
-$tweet1 = Tweet::create($account, 'Tweet number 1 ...'.rand().' http://twitter.com');
+$media = $twitterAds->upload(['media'=> 'kitten.jpg']);
+$tweet1 = Tweet::create($account, 'Tweet number 1 ...'.rand().' http://twitter.com',['media_ids'=> $media->media_id]);
 
 // promote the tweet using our line item
 $promotedTweet = new PromotedTweet($account);
@@ -56,6 +58,7 @@ $promotedTweet->save();
 $websiteCard = new WebsiteCard($account);
 $websiteCard = $websiteCard->all()->next();
 $status = 'Tweet number 2 ...'.rand().$websiteCard->getPreviewUrl();
+
 $tweet2 = Tweet::create($account, $status);
 
 // Promote the tweet using our line item
