@@ -272,7 +272,7 @@ class TwitterAds extends Config
     public function upload(array $parameters = [], $chunked = false)
     {
         if ($chunked) {
-            return $this->uploadMediaChunked(self::UPLOAD_PATH, $parameters)->getBody();
+            return $this->uploadMediaChunked(self::UPLOAD_PATH, $parameters);
         } else {
             return $this->uploadMediaNotChunked(self::UPLOAD_PATH, $parameters)->getBody();
         }
@@ -305,6 +305,12 @@ class TwitterAds extends Config
      */
     private function uploadMediaChunked($path, $parameters)
     {
+        if ($parameters['media_type'] == 'video/mp4') {
+            $parameters['media_category'] = "amplify_video";
+        } elseif($parameters['media_type'] == 'image/gif'){
+            $parameters['media_category'] = 'tweet_gif';
+        }
+
         // Init
         $init = $this->http(
             'POST',
@@ -313,9 +319,11 @@ class TwitterAds extends Config
             [
                 'command' => 'INIT',
                 'media_type' => $parameters['media_type'],
-                'total_bytes' => filesize($parameters['media']),
+                'media_category' => $parameters['media_category'],
+                'total_bytes' => filesize($parameters['media'])
             ]
-        );
+        )->getBody();
+
         // Append
         $segment_index = 0;
         $media = fopen($parameters['media'], 'rb');
@@ -323,26 +331,41 @@ class TwitterAds extends Config
             $this->http(
                 'POST',
                 self::UPLOAD_HOST,
-                'media/upload',
+                $path,
                 [
                     'command' => 'APPEND',
                     'media_id' => $init->media_id_string,
                     'segment_index' => $segment_index++,
                     'media_data' => base64_encode(fread($media, self::UPLOAD_CHUNK)),
                 ]
-            );
+            )->getBody();
         }
         fclose($media);
         // Finalize
         $finalize = $this->http(
             'POST',
             self::UPLOAD_HOST,
-            'media/upload',
+            $path,
             [
                 'command' => 'FINALIZE',
                 'media_id' => $init->media_id_string,
             ]
-        );
+        )->getBody();
+
+        while (isset($finalize->processing_info)) {
+            if (isset($finalize->processing_info->check_after_secs)) {
+                sleep($finalize->processing_info->check_after_secs);
+                $data = array(
+                    'command' => 'STATUS',
+                    'media_id' => $finalize->media_id
+                );
+                $finalize = $this->http('GET', self::UPLOAD_HOST, $path, $data)->getBody();
+            } else {
+                if (isset($finalize->processing_info->state) && $finalize->processing_info->state == 'succeeded') {
+                    break;
+                }
+            }
+        }
 
         return $finalize;
     }
