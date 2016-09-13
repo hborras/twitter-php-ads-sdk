@@ -15,7 +15,7 @@ class Analytics extends Resource
     const ANALYTICS_METRIC_GROUPS_BILLING                           = "BILLING";
     const ANALYTICS_METRIC_GROUPS_VIDEO                             = "VIDEO";
     const ANALYTICS_METRIC_GROUPS_MEDIA                             = "MEDIA";
-    const ANALYTICS_METRIC_GROUPS_WEB_CONVERSIONS                   = "WEB_CONVERSIONS";
+    const ANALYTICS_METRIC_GROUPS_WEB_CONVERSIONS                   = "WEB_CONVERSION";
     const ANALYTICS_METRIC_GROUPS_MOBILE_CONVERSION                 = "MOBILE_CONVERSION";
     const ANALYTICS_METRIC_GROUPS_LIFE_TIME_VALUE_MOBILE_CONVERSION = "LIFE_TIME_VALUE_MOBILE_CONVERSION";
     const ENTITY                                                    = "";
