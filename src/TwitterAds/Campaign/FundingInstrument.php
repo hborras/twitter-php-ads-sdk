@@ -2,7 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 
 /**
  * Created by PhpStorm.
@@ -10,10 +10,12 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
  * Date: 3/04/16
  * Time: 10:43.
  */
-class FundingInstrument extends Resource
+class FundingInstrument extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/funding_instruments';
     const RESOURCE = 'accounts/{account_id}/funding_instruments/{id}';
+
+    const ENTITY = 'FUNDING_INSTRUMENT';
 
     protected $id;
     protected $name;

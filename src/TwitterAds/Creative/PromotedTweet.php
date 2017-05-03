@@ -7,13 +7,15 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 
-class PromotedTweet extends Resource
+class PromotedTweet extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/promoted_tweets';
     const RESOURCE = 'accounts/{account_id}/promoted_tweets/{id}';
     const RESOURCE_STATS = 'stats/accounts/{account_id}/promoted_tweets/{id}';
+
+    const ENTITY = 'PROMOTED_TWEET';
 
     /** Read Only */
     protected $id;

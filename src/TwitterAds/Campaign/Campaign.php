@@ -8,12 +8,13 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
-class Campaign extends Resource
+class Campaign extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/campaigns';
     const RESOURCE = 'accounts/{account_id}/campaigns/{id}';
+
+    const ENTITY = 'CAMPAIGN';
 
     /** Read Only */
     protected $id;

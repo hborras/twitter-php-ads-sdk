@@ -16,7 +16,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
-class Account extends Resource
+class Account extends Analytics
 {
 
     const RESOURCE_REPLACE          = '{account_id}';
@@ -26,6 +26,8 @@ class Account extends Resource
     const APP_LISTS                 = 'accounts/{account_id}/app_lists';
     const SCOPED_TIMELINE           = 'accounts/{account_id}/scoped_timeline';
     const AUTHENTICATED_USER_ACCESS = 'accounts/{account_id}/authenticated_user_access';
+
+    const ENTITY = 'ACCOUNT';
 
     private $twitterAds;
 
