@@ -2,6 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\Arrayable;
@@ -24,6 +25,9 @@ abstract class Resource implements Arrayable
     /** @var  Account $account */
     private $account;
     private $properties = [];
+    
+    /** @var  TwitterAds $twitterAds */
+    private $twitterAds;
 
     abstract public function getId();
 
@@ -31,12 +35,25 @@ abstract class Resource implements Arrayable
      * Automatically set the account if this class is not an account
      * Resource constructor.
      * @param Account|null $account
+     * @param TwitterAds $twitterAds
      */
-    public function __construct(Account $account = null)
+    public function __construct(Account $account = null, TwitterAds $twitterAds = null)
     {
         if (get_class($this) != Account::class) {
             $this->setAccount($account);
         }
+
+        $this->twitterAds = static::assureApi($twitterAds);
+    }
+
+    protected static function assureApi(TwitterAds $instance = null) {
+        $instance = $instance ?: TwitterAds::instance();
+        if (!$instance) {
+            throw new \InvalidArgumentException(
+                'An Api instance must be provided as argument or '.
+                'set as instance in the \TwitterAds\Api');
+        }
+        return $instance;
     }
 
     /**

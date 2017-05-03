@@ -28,7 +28,7 @@ class Account extends Analytics
     const AUTHENTICATED_USER_ACCESS = 'accounts/{account_id}/authenticated_user_access';
 
     const ENTITY = 'ACCOUNT';
-
+    /** @var TwitterAds $twitteAds */
     private $twitterAds;
 
     protected $id;
@@ -41,10 +41,16 @@ class Account extends Analytics
     protected $deleted;
     protected $approval_status;
 
-    public function __construct(TwitterAds $twitterAds)
+    /**
+     * Account constructor.
+     * @param null $id
+     * @param TwitterAds|null $twitterAds
+     */
+    public function __construct($id = null, TwitterAds $twitterAds = null)
     {
         parent::__construct();
-        $this->twitterAds = $twitterAds;
+        $this->id = $id;
+        $this->twitterAds = static::assureApi($twitterAds);
     }
 
     /**

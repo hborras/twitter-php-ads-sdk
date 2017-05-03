@@ -36,6 +36,10 @@ class TwitterAds extends Config
     const UPLOAD_PATH      = 'media/upload.json';
     const UPLOAD_CHUNK     = 40960; // 1024 * 40
 
+    /**
+     * @var TwitterAds
+     */
+    protected static $instance;
     /** @var  string Method used for the request */
     private $method;
     /** @var  string Resource used for the request */
@@ -54,15 +58,29 @@ class TwitterAds extends Config
     private $sandbox;
 
     /**
+     * @return TwitterAds|null
+     */
+    public static function instance() {
+        return static::$instance;
+    }
+
+    /**
+     * @param TwitterAds $instance
+     */
+    public static function setInstance(TwitterAds $instance) {
+        static::$instance = $instance;
+    }
+
+    /**
      * Constructor.
      *
      * @param string $consumerKey The Application Consumer Key
      * @param string $consumerSecret The Application Consumer Secret
-     * @param string|null $oauthToken The Client Token (optional)
-     * @param string|null $oauthTokenSecret The Client Token Secret (optional)
+     * @param string|null $oauthToken The Client Token
+     * @param string|null $oauthTokenSecret The Client Token Secret
      * @param bool $sandbox The Sandbox environment (optional)
      */
-    public function __construct($consumerKey, $consumerSecret, $oauthToken = null, $oauthTokenSecret = null, $sandbox = false)
+    public function __construct($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $sandbox = false)
     {
         $this->resetLastResponse();
         $this->signatureMethod = new HmacSha1();
@@ -74,6 +92,21 @@ class TwitterAds extends Config
             $this->bearer = $oauthTokenSecret;
         }
         $this->sandbox = $sandbox;
+    }
+
+    /**
+     * @param $consumerKey
+     * @param $consumerSecret
+     * @param $oauthToken
+     * @param $oauthTokenSecret
+     * @param bool $sandbox
+     * @return static
+     */
+    public static function init($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $sandbox = false) {
+        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $sandbox);
+        static::setInstance($api);
+
+        return $api;
     }
 
     /**
