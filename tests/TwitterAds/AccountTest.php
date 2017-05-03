@@ -39,8 +39,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             'deleted'               => function($v) { return is_bool($v); },
             'approval_status'       => function($v) { return is_string($v); },
             'properties'            => function($v) { return is_array($v); },
-            'business_id'           => function($v) { return is_string($v); },
-            'business_name'         => function($v) { return is_string($v); },
+            'business_id'           => function($v) { return is_string($v) || is_null($v); },
+            'business_name'         => function($v) { return is_string($v) || is_null($v); },
         ];
         $accounts = $this->twitter->getAccounts();
 
