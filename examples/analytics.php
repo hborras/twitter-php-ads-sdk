@@ -1,7 +1,6 @@
 <?php
 
 use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 
@@ -13,11 +12,11 @@ const ACCESS_TOKEN = 'your access token';
 const ACCESS_TOKEN_SECRET = 'your access token secret';
 const ACCOUNT_ID = 'account id';
 
-// Create Twitter Ads Api Instance
-TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+// Create twitter ads client
+$twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 // load up the account instance, campaign and line item
-$account = new Account(ACCOUNT_ID);
+$account = $twitterAds->getAccounts(ACCOUNT_ID);
 
 // Limit request count and grab the first 10 line items from Cursor
 $lineItems = $account->getLineItems("", ['count' => 10]);
@@ -39,5 +38,3 @@ $ids = array_map(
 );
 
 $stats = LineItem::all_stats($account, $ids, $metrics);
-
-print_r($stats);
