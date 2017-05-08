@@ -28,8 +28,6 @@ class Account extends Analytics
     const AUTHENTICATED_USER_ACCESS = 'accounts/{account_id}/authenticated_user_access';
 
     const ENTITY = 'ACCOUNT';
-    /** @var TwitterAds $twitteAds */
-    private $twitterAds;
 
     protected $id;
     protected $salt;
@@ -43,64 +41,19 @@ class Account extends Analytics
 
     /**
      * Account constructor.
-     * @param null $id
-     * @param TwitterAds|null $twitterAds
+     * @param $id
      */
-    public function __construct($id = null, TwitterAds $twitterAds = null)
+    public function __construct($id = null, $twitterAds = null)
     {
-        parent::__construct();
-        $this->id = $id;
-        $this->twitterAds = static::assureApi($twitterAds);
+        parent::__construct($id, $twitterAds);
     }
 
-    /**
-     * @param array|null $params
-     *
-     * @return Cursor
-     */
-    public function all($params = [])
+    public function read($params = [])
     {
-        $resource = self::RESOURCE_COLLECTION;
-        $response = $this->twitterAds->get($resource, $params);
-        return new Cursor($this, $this, $response->getBody(), $params);
+        $this->getTwitterAds()->setAccountId($this->getId());
+        return parent::read($params);
     }
 
-    /**
-     * Returns an object instance for a given resource.
-     *
-     * @param string $id
-     * @param array $params
-     *
-     * @return $this
-     */
-    public function load($id, $params = [])
-    {
-        $resource = str_replace(self::RESOURCE_REPLACE, $id, self::RESOURCE);
-        $response = $this->twitterAds->get($resource, $params);
-
-        return $this->fromResponse($response->getBody()->data);
-    }
-
-    /**
-     * Reloads all attributes for the current object instance from the API.
-     *
-     * @param array $params
-     *
-     * @return $this
-     */
-    public function reload($params = [])
-    {
-        if ($this->getId() == '') {
-            return $this;
-        }
-        $params[] = ['with_deleted' => true];
-
-        $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::RESOURCE);
-        $response = $this->twitterAds->get($resource, $params);
-        $this->fromResponse($response->getBody()->data);
-
-        return $this;
-    }
 
     /**
      * Returns a collection of features available to the current account.
@@ -114,7 +67,7 @@ class Account extends Analytics
         $this->validateLoaded();
 
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::FEATURES);
-        $response = $this->twitterAds->get($resource);
+        $response = $this->getTwitterAds()->get($resource);
 
         return $response->getBody()->data;
     }
@@ -230,7 +183,7 @@ class Account extends Analytics
         $params[] = ['user_ids' => $ids];
 
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::SCOPED_TIMELINE);
-        $response = $this->twitterAds->get($resource, $params);
+        $response = $this->getTwitterAds()->get($resource, $params);
 
         return $response->getBody()->data;
     }
@@ -297,14 +250,6 @@ class Account extends Analytics
     public function getApprovalStatus()
     {
         return $this->approval_status;
-    }
-
-    /**
-     * @return TwitterAds
-     */
-    public function getTwitterAds()
-    {
-        return $this->twitterAds;
     }
 
     /**

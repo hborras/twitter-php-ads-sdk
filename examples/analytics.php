@@ -14,11 +14,14 @@ const ACCESS_TOKEN_SECRET = 'your access token secret';
 const ACCOUNT_ID = 'account id';
 
 // Create Twitter Ads Api Instance
-TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+$api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+
+$accounts = $api->getAccounts();
 
 // load up the account instance, campaign and line item
 $account = new Account(ACCOUNT_ID);
 
+$account->read();
 // Limit request count and grab the first 10 line items from Cursor
 $lineItems = $account->getLineItems("", ['count' => 10]);
 
@@ -37,7 +40,6 @@ $ids = array_map(
     },
     $lineItems->getCollection()
 );
-
-$stats = LineItem::all_stats($account, $ids, $metrics);
+$stats = (new LineItem())->all_stats($ids, $metrics);
 
 print_r($stats);

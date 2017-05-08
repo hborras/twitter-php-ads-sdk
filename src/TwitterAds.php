@@ -36,9 +36,7 @@ class TwitterAds extends Config
     const UPLOAD_PATH      = 'media/upload.json';
     const UPLOAD_CHUNK     = 40960; // 1024 * 40
 
-    /**
-     * @var TwitterAds
-     */
+    /** @var TwitterAds */
     protected static $instance;
     /** @var  string Method used for the request */
     private $method;
@@ -56,6 +54,8 @@ class TwitterAds extends Config
     private $signatureMethod;
     /** @var  bool Sandbox allows to make requests thought sandbox environment */
     private $sandbox;
+    /** @var string */
+    private $accountId;
 
     /**
      * @return TwitterAds|null
@@ -78,9 +78,10 @@ class TwitterAds extends Config
      * @param string $consumerSecret The Application Consumer Secret
      * @param string|null $oauthToken The Client Token
      * @param string|null $oauthTokenSecret The Client Token Secret
+     * @param string $accountId
      * @param bool $sandbox The Sandbox environment (optional)
      */
-    public function __construct($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $sandbox = false)
+    public function __construct($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId = '', $sandbox = false)
     {
         $this->resetLastResponse();
         $this->signatureMethod = new HmacSha1();
@@ -92,6 +93,7 @@ class TwitterAds extends Config
             $this->bearer = $oauthTokenSecret;
         }
         $this->sandbox = $sandbox;
+        $this->accountId = $accountId;
     }
 
     /**
@@ -99,26 +101,23 @@ class TwitterAds extends Config
      * @param $consumerSecret
      * @param $oauthToken
      * @param $oauthTokenSecret
+     * @param string $accountId
      * @param bool $sandbox
      * @return static
      */
-    public static function init($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $sandbox = false) {
-        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $sandbox);
+    public static function init($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId = '', $sandbox = false) {
+        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
         static::setInstance($api);
 
         return $api;
     }
 
     /**
-     * @param string $accountId
-     *
      * @return Account|Cursor
      */
-    public function getAccounts($accountId = '')
+    public function getAccounts()
     {
-        $account = new Account($this);
-
-        return $accountId ? $account->load($accountId) : $account->all();
+        return (new Account($this))->all();
     }
 
     /**
@@ -649,5 +648,21 @@ class TwitterAds extends Config
     public function getResource()
     {
         return $this->resource;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
+
+    /**
+     * @param string $accountId
+     */
+    public function setAccountId($accountId)
+    {
+        $this->accountId = $accountId;
     }
 }

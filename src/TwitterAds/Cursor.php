@@ -7,9 +7,10 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use Hborras\TwitterAdsSDK\TwitterAds;
+
 class Cursor implements \IteratorAggregate
 {
-    private $account;
     /** @var Resource  */
     private $resource;
     private $params;
@@ -18,13 +19,15 @@ class Cursor implements \IteratorAggregate
     private $total_count = 0;
     /** @var  array */
     private $collection;
+    /** @var  TwitterAds */
+    private $twitterAds;
 
     public function __construct(/* @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hborras\TwitterAdsSDK\TwitterAds\Resource $resource, Account $account, $request, $params)
+        \Hborras\TwitterAdsSDK\TwitterAds\Resource $resource, TwitterAds $twitterAds, $request, $params)
     {
         $this->resource = $resource;
-        $this->account = $account;
         $this->params = $params;
+        $this->twitterAds = $twitterAds;
         $this->fromResponse($request);
     }
 
@@ -88,21 +91,21 @@ class Cursor implements \IteratorAggregate
     public function fetchNext($params = [])
     {
         $params['cursor'] = $this->next_cursor;
-        switch ($this->account->getTwitterAds()->getMethod()) {
+        switch ($this->getTwitterAds()->getMethod()) {
             case 'GET':
-                $response = $this->account->getTwitterAds()->get($this->account->getTwitterAds()->getResource(), $params);
+                $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $params);
             break;
             case 'POST':
-                $response = $this->account->getTwitterAds()->post($this->account->getTwitterAds()->getResource(), $params);
+                $response = $this->getTwitterAds()->post($this->getTwitterAds()->getResource(), $params);
             break;
             case 'PUT':
-                $response = $this->account->getTwitterAds()->put($this->account->getTwitterAds()->getResource(), $params);
+                $response = $this->getTwitterAds()->put($this->getTwitterAds()->getResource(), $params);
             break;
             case 'DELETE':
-                $response = $this->account->getTwitterAds()->delete($this->account->getTwitterAds()->getResource());
+                $response = $this->getTwitterAds()->delete($this->getTwitterAds()->getResource());
             break;
             default:
-                $response = $this->account->getTwitterAds()->get($this->account->getTwitterAds()->getResource(), $params);
+                $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $params);
             break;
         }
 
@@ -121,12 +124,7 @@ class Cursor implements \IteratorAggregate
         }
         foreach ($request->data as $item) {
             if (method_exists($this->resource, 'fromResponse')) {
-                if ($this->resource instanceof Account) {
-                    $obj = new $this->resource($this->account->getTwitterAds());
-                } else {
-                    $obj = new $this->resource();
-                }
-                $obj->setAccount($this->account);
+                $obj = new $this->resource();
                 $this->collection[] = $obj->fromResponse($item);
             } else {
                 $this->collection[] = $item;
@@ -161,18 +159,18 @@ class Cursor implements \IteratorAggregate
     }
 
     /**
-     * @return Account
+     * @return TwitterAds
      */
-    public function getAccount()
+    public function getTwitterAds()
     {
-        return $this->account;
+        return $this->twitterAds;
     }
 
     /**
-     * @param Account $account
+     * @param TwitterAds $twitterAds
      */
-    public function setAccount($account)
+    public function setTwitterAds($twitterAds)
     {
-        $this->account = $account;
+        $this->twitterAds = $twitterAds;
     }
 }

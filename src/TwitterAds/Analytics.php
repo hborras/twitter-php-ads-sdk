@@ -28,11 +28,11 @@ class Analytics extends Resource
      */
     public function stats($metricGroups, $params = [])
     {
-        return $this->all_stats($this->getAccount(), [$this->getId()], $metricGroups, $params);
+        return $this->all_stats([$this->getId()], $metricGroups, $params);
     }
 
 
-    public static function all_stats(Account $account, $ids, $metricGroups, $params = [])
+    public function all_stats($ids, $metricGroups, $params = [])
     {
         $endTime = isset($params['end_time']) ? $params['end_time'] : new \DateTime('now');
         $endTime->setTime($endTime->format('H'), 0, 0);
@@ -56,8 +56,8 @@ class Analytics extends Resource
             $params['segmentation_type'] = $segmentationType;
         }
 
-        $resource = str_replace(static::RESOURCE_REPLACE, $account->getId(), static::RESOURCE_STATS);
-        $response = $account->getTwitterAds()->get($resource, $params);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS);
+        $response = $this->getTwitterAds()->get($resource, $params);
 
         return $response->getBody()->data;
     }
