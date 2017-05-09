@@ -47,6 +47,13 @@ class Campaign extends Analytics
     protected $daily_budget_amount_local_micro;
     protected $total_budget_amount_local_micro;
 
+    public function getLineItems($params = [])
+    {
+        $params['campaign_ids'] = $this->getId();
+        $lineItemClass = new LineItem();
+        return $lineItemClass->loadResource('', $params);
+    }
+
     /**
      * @return mixed
      */

@@ -7,13 +7,14 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\TargetingCriteria;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use PHPUnit_Framework_TestCase;
 
 /**
  * User: Hector Borras Aleixandre
  * Date: 2/04/16
  * Time: 13:22
  */
-class AccountTest extends \PHPUnit_Framework_TestCase
+class AccountTest extends PHPUnit_Framework_TestCase
 {
     /** @var TwitterAds */
     protected $twitter;

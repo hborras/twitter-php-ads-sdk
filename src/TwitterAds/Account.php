@@ -42,18 +42,22 @@ class Account extends Analytics
     /**
      * Account constructor.
      * @param $id
+     * @param null $twitterAds
      */
     public function __construct($id = null, $twitterAds = null)
     {
         parent::__construct($id, $twitterAds);
     }
 
+    /**
+     * @param array $params
+     * @return Resource
+     */
     public function read($params = [])
     {
         $this->getTwitterAds()->setAccountId($this->getId());
         return parent::read($params);
     }
-
 
     /**
      * Returns a collection of features available to the current account.
@@ -84,7 +88,7 @@ class Account extends Analytics
     {
         $promotableUserClass = new PromotableUser();
 
-        return $promotableUserClass->loadResource($this, $id, $params);
+        return $promotableUserClass->loadResource($id, $params);
     }
 
     /**
@@ -99,7 +103,7 @@ class Account extends Analytics
     {
         $fundingInstrumentClass = new FundingInstrument();
 
-        return $fundingInstrumentClass->loadResource($this, $id, $params);
+        return $fundingInstrumentClass->loadResource($id, $params);
     }
 
     /**
@@ -114,7 +118,7 @@ class Account extends Analytics
     {
         $campaignClass = new Campaign();
 
-        return $campaignClass->loadResource($this, $id, $params);
+        return $campaignClass->loadResource($id, $params);
     }
 
     /**
@@ -129,7 +133,7 @@ class Account extends Analytics
     {
         $lineItemsClass = new LineItem();
 
-        return $lineItemsClass->loadResource($this, $id, $params);
+        return $lineItemsClass->loadResource($id, $params);
     }
 
     /**
@@ -144,7 +148,7 @@ class Account extends Analytics
     {
         $appListsClass = new AppList();
 
-        return $appListsClass->loadResource($this, $id, $params);
+        return $appListsClass->loadResource($id, $params);
     }
 
 
@@ -164,7 +168,7 @@ class Account extends Analytics
     {
         $videoClass = new Video();
 
-        return $videoClass->loadResource($this, $id, $params);
+        return $videoClass->loadResource($id, $params);
     }
 
     /**

@@ -3,6 +3,7 @@
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 
 require '../autoload.php';
@@ -17,29 +18,21 @@ const ACCOUNT_ID = 'account id';
 $api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 $accounts = $api->getAccounts();
-
 // load up the account instance, campaign and line item
 $account = new Account(ACCOUNT_ID);
 
 $account->read();
-// Limit request count and grab the first 10 line items from Cursor
-$lineItems = $account->getLineItems("", ['count' => 10]);
 
-// The list of metrics we want to fetch, for a full list of possible metrics
-$metrics = [Analytics::ANALYTICS_METRIC_GROUPS_ENGAGEMENT, Analytics::ANALYTICS_METRIC_GROUPS_BILLING];
+$campaigns = $account->getCampaigns('',['count'=> 2, 'sort_by'=> 'created_at-desc']);
 
-// Fetching stats on the instance
-/** @var LineItem $lineItem */
-$lineItem = $lineItems->first();
-$stats = $lineItem->stats($metrics);
+$campaignIds = [];
+/** @var Campaign $campaign */
+foreach ($campaigns as $campaign) {
+    $lineItems = $campaign->getLineItems();
+    /** @var LineItem $lineItem */
+    foreach ($lineItems as $lineItem) {
+        $promotedTweets = $lineItem->getPromotedTweets();
+    }
+}
 
-// Fetching stats for multiple line items
-$ids = array_map(
-    function($o) {
-        return $o->getId();
-    },
-    $lineItems->getCollection()
-);
-$stats = (new LineItem())->all_stats($ids, $metrics);
-
-print_r($stats);
+echo "hi";

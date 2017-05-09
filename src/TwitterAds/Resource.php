@@ -181,9 +181,8 @@ abstract class Resource implements Arrayable
         return $data;
     }
 
-    public function  loadResource(Account $account, $id = '', $params = [])
+    public function loadResource($id = '', $params = [])
     {
-        $account->validateLoaded();
         if ($id != '') {
             return $this->load($id, $params);
         } else {

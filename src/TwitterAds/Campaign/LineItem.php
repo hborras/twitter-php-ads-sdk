@@ -8,6 +8,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
@@ -67,6 +68,13 @@ class LineItem extends Analytics
     protected $advertiser_domain;
     protected $tracking_tags;
     protected $advertiser_user_id;
+
+    public function getPromotedTweets($params = [])
+    {
+        $params['line_item_ids'] = $this->getId();
+        $promotedTweetClass = new PromotedTweet();
+        return $promotedTweetClass->loadResource('', $params);
+    }
 
     /**
      * Returns a collection of targeting criteria available to the
