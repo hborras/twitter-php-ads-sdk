@@ -7,13 +7,13 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
+use CampaignFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 
 class Campaign extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/campaigns';
     const RESOURCE = 'accounts/{account_id}/campaigns/{id}';
-
     const ENTITY = 'CAMPAIGN';
 
     /** Read Only */
@@ -25,15 +25,15 @@ class Campaign extends Analytics
     protected $deleted;
 
     protected $properties = [
-        'name',
-        'funding_instrument_id',
-        'start_time',
-        'end_time',
-        'paused',
-        'currency',
-        'standard_delivery',
-        'daily_budget_amount_local_micro',
-        'total_budget_amount_local_micro',
+        CampaignFields::NAME,
+        CampaignFields::FUNDING_INSTRUMENT_ID,
+        CampaignFields::START_TIME,
+        CampaignFields::END_TIME,
+        CampaignFields::PAUSED,
+        CampaignFields::CURRENCY,
+        CampaignFields::STANDARD_DELIVERY,
+        CampaignFields::DAILY_BUDGET_AMOUNT_LOCAL_MICRO,
+        CampaignFields::TOTAL_BUDGET_AMOUNT_LOCAL_MICRO,
     ];
 
     /** Writable */
@@ -49,7 +49,7 @@ class Campaign extends Analytics
 
     public function getLineItems($params = [])
     {
-        $params['campaign_ids'] = $this->getId();
+        $params[CampaignFields::CAMPAIGN_IDS] = $this->getId();
         $lineItemClass = new LineItem();
         return $lineItemClass->loadResource('', $params);
     }

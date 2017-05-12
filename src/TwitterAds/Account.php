@@ -40,16 +40,6 @@ class Account extends Analytics
     protected $approval_status;
 
     /**
-     * Account constructor.
-     * @param $id
-     * @param null $twitterAds
-     */
-    public function __construct($id = null, $twitterAds = null)
-    {
-        parent::__construct($id, $twitterAds);
-    }
-
-    /**
      * @param array $params
      * @return Resource
      */
