@@ -7,6 +7,7 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AppListFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class AppList extends Resource
@@ -28,11 +29,11 @@ class AppList extends Resource
             $ids = implode(',', $ids);
         }
 
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE_COLLECTION);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
         $params = $this->toParams();
-        $params['app_store_identifiers'] = $ids;
-        $params['name'] = $name;
-        $response = $this->getAccount()->getTwitterAds()->get($resource, $params);
+        $params[AppListFields::APP_STORE_IDENTIFIERS] = $ids;
+        $params[AppListFields::NAME] = $name;
+        $response = $this->getTwitterAds()->get($resource, $params);
 
         return $this->fromResponse($response->getBody()->data);
     }

@@ -8,12 +8,13 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\TargetingCriteriaFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class TargetingCriteria extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/targeting_criteria';
-    const RESOURCE = 'accounts/{account_id}/targeting_criteria/{id}';
+    const RESOURCE            = 'accounts/{account_id}/targeting_criteria/{id}';
 
     /** Read Only */
     protected $id;
@@ -24,11 +25,11 @@ class TargetingCriteria extends Resource
     protected $deleted;
 
     protected $properties = [
-        'line_item_id',
-        'targeting_type',
-        'targeting_value',
-        'tailored_audience_expansion',
-        'tailored_audience_type',
+        TargetingCriteriaFields::LINE_ITEM_ID,
+        TargetingCriteriaFields::TARGETING_TYPE,
+        TargetingCriteriaFields::TARGETING_VALUE,
+        TargetingCriteriaFields::TAILORED_AUDIENCE_EXPANSION,
+        TargetingCriteriaFields::TAILORED_AUDIENCE_TYPE,
     ];
 
     protected $line_item_id;
@@ -45,12 +46,12 @@ class TargetingCriteria extends Resource
      */
     public function line_item_all($line_item_id, $params = [])
     {
-        $params['line_item_id'] = $line_item_id;
+        $params[TargetingCriteriaFields::LINE_ITEM_ID] = $line_item_id;
 
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE_COLLECTION);
-        $request = $this->getAccount()->getTwitterAds()->get($resource, $params);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
+        $request = $this->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->getAccount(), $request->getBody(), $params);
+        return new Cursor($this, $this->getTwitterAds(), $request->getBody(), $params);
     }
 
     /**

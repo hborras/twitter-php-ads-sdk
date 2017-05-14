@@ -7,8 +7,8 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use CampaignFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
 
 class Campaign extends Analytics
 {

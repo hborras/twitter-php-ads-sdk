@@ -7,6 +7,7 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use AccountFields;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AppList;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
@@ -174,7 +175,7 @@ class Account extends Analytics
         if (is_array($ids)) {
             $ids = implode(',', $ids);
         }
-        $params[] = ['user_ids' => $ids];
+        $params[] = [AccountFields::USER_IDS => $ids];
 
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::SCOPED_TIMELINE);
         $response = $this->getTwitterAds()->get($resource, $params);
