@@ -7,7 +7,6 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use AccountFields;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AppList;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
@@ -16,6 +15,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
 
 class Account extends Analytics
 {
@@ -42,7 +42,7 @@ class Account extends Analytics
 
     /**
      * @param array $params
-     * @return Resource
+     * @return Account
      */
     public function read($params = [])
     {

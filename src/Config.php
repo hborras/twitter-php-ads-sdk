@@ -22,7 +22,7 @@ class Config
      */
     protected $decodeJsonAsArray = false;
     /** @var string User-Agent header */
-    protected $userAgent = 'TwitterAds';
+    protected $userAgent = 'TwitterAdsPhpSdk';
     /** @var array Store proxy connection details */
     protected $proxy = [];
 

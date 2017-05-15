@@ -8,6 +8,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\PromotedTweetFields;
 
 class PromotedTweet extends Analytics
 {
@@ -25,9 +26,9 @@ class PromotedTweet extends Analytics
     protected $deleted;
 
     protected $properties = [
-        'line_item_id',
-        'tweet_id',
-        'paused',
+        PromotedTweetFields::LINE_ITEM_ID,
+        PromotedTweetFields::TWEET_ID,
+        PromotedTweetFields::PAUSED,
     ];
 
     /** Writable */
@@ -42,20 +43,20 @@ class PromotedTweet extends Analytics
     public function save()
     {
         $params = $this->toParams();
-        if (isset($params['tweet_id'])) {
-            $params['tweet_ids'] = $params['tweet_id'];
-            unset($params['tweet_id']);
+        if (isset($params[PromotedTweetFields::TWEET_ID])) {
+            $params[PromotedTweetFields::TWEET_IDS] = $params[PromotedTweetFields::TWEET_ID];
+            unset($params[PromotedTweetFields::TWEET_ID]);
         }
 
         if ($this->getId()) {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
             $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-            $response = $this->getAccount()->getTwitterAds()->put($resource, $params);
+            $response = $this->getTwitterAds()->put($resource, $params);
 
             return $this->fromResponse($response->getBody()->data);
         } else {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE_COLLECTION);
-            $response = $this->getAccount()->getTwitterAds()->post($resource, $params);
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
+            $response = $this->getTwitterAds()->post($resource, $params);
 
             return $this->fromResponse($response->getBody()->data[0]);
         }

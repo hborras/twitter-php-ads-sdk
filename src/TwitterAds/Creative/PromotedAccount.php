@@ -7,6 +7,7 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\PromotedAccountFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class PromotedAccount extends Resource
@@ -23,9 +24,9 @@ class PromotedAccount extends Resource
     protected $deleted;
 
     protected $properties = [
-        'line_item_id',
-        'user_id',
-        'paused',
+        PromotedAccountFields::LINE_ITEM_ID,
+        PromotedAccountFields::USER_ID,
+        PromotedAccountFields::PAUSED,
     ];
 
     /** Writable */

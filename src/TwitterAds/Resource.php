@@ -36,7 +36,7 @@ abstract class Resource implements Arrayable
      * @param null $id
      * @param TwitterAds $twitterAds
      */
-    public function __construct($id = null,  TwitterAds $twitterAds = null)
+    public function __construct($id = null, TwitterAds $twitterAds = null)
     {
         $this->id = $id;
         $this->twitterAds = static::assureApi($twitterAds);
