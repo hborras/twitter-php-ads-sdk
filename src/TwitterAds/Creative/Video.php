@@ -7,6 +7,7 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\VideoFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class Video extends Resource
@@ -26,9 +27,9 @@ class Video extends Resource
     protected $deleted;
 
     protected $properties = [
-        'title',
-        'description',
-        'video_media_id',
+        VideoFields::TITLE,
+        VideoFields::DESCRIPTION,
+        VideoFields::VIDEO_MEDIA_ID,
     ];
 
     /** Writable */
