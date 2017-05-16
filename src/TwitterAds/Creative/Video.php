@@ -13,7 +13,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 class Video extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/videos';
-    const RESOURCE = 'accounts/{account_id}/videos/{id}';
+    const RESOURCE            = 'accounts/{account_id}/videos/{id}';
 
     /** Read Only */
     protected $id;

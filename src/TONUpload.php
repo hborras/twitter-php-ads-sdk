@@ -11,10 +11,10 @@ namespace Hborras\TwitterAdsSDK;
 
 class TONUpload
 {
-    const DEFAULT_DOMAIN = 'https://ton.twitter.com';
+    const DEFAULT_DOMAIN   = 'https://ton.twitter.com';
     const DEFAULT_RESOURCE = '/1.1/ton/bucket/';
-    const DEFAULT_BUCKET = 'ta_partner';
-    const MIN_FILE_SIZE = 1048576;
+    const DEFAULT_BUCKET   = 'ta_partner';
+    const MIN_FILE_SIZE    = 1048576;
 
     private $filePath;
     private $fileSize;
@@ -86,7 +86,7 @@ class TONUpload
             'Content-Length: ' . $this->fileSize
         ];
 
-        $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN.self::DEFAULT_RESOURCE.self::DEFAULT_BUCKET, ['raw' => file_get_contents($this->filePath)], $headers);
+        $response = $this->getTwitterAds()->post(self::DEFAULT_DOMAIN . self::DEFAULT_RESOURCE . self::DEFAULT_BUCKET, ['raw' => file_get_contents($this->filePath)], $headers);
         return $response;
     }
 
@@ -96,7 +96,7 @@ class TONUpload
             'Content-Type: ' . $this->getContentType(),
             'Content-Range: bytes ' . $bytesStart . '-' . ($bytesRead - 1) . '/' . $this->fileSize
         ];
-        $response = $this->getTwitterAds()->put(self::DEFAULT_DOMAIN.$resource, ['raw' => $bytes], $headers);
+        $response = $this->getTwitterAds()->put(self::DEFAULT_DOMAIN . $resource, ['raw' => $bytes], $headers);
 
         return $response;
     }
@@ -111,7 +111,7 @@ class TONUpload
             'Content-Length: ' . strval(0)
         ];
 
-        $resource = self::DEFAULT_DOMAIN.self::DEFAULT_RESOURCE.self::DEFAULT_BUCKET. '?resumable=true';
+        $resource = self::DEFAULT_DOMAIN . self::DEFAULT_RESOURCE . self::DEFAULT_BUCKET . '?resumable=true';
         $response = $this->getTwitterAds()->post($resource, [], $headers);
         return $response;
     }

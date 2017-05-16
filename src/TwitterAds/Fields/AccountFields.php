@@ -19,5 +19,5 @@ class AccountFields
     const UPDATED_AT         = 'updated_at';
     const DELETED            = 'deleted';
     const APPROVAL_STATUS    = 'approval_status';
-    CONST USER_IDS           = 'user_ids';
+    const USER_IDS           = 'user_ids';
 }

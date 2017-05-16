@@ -36,7 +36,7 @@ class Analytics extends Resource
     {
         $endTime = isset($params['end_time']) ? $params['end_time'] : new \DateTime('now');
         $endTime->setTime($endTime->format('H'), 0, 0);
-        $startTime = isset($params['start_time']) ? $params['start_time'] : new \DateTime($endTime->format('c')." - 7 days");
+        $startTime = isset($params['start_time']) ? $params['start_time'] : new \DateTime($endTime->format('c') . " - 7 days");
         $startTime->setTime($startTime->format('H'), 0, 0);
         $granularity = isset($params['granularity']) ? $params['granularity'] : Enumerations::GRANULARITY_HOUR;
         $placement = isset($params['placement']) ? $params['placement'] : Enumerations::PLACEMENT_ALL_ON_TWITTER;

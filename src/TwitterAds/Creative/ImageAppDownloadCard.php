@@ -13,7 +13,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 class ImageAppDownloadCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/image_app_download';
-    const RESOURCE = 'accounts/{account_id}/cards/image_app_download/{id}';
+    const RESOURCE            = 'accounts/{account_id}/cards/image_app_download/{id}';
 
     /** Read Only */
     protected $id;

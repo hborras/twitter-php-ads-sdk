@@ -18,7 +18,7 @@ final class GlobalOptOut extends Resource
 
     // This is a hack to allow PUT requests for an entity without an ID
     const RESOURCE_ID_REPLACE = '{route}';
-    const ROUTE = 'global_opt_out';
+    const ROUTE               = 'global_opt_out';
 
     protected $input_file_path;
     protected $list_type;

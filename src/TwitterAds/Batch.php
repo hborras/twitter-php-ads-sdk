@@ -13,7 +13,7 @@ abstract class Batch extends Resource
     private $batchSize;
     private $account;
 
-    public function __construct(Account $account=null, $batchSize=10,  $batch=[])
+    public function __construct(Account $account = null, $batchSize = 10, $batch = [])
     {
         parent::__construct($account);
         $this->account = $account;
@@ -48,7 +48,7 @@ abstract class Batch extends Resource
 
         return $data;
     }
-    
+
     public function getBatch()
     {
         return $this->batch;
@@ -64,12 +64,12 @@ abstract class Batch extends Resource
     /**
      * Assures the batch is not over the batch size limit.
      *
-     * @param $batch|null
+     * @param $batch |null
      *
      * @throws BatchLimitExceeded when the batch is full
      * @return $batch|$this->batch
      */
-    public function assureBatchSize($batch=null)
+    public function assureBatchSize($batch = null)
     {
         if (count($batch ?: $this->batch) < $this->batchSize) {
             return $batch ?: $this->batch;

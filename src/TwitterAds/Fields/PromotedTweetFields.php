@@ -11,13 +11,13 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
  */
 class PromotedTweetFields
 {
-    const ID                              = 'id';
-    const CREATED_AT                      = 'created_at';
-    const UPDATED_AT                      = 'updated_at';
-    const DELETED                         = 'delete';
+    const ID              = 'id';
+    const CREATED_AT      = 'created_at';
+    const UPDATED_AT      = 'updated_at';
+    const DELETED         = 'delete';
     const APPROVAL_STATUS = 'approval_status';
-    const LINE_ITEM_ID = 'line_item_id';
-    const TWEET_ID = 'tweet_id';
-    const TWEET_IDS = 'tweet_ids';
-    const PAUSED = 'paused';
+    const LINE_ITEM_ID    = 'line_item_id';
+    const TWEET_ID        = 'tweet_id';
+    const TWEET_IDS       = 'tweet_ids';
+    const PAUSED          = 'paused';
 }

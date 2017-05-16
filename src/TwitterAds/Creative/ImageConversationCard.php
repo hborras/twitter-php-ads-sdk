@@ -13,7 +13,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 class ImageConversationCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/image_conversation';
-    const RESOURCE = 'accounts/{account_id}/cards/image_conversation/{id}';
+    const RESOURCE            = 'accounts/{account_id}/cards/image_conversation/{id}';
 
     /** Read Only */
     protected $id;

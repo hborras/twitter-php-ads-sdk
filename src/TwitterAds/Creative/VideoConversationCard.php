@@ -7,12 +7,13 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\VideoConversationCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class VideoConversationCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/video_conversation';
-    const RESOURCE = 'accounts/{account_id}/cards/video_conversation/{id}';
+    const RESOURCE            = 'accounts/{account_id}/cards/video_conversation/{id}';
 
     /** Read Only */
     protected $id;
@@ -24,16 +25,16 @@ class VideoConversationCard extends Resource
     protected $deleted;
 
     protected $properties = [
-        'name',
-        'title',
-        'first_cta',
-        'first_cta_tweet',
-        'second_cta',
-        'second_cta_tweet',
-        'thank_you_text',
-        'thank_you_url',
-        'image_media_id',
-        'video_id',
+        VideoConversationCardFields::NAME,
+        VideoConversationCardFields::TITLE,
+        VideoConversationCardFields::FIRST_CTA,
+        VideoConversationCardFields::FIRST_CTA_TWEET,
+        VideoConversationCardFields::SECOND_CTA,
+        VideoConversationCardFields::SECOND_CTA_TWEET,
+        VideoConversationCardFields::THANK_YOU_TEXT,
+        VideoConversationCardFields::THANK_YOU_URL,
+        VideoConversationCardFields::IMAGE_MEDIA_ID,
+        VideoConversationCardFields::VIDEO_ID,
     ];
 
     /** Writable */

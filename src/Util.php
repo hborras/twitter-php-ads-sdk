@@ -16,7 +16,7 @@ class Util
     {
         $output = '';
         if (is_array($input)) {
-            $output = array_map([__NAMESPACE__.'\Util', 'urlencodeRfc3986'], $input);
+            $output = array_map([__NAMESPACE__ . '\Util', 'urlencodeRfc3986'], $input);
         } elseif (is_scalar($input)) {
             $output = rawurlencode($input);
         }
@@ -104,10 +104,10 @@ class Util
                 // June 12th, 2010 - changed to sort because of issue 164 by hidetaka
                 sort($value, SORT_STRING);
                 foreach ($value as $duplicateValue) {
-                    $pairs[] = $parameter.'='.$duplicateValue;
+                    $pairs[] = $parameter . '=' . $duplicateValue;
                 }
             } else {
-                $pairs[] = $parameter.'='.$value;
+                $pairs[] = $parameter . '=' . $value;
             }
         }
         // For each parameter, the name is separated from the corresponding value by an '=' character (ASCII code 61)

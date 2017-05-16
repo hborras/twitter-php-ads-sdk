@@ -11,7 +11,7 @@ use Hborras\TwitterAdsSDK\TwitterAds;
 
 class Cursor implements \IteratorAggregate
 {
-    /** @var Resource  */
+    /** @var Resource */
     private $resource;
     private $params;
     private $next_cursor = null;
@@ -94,19 +94,19 @@ class Cursor implements \IteratorAggregate
         switch ($this->getTwitterAds()->getMethod()) {
             case 'GET':
                 $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $params);
-            break;
+                break;
             case 'POST':
                 $response = $this->getTwitterAds()->post($this->getTwitterAds()->getResource(), $params);
-            break;
+                break;
             case 'PUT':
                 $response = $this->getTwitterAds()->put($this->getTwitterAds()->getResource(), $params);
-            break;
+                break;
             case 'DELETE':
                 $response = $this->getTwitterAds()->delete($this->getTwitterAds()->getResource());
-            break;
+                break;
             default:
                 $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $params);
-            break;
+                break;
         }
 
         return $this->fromResponse($response->getBody());

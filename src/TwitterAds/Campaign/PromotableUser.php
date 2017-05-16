@@ -13,7 +13,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 class PromotableUser extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/promotable_users';
-    const RESOURCE = 'accounts/{account_id}/promotable_users/{id}';
+    const RESOURCE            = 'accounts/{account_id}/promotable_users/{id}';
 
     protected $id;
     protected $promotable_user_type;

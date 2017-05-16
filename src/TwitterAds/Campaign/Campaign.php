@@ -13,8 +13,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
 class Campaign extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/campaigns';
-    const RESOURCE = 'accounts/{account_id}/campaigns/{id}';
-    const ENTITY = 'CAMPAIGN';
+    const RESOURCE            = 'accounts/{account_id}/campaigns/{id}';
+    const ENTITY              = 'CAMPAIGN';
 
     /** Read Only */
     protected $id;

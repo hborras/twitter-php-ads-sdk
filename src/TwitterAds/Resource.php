@@ -24,7 +24,7 @@ abstract class Resource implements Arrayable
     const RESOURCE_REPLACE    = '{account_id}';
 
     private $properties = [];
-    
+
     /** @var  TwitterAds $twitterAds */
     private $twitterAds;
 
@@ -42,11 +42,12 @@ abstract class Resource implements Arrayable
         $this->twitterAds = static::assureApi($twitterAds);
     }
 
-    protected static function assureApi(TwitterAds $instance = null) {
+    protected static function assureApi(TwitterAds $instance = null)
+    {
         $instance = $instance ?: TwitterAds::instance();
         if (!$instance) {
             throw new \InvalidArgumentException(
-                'An Api instance must be provided as argument or '.
+                'An Api instance must be provided as argument or ' .
                 'set as instance in the \TwitterAds\Api');
         }
         return $instance;

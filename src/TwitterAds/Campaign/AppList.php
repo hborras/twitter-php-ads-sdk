@@ -13,7 +13,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 class AppList extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/app_lists';
-    const RESOURCE = 'accounts/{account_id}/app_lists/{id}';
+    const RESOURCE            = 'accounts/{account_id}/app_lists/{id}';
 
     /** Read Only */
     protected $id;

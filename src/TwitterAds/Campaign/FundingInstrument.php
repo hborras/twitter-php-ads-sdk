@@ -13,7 +13,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 class FundingInstrument extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/funding_instruments';
-    const RESOURCE = 'accounts/{account_id}/funding_instruments/{id}';
+    const RESOURCE            = 'accounts/{account_id}/funding_instruments/{id}';
 
     const ENTITY = 'FUNDING_INSTRUMENT';
 

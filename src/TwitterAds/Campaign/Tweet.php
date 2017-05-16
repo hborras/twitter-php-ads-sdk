@@ -13,15 +13,15 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class Tweet
 {
-    const TWEET_PREVIEW = 'accounts/{account_id}/tweet/preview';
+    const TWEET_PREVIEW    = 'accounts/{account_id}/tweet/preview';
     const TWEET_ID_PREVIEW = 'accounts/{account_id}/tweet/preview/{id}';
-    const TWEET_CREATE = 'accounts/{account_id}/tweet';
+    const TWEET_CREATE     = 'accounts/{account_id}/tweet';
 
     /**
      * Returns an HTML preview of a tweet, either new or existing.
      *
      * @param Account $account
-     * @param array   $params
+     * @param array $params
      *
      * @return mixed
      */
@@ -60,7 +60,7 @@ class Tweet
 
         $resource = str_replace(Resource::RESOURCE_REPLACE, $account->getId(), self::TWEET_CREATE);
         $response = $account->getTwitterAds()->post($resource, $params);
-        
+
         return $response->getBody()->data;
     }
 }

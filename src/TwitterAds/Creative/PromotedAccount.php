@@ -13,8 +13,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 class PromotedAccount extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/promoted_accounts';
-    const RESOURCE = 'accounts/{account_id}/promoted_accounts/{id}';
-    const RESOURCE_STATS = 'stats/accounts/{account_id}/promoted_accounts/{id}';
+    const RESOURCE            = 'accounts/{account_id}/promoted_accounts/{id}';
+    const RESOURCE_STATS      = 'stats/accounts/{account_id}/promoted_accounts/{id}';
 
     /** Read Only */
     protected $id;

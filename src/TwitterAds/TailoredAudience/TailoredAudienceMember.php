@@ -87,7 +87,7 @@ final class TailoredAudienceMember implements Arrayable
 
     public function setAudienceNames(array $names)
     {
-        $this->audience_names =  explode(', ', $names);
+        $this->audience_names = explode(', ', $names);
     }
 
     public function getEffectiveAt()
@@ -114,12 +114,12 @@ final class TailoredAudienceMember implements Arrayable
     {
         return [
             'advertiser_account_id' => $this->getAdvertiserAccountId(),
-            'user_identifier'       => $this->getUserIdentifier(),
-            'user_identifier_type'  => $this->getUserIdentifierType(),
-            'score'                 => $this->getScore(),
-            'audience_names'        => $this->getAudienceNames(),
-            'effective_at'          => $this->getEffectiveAt(),
-            'expires_at'            => $this->getExpiresAt(),
+            'user_identifier' => $this->getUserIdentifier(),
+            'user_identifier_type' => $this->getUserIdentifierType(),
+            'score' => $this->getScore(),
+            'audience_names' => $this->getAudienceNames(),
+            'effective_at' => $this->getEffectiveAt(),
+            'expires_at' => $this->getExpiresAt(),
         ];
     }
 
