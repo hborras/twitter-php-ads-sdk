@@ -23,6 +23,8 @@ class Campaign extends Analytics
     protected $created_at;
     protected $updated_at;
     protected $deleted;
+    protected $currency;
+    protected $entity_status;
 
     protected $properties = [
         CampaignFields::NAME,
@@ -30,10 +32,11 @@ class Campaign extends Analytics
         CampaignFields::START_TIME,
         CampaignFields::END_TIME,
         CampaignFields::PAUSED,
-        CampaignFields::CURRENCY,
         CampaignFields::STANDARD_DELIVERY,
         CampaignFields::DAILY_BUDGET_AMOUNT_LOCAL_MICRO,
         CampaignFields::TOTAL_BUDGET_AMOUNT_LOCAL_MICRO,
+        CampaignFields::DURATION_IN_DAYS,
+        CampaignFields::FREQUENCY_CAP,
     ];
 
     /** Writable */
@@ -42,10 +45,11 @@ class Campaign extends Analytics
     protected $start_time;
     protected $end_time;
     protected $paused;
-    protected $currency;
     protected $standard_delivery;
     protected $daily_budget_amount_local_micro;
     protected $total_budget_amount_local_micro;
+    protected $duration_in_days;
+    protected $frequency_cap;
 
     public function getLineItems($params = [])
     {
@@ -260,5 +264,45 @@ class Campaign extends Analytics
     public function setProperties($properties)
     {
         $this->properties = $properties;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDurationInDays()
+    {
+        return $this->duration_in_days;
+    }
+
+    /**
+     * @param mixed $duration_in_days
+     */
+    public function setDurationInDays($duration_in_days)
+    {
+        $this->duration_in_days = $duration_in_days;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFrequencyCap()
+    {
+        return $this->frequency_cap;
+    }
+
+    /**
+     * @param mixed $frequency_cap
+     */
+    public function setFrequencyCap($frequency_cap)
+    {
+        $this->frequency_cap = $frequency_cap;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntityStatus()
+    {
+        return $this->entity_status;
     }
 }

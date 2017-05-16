@@ -26,5 +26,13 @@ class CampaignFields
     const STANDARD_DELIVERY               = 'standard_delivery';
     const DAILY_BUDGET_AMOUNT_LOCAL_MICRO = 'daily_budget_amount_local_micro';
     const TOTAL_BUDGET_AMOUNT_LOCAL_MICRO = 'total_budget_amount_local_micro';
+    const DURATION_IN_DAYS = 'duration_in_days';
+    const FREQUENCY_CAP = 'frequency_cap';
     const CAMPAIGN_IDS                    = 'campaign_ids';
+    const FUNDING_INSTRUMENT_IDS = 'funding_instrument_ids';
+    const WITH_DELETED = 'with_deleted';
+    const COUNT = 'count';
+    const SORT_BY = 'sort_by';
+    const DRAFT_ONLY = 'draft_only';
+    const ENTITY_STATUS = 'entity_status';
 }

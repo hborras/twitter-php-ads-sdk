@@ -49,4 +49,6 @@ class Enumerations
     const GRANULARITY_HOUR  = "HOUR";
     const GRANULARITY_DAY   = "DAY";
     const GRANULARITY_TOTAL = "TOTAL";
+
+    
 }
