@@ -50,5 +50,5 @@ class Enumerations
     const GRANULARITY_DAY   = "DAY";
     const GRANULARITY_TOTAL = "TOTAL";
 
-    
+
 }

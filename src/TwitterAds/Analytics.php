@@ -14,8 +14,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
 class Analytics extends Resource
 {
-    const ENTITY                                                    = "";
-    const RESOURCE_STATS                                            = 'stats/accounts/{account_id}/';
+    const ENTITY         = "";
+    const RESOURCE_STATS = 'stats/accounts/{account_id}/';
 
     /**
      * Pulls a list of metrics for the current object instance.
@@ -36,12 +36,12 @@ class Analytics extends Resource
         $startTime->setTime($startTime->format('H'), 0, 0);
         $granularity = isset($params[AnalyticsFields::GRANULARITY]) ? $params[AnalyticsFields::GRANULARITY] : Enumerations::GRANULARITY_HOUR;
         $placement = isset($params[AnalyticsFields::PLACEMENT]) ? $params[AnalyticsFields::PLACEMENT] : Enumerations::PLACEMENT_ALL_ON_TWITTER;
-        if(isset($params[AnalyticsFields::ENTITY])){
+        if (isset($params[AnalyticsFields::ENTITY])) {
             $entity = $params[AnalyticsFields::ENTITY];
         } else {
             throw new BadRequest('Entity parameter is mandatory', 500, []);
         }
-        if(!self::inAvailableEntities($entity)){
+        if (!self::inAvailableEntities($entity)) {
             throw new BadRequest('Entity must be one of ACCOUNT, FUNDING_INSTRUMENT,CAMPAIGN,LINE_ITEM,PROMOTED_TWEET,ORGANIC_TWEET', 500, []);
         }
         $segmentationType = isset($params[AnalyticsFields::SEGMENTATION_TYPE]) ? $params[AnalyticsFields::SEGMENTATION_TYPE] : null;
@@ -65,7 +65,7 @@ class Analytics extends Resource
 
         return $response->getBody()->data;
     }
-    
+
     public static function inAvailableEntities($entity)
     {
         $availableEntities = [
@@ -76,7 +76,7 @@ class Analytics extends Resource
             AnalyticsFields::PROMOTED_TWEET,
             AnalyticsFields::ORGANIC_TWEET,
         ];
-        
+
         return in_array($entity, $availableEntities);
     }
 
