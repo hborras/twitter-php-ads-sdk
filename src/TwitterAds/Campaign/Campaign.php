@@ -83,7 +83,7 @@ class Campaign extends Analytics
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getCreatedAt()
     {

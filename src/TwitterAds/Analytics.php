@@ -34,7 +34,7 @@ class Analytics extends Resource
         $endTime->setTime($endTime->format('H'), 0, 0);
         $startTime = isset($params[AnalyticsFields::START_TIME]) ? $params[AnalyticsFields::START_TIME] : new \DateTime($endTime->format('c') . " - 7 days");
         $startTime->setTime($startTime->format('H'), 0, 0);
-        $granularity = isset($params[AnalyticsFields::GRANULARITY]) ? $params[AnalyticsFields::GRANULARITY] : Enumerations::GRANULARITY_HOUR;
+        $granularity = isset($params[AnalyticsFields::GRANULARITY]) ? $params[AnalyticsFields::GRANULARITY] : Enumerations::GRANULARITY_TOTAL;
         $placement = isset($params[AnalyticsFields::PLACEMENT]) ? $params[AnalyticsFields::PLACEMENT] : Enumerations::PLACEMENT_ALL_ON_TWITTER;
         if (isset($params[AnalyticsFields::ENTITY])) {
             $entity = $params[AnalyticsFields::ENTITY];
