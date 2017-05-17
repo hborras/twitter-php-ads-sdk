@@ -3,6 +3,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
 /**
  * Created by PhpStorm.
@@ -28,6 +29,17 @@ class FundingInstrument extends Analytics
     protected $created_at;
     protected $updated_at;
     protected $deleted;
+
+    /**
+     * @param $metricGroups
+     * @param array $params
+     * @return mixed
+     */
+    public function stats($metricGroups, $params = [])
+    {
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::FUNDING_INSTRUMENT;
+        return parent::stats($metricGroups, $params);
+    }
 
     /**
      * @return mixed

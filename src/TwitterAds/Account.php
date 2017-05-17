@@ -14,6 +14,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
 
@@ -39,6 +40,17 @@ class Account extends Analytics
     protected $updated_at;
     protected $deleted;
     protected $approval_status;
+
+    /**
+     * @param $metricGroups
+     * @param array $params
+     * @return mixed
+     */
+    public function stats($metricGroups, $params = [])
+    {
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::ACCOUNT;
+        return parent::stats($metricGroups, $params);
+    }
 
     /**
      * @param array $params
