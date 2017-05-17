@@ -23,7 +23,7 @@ $accounts = $api->getAccounts();
 // load up the account instance, campaign and line item
 $account = new Account(ACCOUNT_ID);
 $account->read();
-$campaigns = $account->getCampaigns('', [TwitterAds\Fields\CampaignFields::COUNT => 1000]);
+$campaigns = $account->getCampaigns('', [TwitterAds\Fields\CampaignFields::COUNT => 10]);
 
 $campaignsData = [];
 
@@ -37,89 +37,92 @@ $i = 1;
 $j = 1;
 $l = 1;
 foreach ($campaignsData as $campaign) {
-    if(strpos($campaign->getName(), 'MX')){
-        echo $i. ": ".$campaign->getId()." ".$campaign->getName()." ".$campaign->getStartTime()->format('Y-m-d')." - ".$campaign->getEntityStatus().PHP_EOL;
-        $lineItems = $campaign->getLineItems();
-        /** @var LineItem $lineItem */
-        foreach ($lineItems as $lineItem) {
-            echo "\t".$j. ": ".$lineItem->getId()." ".$lineItem->getName()." ".PHP_EOL;
-            echo "\t\tBid: ".($lineItem->getBidAmountLocalMicro()/1000000).PHP_EOL;
-            echo "\t\tObjective: ".$lineItem->getObjective().PHP_EOL;
-            echo "\t\tCharge By: ".$lineItem->getChargeBy().PHP_EOL;
-            echo "\t\tBid Unit: ".$lineItem->getBidUnit().PHP_EOL;
-            echo "\t\tOptimization: ".$lineItem->getOptimization().PHP_EOL;
-            echo "\t\tBid Type: ".$lineItem->getBidType().PHP_EOL;
-                $targetingCriterias = $lineItem->getTargetingCriteria();
-            /** @var TwitterAds\Campaign\TargetingCriteria $targetingCriteria */
-            foreach ($targetingCriterias as $targetingCriteria) {
-                echo "\t\t".$l. ": ".$targetingCriteria->getId()." ".$targetingCriteria->getName()." ".
+    echo $i . ": " . $campaign->getId() . " " . $campaign->getName() . " " . $campaign->getStartTime()->format('Y-m-d') . " - " . $campaign->getEntityStatus() . PHP_EOL;
+    $lineItems = $campaign->getLineItems();
+    /** @var LineItem $lineItem */
+    foreach ($lineItems as $lineItem) {
+        echo "\t" . $j . ": " . $lineItem->getId() . " " . $lineItem->getName() . " " . PHP_EOL;
+        echo "\t\tBid: " . ($lineItem->getBidAmountLocalMicro() / 1000000) . PHP_EOL;
+        echo "\t\tObjective: " . $lineItem->getObjective() . PHP_EOL;
+        echo "\t\tCharge By: " . $lineItem->getChargeBy() . PHP_EOL;
+        echo "\t\tBid Unit: " . $lineItem->getBidUnit() . PHP_EOL;
+        echo "\t\tOptimization: " . $lineItem->getOptimization() . PHP_EOL;
+        echo "\t\tBid Type: " . $lineItem->getBidType() . PHP_EOL;
+        $targetingCriterias = $lineItem->getTargetingCriteria();
+        /** @var TwitterAds\Campaign\TargetingCriteria $targetingCriteria */
+        foreach ($targetingCriterias as $targetingCriteria) {
+            echo "\t\t" . $l . ": " . $targetingCriteria->getId() . " " . $targetingCriteria->getName() . " " .
 
-                    $targetingCriteria->getTargetingType(). " ".$targetingCriteria->getTargetingValue().PHP_EOL;
+                $targetingCriteria->getTargetingType() . " " . $targetingCriteria->getTargetingValue() . PHP_EOL;
 
-                $l++;
-            }
-            $l = 1;
-            try{
-                $startDate = new \DateTime($campaign->getStartTime()->format('Y-m-d 00:00:00'));
-                $endDate = new \DateTime('now');
-                $dates = dateRanges($startDate, $endDate);
-                foreach ($dates as $date) {
-                    $stats = $lineItem->stats(
-                        [
-                            TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_BILLING,
-                            TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_MOBILE_CONVERSION,
-                            TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_ENGAGEMENT,
-                        ],
-                        [
-                            TwitterAds\Fields\AnalyticsFields::START_TIME => $date[0],
-                            AnalyticsFields::END_TIME => $date[1],
-                            AnalyticsFields::ENTITY => AnalyticsFields::LINE_ITEM,
-                            AnalyticsFields::GRANULARITY => Enumerations::GRANULARITY_TOTAL,
-                            AnalyticsFields::PLACEMENT => Enumerations::PLACEMENT_ALL_ON_TWITTER
-                        ]
-                    );
-                    $stats = $stats[0]->id_data[0]->metrics;
-                    if(!is_null($stats->billed_charge_local_micro)){
-                        echo "\t\t\t Start: ". $date[0]->format('Y-m-d H:i:s').PHP_EOL;
-                        echo "\t\t\t End: ". $date[1]->format('Y-m-d H:i:s').PHP_EOL;
-                        echo "\t\t\t ". ($stats->billed_charge_local_micro[0] / 1000000)."€".PHP_EOL;
-                        echo "\t\t\t\t App clicks: ";
-                        getStats($stats->app_clicks);
-                        echo "\t\t\t\t Installs:".PHP_EOL;
-                        getStats($stats->mobile_conversion_installs);
-                        echo "\t\t\t\t Checkouts:".PHP_EOL;
-                        getStats($stats->mobile_conversion_checkouts_initiated);
-                    }
+            $l++;
+        }
+        $l = 1;
+        try {
+            $startDate = new \DateTime($campaign->getStartTime()->format('Y-m-d 00:00:00'));
+            $endDate = new \DateTime('now');
+            $dates = dateRanges($startDate, $endDate);
+            foreach ($dates as $date) {
+                $stats = $lineItem->stats(
+                    [
+                        TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_BILLING,
+                        TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_MOBILE_CONVERSION,
+                        TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_ENGAGEMENT,
+                    ],
+                    [
+                        TwitterAds\Fields\AnalyticsFields::START_TIME => $date[0],
+                        AnalyticsFields::END_TIME => $date[1],
+                        AnalyticsFields::GRANULARITY => Enumerations::GRANULARITY_TOTAL,
+                        AnalyticsFields::PLACEMENT => Enumerations::PLACEMENT_ALL_ON_TWITTER
+                    ]
+                );
+                $stats = $stats[0]->id_data[0]->metrics;
+                if (!is_null($stats->billed_charge_local_micro)) {
+                    echo "\t\t\t Start: " . $date[0]->format('Y-m-d H:i:s') . PHP_EOL;
+                    echo "\t\t\t End: " . $date[1]->format('Y-m-d H:i:s') . PHP_EOL;
+                    echo "\t\t\t " . ($stats->billed_charge_local_micro[0] / 1000000) . "€" . PHP_EOL;
+                    echo "\t\t\t\t App clicks: ";
+                    getStats($stats->app_clicks);
+                    echo "\t\t\t\t Installs:" . PHP_EOL;
+                    getStats($stats->mobile_conversion_installs);
+                    echo "\t\t\t\t Checkouts:" . PHP_EOL;
+                    getStats($stats->mobile_conversion_checkouts_initiated);
                 }
-
-            } catch (\Hborras\TwitterAdsSDK\TwitterAdsException $e){
-                print_r($e->getErrors());
             }
 
-            $j++;
+        } catch (\Hborras\TwitterAdsSDK\TwitterAdsException $e) {
+            print_r($e->getErrors());
         }
-        $j = 1;
-        $i++;
+
+        $j++;
     }
+    $j = 1;
+    $i++;
 }
 
-function getStats($stat){
-    if($stat instanceof stdClass){
+function getStats($stat)
+{
+    if ($stat instanceof stdClass) {
         foreach (get_object_vars($stat) as $key => $val) {
-            if(is_array($val)){
-                echo "\t\t\t\t\t ".$key.": ".$val[0].PHP_EOL;
+            if (is_array($val)) {
+                echo "\t\t\t\t\t " . $key . ": " . $val[0] . PHP_EOL;
             } else {
-                echo "\t\t\t\t\t ".$key." 0".PHP_EOL;
+                echo "\t\t\t\t\t " . $key . " 0" . PHP_EOL;
             }
         }
-    } else if(is_array($stat)){
+    } else if (is_array($stat)) {
         foreach ($stat as $s) {
-            echo $s.PHP_EOL;
+            echo $s . PHP_EOL;
         }
     }
 
 }
 
+/**
+ * @param $startTime
+ * @param $endTime
+ * @return array
+ */
 function dateRanges($startTime, $endTime)
 {
     $interval = new \DateInterval('P7D');
