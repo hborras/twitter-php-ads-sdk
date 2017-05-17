@@ -10,6 +10,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemFields;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
@@ -75,6 +76,17 @@ class LineItem extends Analytics
         $params[LineItemFields::LINE_ITEM_IDS] = $this->getId();
         $promotedTweetClass = new PromotedTweet();
         return $promotedTweetClass->loadResource('', $params);
+    }
+
+    /**
+     * @param $metricGroups
+     * @param array $params
+     * @return mixed
+     */
+    public function stats($metricGroups, $params = [])
+    {
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::LINE_ITEM;
+        return parent::stats($metricGroups, $params);
     }
 
     /**

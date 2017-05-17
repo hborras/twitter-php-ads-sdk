@@ -8,6 +8,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\PromotedTweetFields;
 
 class PromotedTweet extends Analytics
@@ -35,6 +36,17 @@ class PromotedTweet extends Analytics
     protected $line_item_id;
     protected $tweet_id;
     protected $paused;
+
+    /**
+     * @param $metricGroups
+     * @param array $params
+     * @return mixed
+     */
+    public function stats($metricGroups, $params = [])
+    {
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::PROMOTED_TWEET;
+        return parent::stats($metricGroups, $params);
+    }
 
     /**
      * Saves or updates the current object instance depending on the

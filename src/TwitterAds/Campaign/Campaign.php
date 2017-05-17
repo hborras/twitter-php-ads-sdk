@@ -8,6 +8,8 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
 
 class Campaign extends Analytics
@@ -51,11 +53,26 @@ class Campaign extends Analytics
     protected $duration_in_days;
     protected $frequency_cap;
 
+    /**
+     * @param array $params
+     * @return \Hborras\TwitterAdsSDK\TwitterAds\Cursor|Resource
+     */
     public function getLineItems($params = [])
     {
         $params[CampaignFields::CAMPAIGN_IDS] = $this->getId();
         $lineItemClass = new LineItem();
         return $lineItemClass->loadResource('', $params);
+    }
+
+    /**
+     * @param $metricGroups
+     * @param array $params
+     * @return mixed
+     */
+    public function stats($metricGroups, $params = [])
+    {
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::CAMPAIGN;
+        return parent::stats($metricGroups, $params);
     }
 
     /**
