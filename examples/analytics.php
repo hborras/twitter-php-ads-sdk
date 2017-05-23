@@ -23,15 +23,14 @@ $accounts = $api->getAccounts();
 // load up the account instance, campaign and line item
 $account = new Account(ACCOUNT_ID);
 $account->read();
-$campaigns = $account->getCampaigns('', [TwitterAds\Fields\CampaignFields::COUNT => 10]);
-
+$campaigns = $account->getCampaigns('', [TwitterAds\Fields\CampaignFields::COUNT => 1]);
+$campaigns->setUseImplicitFetch(true);
 $campaignsData = [];
 
 /** @var Campaign $campaign */
 foreach ($campaigns as $campaign) {
     $campaignsData[] = $campaign;
 }
-$campaigns->fetchNext();
 
 $i = 1;
 $j = 1;
