@@ -7,7 +7,6 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\TargetingCriteria;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
-use PHPUnit_Framework_TestCase;
 
 /**
  * User: Hector Borras Aleixandre
@@ -17,14 +16,14 @@ use PHPUnit_Framework_TestCase;
 class AccountTest extends PHPUnit_Framework_TestCase
 {
     /** @var TwitterAds */
-    protected $twitter;
+    protected $api;
 
     /**
      * Set up the client
      */
     protected function setUp()
     {
-        $this->twitter = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, false);
+        $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, '', false);
     }
 
     public function testAccountsCanBeConvertedToAnArray()
@@ -40,10 +39,11 @@ class AccountTest extends PHPUnit_Framework_TestCase
             'deleted'               => function($v) { return is_bool($v); },
             'approval_status'       => function($v) { return is_string($v); },
             'properties'            => function($v) { return is_array($v); },
+            'twitterAds'            => function($v) { return is_array($v); },
             'business_id'           => function($v) { return is_string($v) || is_null($v); },
             'business_name'         => function($v) { return is_string($v) || is_null($v); },
         ];
-        $accounts = $this->twitter->getAccounts();
+        $accounts = $this->api->getAccounts();
 
         foreach($accounts as $account) {
             $array = $account->toArray();
@@ -58,7 +58,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccounts()
     {
-        $cursor = $this->twitter->getAccounts();
+        $cursor = $this->api->getAccounts();
         $this->assertInstanceOf(Cursor::class, $cursor);
         return $cursor;
     }
@@ -72,7 +72,8 @@ class AccountTest extends PHPUnit_Framework_TestCase
     {
         /** @var Account $firstAccount */
         $firstAccount = $accounts->next();
-        $account = $this->twitter->getAccounts($firstAccount->getId());
+        $account = new Account($firstAccount->getId());
+        $account->read();
         $this->assertEquals($firstAccount->getId(), $account->getId());
         return $account;
     }
