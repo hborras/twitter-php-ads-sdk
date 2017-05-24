@@ -33,11 +33,11 @@ class GlobalOptOutTest extends \PHPUnit_Framework_TestCase
         $optPut = new GlobalOptOut($account);
         $optPut->setListType(TailoredAudience::LIST_TYPE_EMAIL);
 
-        $data = (object)['data' => (object) [
+        $data = (object)['data' => (object)[
             'input_file_path' => 'test',
             'list_type' => TailoredAudience::LIST_TYPE_EMAIL,
         ]];
-        
+
         $twitterAds->expects($this->once())
             ->method('put')
             ->with($url, $optPut->toParams())

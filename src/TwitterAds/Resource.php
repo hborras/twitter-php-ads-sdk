@@ -171,7 +171,6 @@ abstract class Resource implements Arrayable
     {
         $data = [];
         $vars = get_object_vars($this);
-
         foreach ($vars as $key => $var) {
             if ($var instanceof $this) {
                 continue;

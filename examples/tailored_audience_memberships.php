@@ -2,7 +2,9 @@
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMemberships;
-use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMember;;
+use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMember;
+
+;
 
 require '../autoload.php';
 

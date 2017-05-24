@@ -40,6 +40,8 @@ class Account extends Analytics
     protected $updated_at;
     protected $deleted;
     protected $approval_status;
+    protected $business_id;
+    protected $business_name;
 
     /**
      * @param $metricGroups
@@ -265,5 +267,21 @@ class Account extends Analytics
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBusinessId()
+    {
+        return $this->business_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBusinessName()
+    {
+        return $this->business_name;
     }
 }

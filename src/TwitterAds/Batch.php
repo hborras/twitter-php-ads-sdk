@@ -2,6 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\Arrayable;
@@ -13,10 +14,9 @@ abstract class Batch extends Resource
     private $batchSize;
     private $account;
 
-    public function __construct(Account $account = null, $batchSize = 10, $batch = [])
+    public function __construct(TwitterAds $twitterAds = null, $batchSize = 10, $batch = [])
     {
-        parent::__construct($account);
-        $this->account = $account;
+        parent::__construct('', $twitterAds);
         $this->batchSize = $batchSize;
         $this->batch = $this->assureBatchSize($batch);
     }
@@ -46,7 +46,7 @@ abstract class Batch extends Resource
             $data[] = $member->toArray();
         }
 
-        return $data;
+        return json_encode($data);
     }
 
     public function getBatch()

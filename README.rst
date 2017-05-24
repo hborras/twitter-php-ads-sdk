@@ -79,6 +79,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 .. |Build Status| image:: https://travis-ci.org/hborras/twitter-php-ads-sdk.svg?branch=master
-   :target: https://travis-ci.org/hborras/twitter-php-ads-sdk
+:target: https://travis-ci.org/hborras/twitter-php-ads-sdk
 .. |Scrutinizer Status| image:: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk/badges/quality-score.png?b=master
-   :target: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk
+:target: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk

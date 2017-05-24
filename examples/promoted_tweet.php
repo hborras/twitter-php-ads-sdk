@@ -45,8 +45,8 @@ $lineItem->setPaused(false);
 $lineItem->save();
 
 // create request for a simple nullcasted tweet
-$media = $twitterAds->upload(['media'=> 'kitten.jpg']);
-$tweet1 = Tweet::create($account, 'Tweet number 1 ...'.rand().' http://twitter.com',['media_ids'=> $media->media_id]);
+$media = $twitterAds->upload(['media' => 'kitten.jpg']);
+$tweet1 = Tweet::create($account, 'Tweet number 1 ...' . rand() . ' http://twitter.com', ['media_ids' => $media->media_id]);
 
 // promote the tweet using our line item
 $promotedTweet = new PromotedTweet($account);
@@ -57,7 +57,7 @@ $promotedTweet->save();
 // create request for a nullcasted tweet with a website card
 $websiteCard = new WebsiteCard($account);
 $websiteCard = $websiteCard->all()->next();
-$status = 'Tweet number 2 ...'.rand().$websiteCard->getPreviewUrl();
+$status = 'Tweet number 2 ...' . rand() . $websiteCard->getPreviewUrl();
 
 $tweet2 = Tweet::create($account, $status);
 

@@ -26,11 +26,11 @@ $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS
 $account = $twitterAds->getAccounts(ACCOUNT_ID);
 
 /** Upload media */
-$media = $twitterAds->upload(['media'=> 'video.mp4', 'media_type' => 'video/mp4'], true);
+$media = $twitterAds->upload(['media' => 'video.mp4', 'media_type' => 'video/mp4'], true);
 
 /** Create a video entity and save it*/
 $video = new Video($account);
-$video->setTitle("Test Video ".rand());
-$video->setDescription("Description".rand());
+$video->setTitle("Test Video " . rand());
+$video->setDescription("Description" . rand());
 $video->setVideoMediaId($media->media_id);
 $video->save();

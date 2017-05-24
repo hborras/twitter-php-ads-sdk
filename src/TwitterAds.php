@@ -83,7 +83,7 @@ class TwitterAds extends Config
      * @param string $accountId
      * @param bool $sandbox The Sandbox environment (optional)
      */
-    public function __construct($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId = '', $sandbox = false)
+    public function __construct($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
         $this->resetLastResponse();
         $this->signatureMethod = new HmacSha1();
@@ -107,7 +107,7 @@ class TwitterAds extends Config
      * @param bool $sandbox
      * @return static
      */
-    public static function init($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId = '', $sandbox = false)
+    public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
         $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
         static::setInstance($api);

@@ -4,7 +4,8 @@ namespace Hborras\TwitterAdsSDK\Tests;
 
 use Hborras\TwitterAdsSDK\Consumer;
 
-class ConsumerTest extends \PHPUnit_Framework_TestCase {
+class ConsumerTest extends \PHPUnit_Framework_TestCase
+{
     public function testToString()
     {
         $key = uniqid();

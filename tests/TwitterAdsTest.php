@@ -6,38 +6,37 @@ namespace Hborras\TwitterAdsSDK\Test;
 
 use Hborras\TwitterAdsSDK\Response;
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Account;
 
 class TwitterAdsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var TwitterAds */
-    protected $twitter;
+    protected $api;
 
     protected function setUp()
     {
-        $this->twitter = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+        $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, '', false);
     }
 
     public function testBuildClient()
     {
-        $this->assertObjectHasAttribute('consumer', $this->twitter);
-        $this->assertObjectHasAttribute('token', $this->twitter);
+        $this->assertObjectHasAttribute('consumer', $this->api);
+        $this->assertObjectHasAttribute('token', $this->api);
     }
 
     public function testSetOauthToken()
     {
-        $twitter = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET);
-        $twitter->setOauthToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
-        $this->assertObjectHasAttribute('consumer', $twitter);
-        $this->assertObjectHasAttribute('token', $twitter);
-        $twitter->get('accounts');
-        $this->assertEquals(200, $twitter->getLastHttpCode());
+        $this->api->setOauthToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+        $this->assertObjectHasAttribute('consumer', $this->api);
+        $this->assertObjectHasAttribute('token', $this->api);
+        $this->api->get('accounts');
+        $this->assertEquals(200, $this->api->getLastHttpCode());
     }
 
     public function testOauth2Token()
     {
-        $twitter = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET);
-        $result = $twitter->oauth2('oauth2/token', array('grant_type' => 'client_credentials'));
-        $this->assertEquals(200, $twitter->getLastHttpCode());
+        $result = $this->api->oauth2('oauth2/token', array('grant_type' => 'client_credentials'));
+        $this->assertEquals(200, $this->api->getLastHttpCode());
         $this->assertObjectHasAttribute('token_type', $result);
         $this->assertObjectHasAttribute('access_token', $result);
         $this->assertEquals('bearer', $result->token_type);
@@ -63,9 +62,8 @@ class TwitterAdsTest extends \PHPUnit_Framework_TestCase
 
     public function testOauthRequestToken()
     {
-        $twitter = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET);
-        $result = $twitter->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
-        $this->assertEquals(200, $twitter->getLastHttpCode());
+        $result = $this->api->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
+        $this->assertEquals(200, $this->api->getLastHttpCode());
         $this->assertArrayHasKey('oauth_token', $result);
         $this->assertArrayHasKey('oauth_token_secret', $result);
         $this->assertArrayHasKey('oauth_callback_confirmed', $result);
@@ -79,6 +77,7 @@ class TwitterAdsTest extends \PHPUnit_Framework_TestCase
      */
     public function testOauthRequestTokenException()
     {
+
         $twitter = new TwitterAds('CONSUMER_KEY', 'CONSUMER_SECRET');
         $result = $twitter->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
         return $result;
@@ -86,7 +85,7 @@ class TwitterAdsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Hborras\TwitterAdsSDK\TwitterAdsException
-     * @expectedExceptionMessage Invalid oauth_verifier parameter
+     * @expectedExceptionMessage Error processing your OAuth request: Invalid oauth_verifier parameter
      * @depends testOauthRequestToken
      * @param array $requestToken
      * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
@@ -105,7 +104,61 @@ class TwitterAdsTest extends \PHPUnit_Framework_TestCase
 
     public function testUrl()
     {
-        $url = $this->twitter->url('oauth/authorize', array('foo' => 'bar', 'baz' => 'qux'));
+        $url = $this->api->url('oauth/authorize', array('foo' => 'bar', 'baz' => 'qux'));
         $this->assertEquals('https://api.twitter.com/oauth/authorize?foo=bar&baz=qux', $url);
+    }
+
+    public function testAccountsCanBeConvertedToAnArray()
+    {
+        $types = [
+            'id' => function ($v) {
+                return is_string($v);
+            },
+            'name' => function ($v) {
+                return is_string($v);
+            },
+            'salt' => function ($v) {
+                return is_string($v);
+            },
+            'timezone' => function ($v) {
+                return is_string($v);
+            },
+            'timezone_switch_at' => function ($v) {
+                return $v instanceof \DateTimeInterface;
+            },
+            'created_at' => function ($v) {
+                return $v instanceof \DateTimeInterface;
+            },
+            'updated_at' => function ($v) {
+                return $v instanceof \DateTimeInterface;
+            },
+            'deleted' => function ($v) {
+                return is_bool($v);
+            },
+            'approval_status' => function ($v) {
+                return is_string($v);
+            },
+            'properties' => function ($v) {
+                return is_array($v);
+            },
+            'twitterAds' => function ($v) {
+                return $v instanceof TwitterAds;
+            },
+            'business_id' => function ($v) {
+                return is_string($v) || is_null($v);
+            },
+            'business_name' => function ($v) {
+                return is_string($v) || is_null($v);
+            },
+        ];
+        $accounts = $this->api->getAccounts();
+
+        /** @var Account $account */
+        foreach ($accounts as $account) {
+            $array = $account->toArray();
+            foreach ($array as $key => $value) {
+                $this->assertTrue($types[$key]($value));
+            }
+        }
     }
 }

@@ -103,7 +103,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     public function fetchNext($params = [])
     {
         $requestParams = $this->params;
-        if(count($params) > 0){
+        if (count($params) > 0) {
             foreach ($params as $key => $value) {
                 $requestParams[$key] = $value;
             }
@@ -317,21 +317,24 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     /**
      * @return bool
      */
-    public static function getDefaultUseImplicitFetch() {
+    public static function getDefaultUseImplicitFetch()
+    {
         return static::$defaultUseImplicitFetch;
     }
 
     /**
      * @param bool $use_implicit_fetch
      */
-    public static function setDefaultUseImplicitFetch($use_implicit_fetch) {
+    public static function setDefaultUseImplicitFetch($use_implicit_fetch)
+    {
         static::$defaultUseImplicitFetch = $use_implicit_fetch;
     }
 
     /**
      * @return bool
      */
-    public function getUseImplicitFetch() {
+    public function getUseImplicitFetch()
+    {
         return $this->useImplicitFetch !== null
             ? $this->useImplicitFetch
             : static::$defaultUseImplicitFetch;
@@ -340,7 +343,8 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     /**
      * @param bool $useImplicitFetch
      */
-    public function setUseImplicitFetch($useImplicitFetch) {
+    public function setUseImplicitFetch($useImplicitFetch)
+    {
         $this->useImplicitFetch = $useImplicitFetch;
     }
 
