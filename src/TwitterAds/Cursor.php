@@ -175,4 +175,20 @@ class Cursor implements \IteratorAggregate
     {
         $this->account = $account;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param mixed $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
 }
