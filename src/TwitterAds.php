@@ -607,6 +607,29 @@ class TwitterAds extends Config
     }
 
     /**
+     * Set API URLS.
+     */
+    public function accessTokenURL()
+    {
+        return 'https://api.twitter.com/oauth/access_token';
+    }
+
+    public function authenticateURL()
+    {
+        return 'https://api.twitter.com/oauth/authenticate';
+    }
+
+    public function authorizeURL()
+    {
+        return 'https://api.twitter.com/oauth/authorize';
+    }
+
+    public function requestTokenURL()
+    {
+        return 'https://api.twitter.com/oauth/request_token';
+    }
+
+    /**
      * Encode application authorization header with base64.
      *
      * @param Consumer $consumer
@@ -662,5 +685,113 @@ class TwitterAds extends Config
     public function setAccountId($accountId)
     {
         $this->accountId = $accountId;
+    }
+
+    public function getRequestToken($oauth_callback)
+    {
+        $parameters = array();
+        $parameters['oauth_callback'] = $oauth_callback;
+        $request = $this->oAuthRequest($this->requestTokenURL(), 'GET', $parameters);
+        $token = self::parse_parameters($request);
+
+        return $token;
+    }
+
+    /**
+     * Exchange request token and secret for an access token and
+     * secret, to sign API calls.
+     *
+     * @param $oauth_verifier
+     * @return array ("oauth_token" => "the-access-token",
+     *                "oauth_token_secret" => "the-access-secret",
+     * "user_id" => "9436992",
+     * "screen_name" => "abraham")
+     */
+    public function getAccessToken($oauth_verifier)
+    {
+        $parameters = array();
+        $parameters['oauth_verifier'] = $oauth_verifier;
+        $request = $this->oAuthRequest($this->accessTokenURL(), 'GET', $parameters);
+        $token = self::parse_parameters($request);
+
+        return $token;
+    }
+
+    // This function takes a input like a=b&a=c&d=e and returns the parsed
+    // parameters like this
+    // array('a' => array('b','c'), 'd' => 'e')
+    public static function parse_parameters($input)
+    {
+        if (!isset($input) || !$input) {
+            return array();
+        }
+
+        $pairs = explode('&', $input);
+
+        $parsed_parameters = array();
+        foreach ($pairs as $pair) {
+            $split = explode('=', $pair, 2);
+            $parameter = self::urldecode_rfc3986($split[0]);
+            $value = isset($split[1]) ? self::urldecode_rfc3986($split[1]) : '';
+
+            if (isset($parsed_parameters[$parameter])) {
+                // We have already recieved parameter(s) with this name, so add to the list
+                // of parameters with this name
+
+                if (is_scalar($parsed_parameters[$parameter])) {
+                    // This is the first duplicate, so transform scalar (string) into an array
+                    // so we can add the duplicates
+                    $parsed_parameters[$parameter] = array($parsed_parameters[$parameter]);
+                }
+
+                $parsed_parameters[$parameter][] = $value;
+            } else {
+                $parsed_parameters[$parameter] = $value;
+            }
+        }
+
+        return $parsed_parameters;
+    }
+
+    public static function urlencode_rfc3986($input)
+    {
+        if (is_array($input)) {
+            return array_map(array(__CLASS__, 'urlencode_rfc3986'), $input);
+        } elseif (is_scalar($input)) {
+            return str_replace(
+                '',
+                ' ',
+                str_replace('%7E', '~', rawurlencode($input))
+            );
+        } else {
+            return '';
+        }
+    }
+
+    // This decode function isn't taking into consideration the above
+    // modifications to the encoding process. However, this method doesn't
+    // seem to be used anywhere so leaving it as is.
+    public static function urldecode_rfc3986($string)
+    {
+        return urldecode($string);
+    }
+
+    /**
+     * Get the authorize URL.
+     *
+     * @param $token
+     * @param bool $sign_in_with_twitter
+     * @return string
+     */
+    public function getAuthorizeURL($token, $sign_in_with_twitter = true)
+    {
+        if (is_array($token)) {
+            $token = $token['oauth_token'];
+        }
+        if (empty($sign_in_with_twitter)) {
+            return $this->authorizeURL() . "?oauth_token={$token}";
+        } else {
+            return $this->authenticateURL() . "?oauth_token={$token}";
+        }
     }
 }
