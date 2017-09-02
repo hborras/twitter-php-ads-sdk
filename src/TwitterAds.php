@@ -1,9 +1,5 @@
 <?php
-/**
- * A Twitter supported and maintained Ads API SDK for PHP.
- *
- * @license MIT
- */
+
 namespace Hborras\TwitterAdsSDK;
 
 use Exception;
@@ -18,7 +14,6 @@ use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
 use Hborras\TwitterAdsSDK\Util\JsonDecoder;
-use GuzzleHttp;
 
 /**
  * TwitterAds class for interacting with the Twitter API.
@@ -487,7 +482,6 @@ class TwitterAds extends Config
      * @param array $headers
      * @return string
      * @throws TwitterAdsException
-     * @throws TwitterOAuthException
      */
     private function oAuthRequest($url, $method, array $parameters, $headers = [])
     {
