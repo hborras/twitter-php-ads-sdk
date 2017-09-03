@@ -104,6 +104,7 @@ class TwitterAds extends Config
      */
     public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
+        
         $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
         static::setInstance($api);
 
