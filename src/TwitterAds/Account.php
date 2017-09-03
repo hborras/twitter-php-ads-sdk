@@ -8,13 +8,16 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AppList;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
 
 class Account extends Analytics
 {
@@ -29,8 +32,6 @@ class Account extends Analytics
 
     const ENTITY = 'ACCOUNT';
 
-    private $twitterAds;
-
     protected $id;
     protected $salt;
     protected $name;
@@ -40,60 +41,29 @@ class Account extends Analytics
     protected $updated_at;
     protected $deleted;
     protected $approval_status;
-
-    public function __construct(TwitterAds $twitterAds)
-    {
-        parent::__construct();
-        $this->twitterAds = $twitterAds;
-    }
+    protected $business_id;
+    protected $business_name;
 
     /**
-     * @param array|null $params
-     *
-     * @return Cursor
-     */
-    public function all($params = [])
-    {
-        $resource = self::RESOURCE_COLLECTION;
-        $response = $this->twitterAds->get($resource, $params);
-        return new Cursor($this, $this, $response->getBody(), $params);
-    }
-
-    /**
-     * Returns an object instance for a given resource.
-     *
-     * @param string $id
+     * @param $metricGroups
      * @param array $params
-     *
-     * @return $this
+     * @param bool $async
+     * @return mixed
      */
-    public function load($id, $params = [])
+    public function stats($metricGroups, $params = [], $async = false)
     {
-        $resource = str_replace(self::RESOURCE_REPLACE, $id, self::RESOURCE);
-        $response = $this->twitterAds->get($resource, $params);
-
-        return $this->fromResponse($response->getBody()->data);
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::ACCOUNT;
+        return parent::stats($metricGroups, $params, $async);
     }
 
     /**
-     * Reloads all attributes for the current object instance from the API.
-     *
      * @param array $params
-     *
-     * @return $this
+     * @return Account
      */
-    public function reload($params = [])
+    public function read($params = [])
     {
-        if ($this->getId() == '') {
-            return $this;
-        }
-        $params[] = ['with_deleted' => true];
-
-        $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::RESOURCE);
-        $response = $this->twitterAds->get($resource, $params);
-        $this->fromResponse($response->getBody()->data);
-
-        return $this;
+        $this->getTwitterAds()->setAccountId($this->getId());
+        return parent::read($params);
     }
 
     /**
@@ -108,7 +78,7 @@ class Account extends Analytics
         $this->validateLoaded();
 
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::FEATURES);
-        $response = $this->twitterAds->get($resource);
+        $response = $this->getTwitterAds()->get($resource);
 
         return $response->getBody()->data;
     }
@@ -125,7 +95,7 @@ class Account extends Analytics
     {
         $promotableUserClass = new PromotableUser();
 
-        return $promotableUserClass->loadResource($this, $id, $params);
+        return $promotableUserClass->loadResource($id, $params);
     }
 
     /**
@@ -140,7 +110,7 @@ class Account extends Analytics
     {
         $fundingInstrumentClass = new FundingInstrument();
 
-        return $fundingInstrumentClass->loadResource($this, $id, $params);
+        return $fundingInstrumentClass->loadResource($id, $params);
     }
 
     /**
@@ -155,7 +125,7 @@ class Account extends Analytics
     {
         $campaignClass = new Campaign();
 
-        return $campaignClass->loadResource($this, $id, $params);
+        return $campaignClass->loadResource($id, $params);
     }
 
     /**
@@ -170,7 +140,7 @@ class Account extends Analytics
     {
         $lineItemsClass = new LineItem();
 
-        return $lineItemsClass->loadResource($this, $id, $params);
+        return $lineItemsClass->loadResource($id, $params);
     }
 
     /**
@@ -185,7 +155,20 @@ class Account extends Analytics
     {
         $appListsClass = new AppList();
 
-        return $appListsClass->loadResource($this, $id, $params);
+        return $appListsClass->loadResource($id, $params);
+    }
+
+    /**
+     * Returns a collection of jobs. Can specify job_ids parameter to filter
+     *
+     * @param array $params
+     * @return Cursor|Resource
+     */
+    public function getJobs($params = [])
+    {
+        $jobsClass = new Job();
+
+        return $jobsClass->loadResource('', $params);
     }
 
 
@@ -205,7 +188,7 @@ class Account extends Analytics
     {
         $videoClass = new Video();
 
-        return $videoClass->loadResource($this, $id, $params);
+        return $videoClass->loadResource($id, $params);
     }
 
     /**
@@ -221,10 +204,10 @@ class Account extends Analytics
         if (is_array($ids)) {
             $ids = implode(',', $ids);
         }
-        $params[] = ['user_ids' => $ids];
+        $params[] = [AccountFields::USER_IDS => $ids];
 
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::SCOPED_TIMELINE);
-        $response = $this->twitterAds->get($resource, $params);
+        $response = $this->getTwitterAds()->get($resource, $params);
 
         return $response->getBody()->data;
     }
@@ -294,19 +277,27 @@ class Account extends Analytics
     }
 
     /**
-     * @return TwitterAds
-     */
-    public function getTwitterAds()
-    {
-        return $this->twitterAds;
-    }
-
-    /**
      * @return string
      */
     public function getName()
     {
         return $this->name;
     }
-    
+
+    /**
+     * @return mixed
+     */
+    public function getBusinessId()
+    {
+        return $this->business_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBusinessName()
+    {
+        return $this->business_name;
+    }
+
 }
