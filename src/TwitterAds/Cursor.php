@@ -378,20 +378,4 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     {
         $this->params = $params;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getParams()
-    {
-        return $this->params;
-    }
-
-    /**
-     * @param mixed $params
-     */
-    public function setParams($params)
-    {
-        $this->params = $params;
-    }
 }
