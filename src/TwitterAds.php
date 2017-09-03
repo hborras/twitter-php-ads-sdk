@@ -1,9 +1,5 @@
 <?php
-/**
- * A Twitter supported and maintained Ads API SDK for PHP.
- *
- * @license MIT
- */
+
 namespace Hborras\TwitterAdsSDK;
 
 use Exception;
@@ -18,7 +14,6 @@ use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
 use Hborras\TwitterAdsSDK\Util\JsonDecoder;
-use GuzzleHttp;
 
 /**
  * TwitterAds class for interacting with the Twitter API.
@@ -36,6 +31,8 @@ class TwitterAds extends Config
     const UPLOAD_PATH      = 'media/upload.json';
     const UPLOAD_CHUNK     = 40960; // 1024 * 40
 
+    /** @var TwitterAds */
+    protected static $instance;
     /** @var  string Method used for the request */
     private $method;
     /** @var  string Resource used for the request */
@@ -52,17 +49,36 @@ class TwitterAds extends Config
     private $signatureMethod;
     /** @var  bool Sandbox allows to make requests thought sandbox environment */
     private $sandbox;
+    /** @var string */
+    private $accountId;
+
+    /**
+     * @return TwitterAds|null
+     */
+    public static function instance()
+    {
+        return static::$instance;
+    }
+
+    /**
+     * @param TwitterAds $instance
+     */
+    public static function setInstance(TwitterAds $instance)
+    {
+        static::$instance = $instance;
+    }
 
     /**
      * Constructor.
      *
      * @param string $consumerKey The Application Consumer Key
      * @param string $consumerSecret The Application Consumer Secret
-     * @param string|null $oauthToken The Client Token (optional)
-     * @param string|null $oauthTokenSecret The Client Token Secret (optional)
+     * @param string|null $oauthToken The Client Token
+     * @param string|null $oauthTokenSecret The Client Token Secret
+     * @param string $accountId
      * @param bool $sandbox The Sandbox environment (optional)
      */
-    public function __construct($consumerKey, $consumerSecret, $oauthToken = null, $oauthTokenSecret = null, $sandbox = false)
+    public function __construct($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
         $this->resetLastResponse();
         $this->signatureMethod = new HmacSha1();
@@ -74,41 +90,33 @@ class TwitterAds extends Config
             $this->bearer = $oauthTokenSecret;
         }
         $this->sandbox = $sandbox;
+        $this->accountId = $accountId;
     }
 
     /**
-     * Set API URLS.
-     */
-    public function accessTokenURL()
-    {
-        return 'https://api.twitter.com/oauth/access_token';
-    }
-
-    public function authenticateURL()
-    {
-        return 'https://api.twitter.com/oauth/authenticate';
-    }
-
-    public function authorizeURL()
-    {
-        return 'https://api.twitter.com/oauth/authorize';
-    }
-
-    public function requestTokenURL()
-    {
-        return 'https://api.twitter.com/oauth/request_token';
-    }
-
-    /**
+     * @param $consumerKey
+     * @param $consumerSecret
+     * @param $oauthToken
+     * @param $oauthTokenSecret
      * @param string $accountId
-     *
+     * @param bool $sandbox
+     * @return static
+     */
+    public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
+    {
+
+        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
+        static::setInstance($api);
+
+        return $api;
+    }
+
+    /**
      * @return Account|Cursor
      */
-    public function getAccounts($accountId = '')
+    public function getAccounts()
     {
-        $account = new Account($this);
-
-        return $accountId ? $account->load($accountId) : $account->all();
+        return (new Account($this))->all();
     }
 
     /**
@@ -218,7 +226,7 @@ class TwitterAds extends Config
         $this->response->setApiPath($path);
         $url = sprintf('%s/%s', self::API_HOST_OAUTH, $path);
         $request = Request::fromConsumerAndToken($this->consumer, $this->token, $method, $url, $parameters);
-        $authorization = 'Authorization: Basic '.$this->encodeAppAuthorization($this->consumer);
+        $authorization = 'Authorization: Basic ' . $this->encodeAppAuthorization($this->consumer);
         $result = $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters);
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
@@ -330,7 +338,7 @@ class TwitterAds extends Config
     {
         if ($parameters['media_type'] == 'video/mp4') {
             $parameters['media_category'] = "amplify_video";
-        } elseif($parameters['media_type'] == 'image/gif'){
+        } elseif ($parameters['media_type'] == 'image/gif') {
             $parameters['media_category'] = 'tweet_gif';
         }
 
@@ -413,10 +421,10 @@ class TwitterAds extends Config
         $this->method = $method;
         $this->resource = $path;
         $this->resetLastResponse();
-        if(strpos($path, TONUpload::DEFAULT_DOMAIN) === 0) {
+        if (strpos($path, TONUpload::DEFAULT_DOMAIN) === 0) {
             $url = $path;
         } else {
-            if($host == self::UPLOAD_HOST){
+            if ($host == self::UPLOAD_HOST) {
                 $url = sprintf('%s/%s/%s', $host, self::API_REST_VERSION, $path);
             } else {
                 $url = sprintf('%s/%s/%s', $host, self::API_VERSION, $path);
@@ -443,7 +451,8 @@ class TwitterAds extends Config
      * @throws ServerError
      * @throws ServiceUnavailable
      */
-    public function manageErrors($response){
+    public function manageErrors($response)
+    {
         switch ($this->getLastHttpCode()) {
             case 400:
                 throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $response->errors);
@@ -474,7 +483,6 @@ class TwitterAds extends Config
      * @param array $headers
      * @return string
      * @throws TwitterAdsException
-     * @throws TwitterOAuthException
      */
     private function oAuthRequest($url, $method, array $parameters, $headers = [])
     {
@@ -487,9 +495,9 @@ class TwitterAds extends Config
             $request->signRequest($this->signatureMethod, $this->consumer, $this->token);
             $authorization = $request->toHeader();
         } else {
-            $authorization = 'Authorization: Bearer '.$this->bearer;
+            $authorization = 'Authorization: Bearer ' . $this->bearer;
         }
-        if(strpos($url, TONUpload::DEFAULT_DOMAIN) === 0) {
+        if (strpos($url, TONUpload::DEFAULT_DOMAIN) === 0) {
             return $this->request($url, $method, $authorization, $parameters, $headers);
         } else {
             return $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters, $headers);
@@ -514,10 +522,10 @@ class TwitterAds extends Config
         /* Curl settings */
         $options = [
             CURLOPT_VERBOSE => false,
-            CURLOPT_CAINFO => __DIR__.DIRECTORY_SEPARATOR.'cacert.pem',
+            CURLOPT_CAINFO => __DIR__ . DIRECTORY_SEPARATOR . 'cacert.pem',
             CURLOPT_CONNECTTIMEOUT => $this->connectionTimeout,
             CURLOPT_HEADER => true,
-            CURLOPT_HTTPHEADER => array_merge(['Accept: */*', $authorization, 'Expect:'],$headers,['Connection: close']),
+            CURLOPT_HTTPHEADER => array_merge(['Accept: */*', $authorization, 'Expect:'], $headers, ['Connection: close']),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
@@ -540,7 +548,7 @@ class TwitterAds extends Config
                 break;
             case 'POST':
                 $options[CURLOPT_POST] = true;
-                if(isset($postfields['raw'])){
+                if (isset($postfields['raw'])) {
                     $options[CURLOPT_POSTFIELDS] = $postfields['raw'];
                 } else {
                     $options[CURLOPT_POSTFIELDS] = Util::buildHttpQuery($postfields);
@@ -552,14 +560,14 @@ class TwitterAds extends Config
                 break;
             case 'PUT':
                 $options[CURLOPT_CUSTOMREQUEST] = 'PUT';
-                if(isset($postfields['raw'])){
+                if (isset($postfields['raw'])) {
                     $options[CURLOPT_POSTFIELDS] = $postfields['raw'];
                 }
                 break;
         }
 
         if (in_array($method, ['GET', 'PUT', 'DELETE']) && !empty($postfields) && !isset($postfields['raw'])) {
-            $options[CURLOPT_URL] .= '?'.Util::buildHttpQuery($postfields);
+            $options[CURLOPT_URL] .= '?' . Util::buildHttpQuery($postfields);
         }
 
         $curlHandle = curl_init();
@@ -600,6 +608,29 @@ class TwitterAds extends Config
     }
 
     /**
+     * Set API URLS.
+     */
+    public function accessTokenURL()
+    {
+        return 'https://api.twitter.com/oauth/access_token';
+    }
+
+    public function authenticateURL()
+    {
+        return 'https://api.twitter.com/oauth/authenticate';
+    }
+
+    public function authorizeURL()
+    {
+        return 'https://api.twitter.com/oauth/authorize';
+    }
+
+    public function requestTokenURL()
+    {
+        return 'https://api.twitter.com/oauth/request_token';
+    }
+
+    /**
      * Encode application authorization header with base64.
      *
      * @param Consumer $consumer
@@ -612,7 +643,49 @@ class TwitterAds extends Config
         $key = $consumer->key;
         $secret = $consumer->secret;
 
-        return base64_encode($key.':'.$secret);
+        return base64_encode($key . ':' . $secret);
+    }
+
+    /**
+     * Return current response. Allows inheritance.
+     *
+     * @return Response
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
+
+    /**
+     * @param string $accountId
+     */
+    public function setAccountId($accountId)
+    {
+        $this->accountId = $accountId;
     }
 
     public function getRequestToken($oauth_callback)
@@ -687,7 +760,7 @@ class TwitterAds extends Config
             return array_map(array(__CLASS__, 'urlencode_rfc3986'), $input);
         } elseif (is_scalar($input)) {
             return str_replace(
-                '+',
+                '',
                 ' ',
                 str_replace('%7E', '~', rawurlencode($input))
             );
@@ -721,31 +794,5 @@ class TwitterAds extends Config
         } else {
             return $this->authenticateURL() . "?oauth_token={$token}";
         }
-    }
-
-    /**
-     * Return current response. Allows inheritance.
-     *
-     * @return Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResource()
-    {
-        return $this->resource;
     }
 }
