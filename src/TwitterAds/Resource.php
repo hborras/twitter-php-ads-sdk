@@ -2,6 +2,8 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use Hborras\TwitterAdsSDK\DateTime\DateTimeFormatter;
+use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\Arrayable;
@@ -14,29 +16,41 @@ use Hborras\TwitterAdsSDK\Arrayable;
  */
 abstract class Resource implements Arrayable
 {
-    use \Hborras\TwitterAdsSDK\DateTime\DateTimeFormatter;
+    use DateTimeFormatter;
 
     const RESOURCE            = '';
     const RESOURCE_COLLECTION = '';
     const RESOURCE_ID_REPLACE = '{id}';
     const RESOURCE_REPLACE    = '{account_id}';
 
-    /** @var  Account $account */
-    private $account;
     private $properties = [];
+
+    /** @var  TwitterAds $twitterAds */
+    private $twitterAds;
 
     abstract public function getId();
 
     /**
      * Automatically set the account if this class is not an account
      * Resource constructor.
-     * @param Account|null $account
+     * @param null $id
+     * @param TwitterAds $twitterAds
      */
-    public function __construct(Account $account = null)
+    public function __construct($id = null, TwitterAds $twitterAds = null)
     {
-        if (get_class($this) != Account::class) {
-            $this->setAccount($account);
+        $this->id = $id;
+        $this->twitterAds = static::assureApi($twitterAds);
+    }
+
+    protected static function assureApi(TwitterAds $instance = null)
+    {
+        $instance = $instance ?: TwitterAds::instance();
+        if (!$instance) {
+            throw new \InvalidArgumentException(
+                'An Api instance must be provided as argument or ' .
+                'set as instance in the \TwitterAds\Api');
         }
+        return $instance;
     }
 
     /**
@@ -48,10 +62,20 @@ abstract class Resource implements Arrayable
      */
     public function all($params = [])
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE_COLLECTION);
-        $response = $this->account->getTwitterAds()->get($resource, $params);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
+        $response = $this->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->account, $response->getBody(), $params);
+        return new Cursor($this, $this->getTwitterAds(), $response->getBody(), $params);
+    }
+
+    /**
+     * @param $params
+     * @return Resource
+     */
+    public function read($params = [])
+    {
+        return $this->load($this->getId(), $params);
+        
     }
 
     /**
@@ -64,9 +88,9 @@ abstract class Resource implements Arrayable
      */
     public function load($id, $params = [])
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $id, $resource);
-        $response = $this->account->getTwitterAds()->get($resource, $params);
+        $response = $this->getTwitterAds()->get($resource, $params);
 
         return $this->fromResponse($response->getBody()->data);
     }
@@ -84,9 +108,9 @@ abstract class Resource implements Arrayable
             throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
         }
 
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-        $response = $this->account->getTwitterAds()->get($resource, $params);
+        $response = $this->getTwitterAds()->get($resource, $params);
 
         return $this->fromResponse($response->getBody()->data);
     }
@@ -148,7 +172,6 @@ abstract class Resource implements Arrayable
     {
         $data = [];
         $vars = get_object_vars($this);
-
         foreach ($vars as $key => $var) {
             if ($var instanceof $this) {
                 continue;
@@ -159,10 +182,8 @@ abstract class Resource implements Arrayable
         return $data;
     }
 
-    public function  loadResource(Account $account, $id = '', $params = [])
+    public function loadResource($id = '', $params = [])
     {
-        $this->setAccount($account);
-        $account->validateLoaded();
         if ($id != '') {
             return $this->load($id, $params);
         } else {
@@ -177,12 +198,12 @@ abstract class Resource implements Arrayable
     public function save()
     {
         if ($this->getId()) {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
             $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-            $response = $this->account->getTwitterAds()->put($resource, $this->toParams());
+            $response = $this->getTwitterAds()->put($resource, $this->toParams());
         } else {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE_COLLECTION);
-            $response = $this->account->getTwitterAds()->post($resource, $this->toParams());
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
+            $response = $this->getTwitterAds()->post($resource, $this->toParams());
         }
 
         return $this->fromResponse($response->getBody()->data);
@@ -194,26 +215,10 @@ abstract class Resource implements Arrayable
      */
     public function delete()
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->account->getId(), static::RESOURCE);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-        $response = $this->account->getTwitterAds()->delete($resource);
+        $response = $this->getTwitterAds()->delete($resource);
         $this->fromResponse($response->getBody()->data);
-    }
-
-    /**
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
-
-    /**
-     * @param Account $account
-     */
-    public function setAccount($account = null)
-    {
-        $this->account = $account;
     }
 
     /**
@@ -222,5 +227,14 @@ abstract class Resource implements Arrayable
     public function getProperties()
     {
         return $this->properties;
+    }
+
+
+    /**
+     * @return TwitterAds
+     */
+    public function getTwitterAds()
+    {
+        return $this->twitterAds;
     }
 }

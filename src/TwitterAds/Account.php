@@ -308,4 +308,5 @@ class Account extends Analytics
     {
         return $this->name;
     }
+    
 }
