@@ -67,12 +67,13 @@ class Campaign extends Analytics
     /**
      * @param $metricGroups
      * @param array $params
+     * @param bool $async
      * @return mixed
      */
-    public function stats($metricGroups, $params = [])
+    public function stats($metricGroups, $params = [], $async = false)
     {
         $params[AnalyticsFields::ENTITY] = AnalyticsFields::CAMPAIGN;
-        return parent::stats($metricGroups, $params);
+        return parent::stats($metricGroups, $params, $async);
     }
 
     /**

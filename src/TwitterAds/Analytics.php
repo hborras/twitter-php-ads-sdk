@@ -9,26 +9,31 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 
+use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
 class Analytics extends Resource
 {
-    const ENTITY         = "";
-    const RESOURCE_STATS = 'stats/accounts/{account_id}/';
+    const ENTITY              = "";
+    const RESOURCE_STATS      = 'stats/accounts/{account_id}/';
+    const RESOURCE_STATS_JOBS = 'stats/jobs/accounts/{account_id}/';
 
     /**
      * Pulls a list of metrics for the current object instance.
      * @param $metricGroups
-     * @param $params
+     * @param array $params
+     * @param bool $async
+     * @return $this
+     * @throws BadRequest
      */
-    public function stats($metricGroups, $params = [])
+    public function stats($metricGroups, $params = [], $async = false)
     {
-        return $this->all_stats([$this->getId()], $metricGroups, $params);
+        return $this->all_stats([$this->getId()], $metricGroups, $params, $async);
     }
 
 
-    public function all_stats($ids, $metricGroups, $params = [])
+    public function all_stats($ids, $metricGroups, $params = [], $async = false)
     {
         $endTime = isset($params[AnalyticsFields::END_TIME]) ? $params[AnalyticsFields::END_TIME] : new \DateTime('now');
         $endTime->setTime($endTime->format('H'), 0, 0);
@@ -56,14 +61,21 @@ class Analytics extends Resource
             AnalyticsFields::PLACEMENT => $placement,
         ];
 
-        if (!is_null($segmentationType)) {
-            $params[AnalyticsFields::SEGMENTATION_TYPE] = $segmentationType;
+        if (!$async) {
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS);
+            $response = $this->getTwitterAds()->get($resource, $params);
+
+            return $response->getBody()->data;
+        } else {
+            if (!is_null($segmentationType)) {
+                $params[AnalyticsFields::SEGMENTATION_TYPE] = $segmentationType;
+            }
+
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS_JOBS);
+            $response = $this->getTwitterAds()->post($resource, $params);
+            $job = new Job();
+            return $job->fromResponse($response->getBody()->data);
         }
-
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS);
-        $response = $this->getTwitterAds()->get($resource, $params);
-
-        return $response->getBody()->data;
     }
 
     public static function inAvailableEntities($entity)

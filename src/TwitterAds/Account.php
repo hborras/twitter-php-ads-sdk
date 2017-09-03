@@ -8,6 +8,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AppList;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
@@ -46,12 +47,13 @@ class Account extends Analytics
     /**
      * @param $metricGroups
      * @param array $params
+     * @param bool $async
      * @return mixed
      */
-    public function stats($metricGroups, $params = [])
+    public function stats($metricGroups, $params = [], $async = false)
     {
         $params[AnalyticsFields::ENTITY] = AnalyticsFields::ACCOUNT;
-        return parent::stats($metricGroups, $params);
+        return parent::stats($metricGroups, $params, $async);
     }
 
     /**
@@ -154,6 +156,19 @@ class Account extends Analytics
         $appListsClass = new AppList();
 
         return $appListsClass->loadResource($id, $params);
+    }
+
+    /**
+     * Returns a collection of jobs. Can specify job_ids parameter to filter
+     *
+     * @param array $params
+     * @return Cursor|Resource
+     */
+    public function getJobs($params = [])
+    {
+        $jobsClass = new Job();
+
+        return $jobsClass->loadResource('', $params);
     }
 
 

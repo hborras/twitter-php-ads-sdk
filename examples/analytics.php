@@ -24,7 +24,7 @@ $accounts = $api->getAccounts();
 $account = new Account(ACCOUNT_ID);
 $account->read();
 $campaigns = $account->getCampaigns('', [TwitterAds\Fields\CampaignFields::COUNT => 1]);
-$campaigns->setUseImplicitFetch(true);
+$campaigns->setUseImplicitFetch(false);
 $campaignsData = [];
 
 /** @var Campaign $campaign */
@@ -73,7 +73,7 @@ foreach ($campaignsData as $campaign) {
                         AnalyticsFields::END_TIME => $date[1],
                         AnalyticsFields::GRANULARITY => Enumerations::GRANULARITY_TOTAL,
                         AnalyticsFields::PLACEMENT => Enumerations::PLACEMENT_ALL_ON_TWITTER
-                    ]
+                    ], true
                 );
                 $stats = $stats[0]->id_data[0]->metrics;
                 if (!is_null($stats->billed_charge_local_micro)) {
