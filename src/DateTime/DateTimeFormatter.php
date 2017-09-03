@@ -22,6 +22,7 @@ trait DateTimeFormatter
     {
         return (new \DateTime($datestr))->setTimezone(new \DateTimeZone('UTC'));
     }
+
     /**
      * Returns an ImmutableDateTime object from a date string.
      *

@@ -7,12 +7,13 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\ImageAppDownloadCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class ImageAppDownloadCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/image_app_download';
-    const RESOURCE = 'accounts/{account_id}/cards/image_app_download/{id}';
+    const RESOURCE            = 'accounts/{account_id}/cards/image_app_download/{id}';
 
     /** Read Only */
     protected $id;
@@ -22,16 +23,16 @@ class ImageAppDownloadCard extends Resource
     protected $deleted;
 
     protected $properties = [
-        'name',
-        'app_country_code',
-        'iphone_app_id',
-        'iphone_deep_link',
-        'ipad_app_id',
-        'ipad_deep_link',
-        'googleplay_app_id',
-        'googleplay_deep_link',
-        'app_cta',
-        'wide_app_image_media_id',
+        ImageAppDownloadCardFields::NAME,
+        ImageAppDownloadCardFields::APP_COUNTRY_CODE,
+        ImageAppDownloadCardFields::IPHONE_APP_ID,
+        ImageAppDownloadCardFields::IPHONE_DEEP_LINK,
+        ImageAppDownloadCardFields::IPAD_APP_ID,
+        ImageAppDownloadCardFields::IPAD_DEEP_LINK,
+        ImageAppDownloadCardFields::GOOGLEPLAY_APP_ID,
+        ImageAppDownloadCardFields::GOOGLEPLAY_DEEP_LINK,
+        ImageAppDownloadCardFields::APP_CTA,
+        ImageAppDownloadCardFields::WIDE_APP_IMAGE_MEDIA_ID
     ];
 
     /** Writable */

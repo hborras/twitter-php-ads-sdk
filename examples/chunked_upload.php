@@ -25,5 +25,5 @@ $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS
 $account = $twitterAds->getAccounts(ACCOUNT_ID);
 
 // create request for a simple nullcasted tweet
-$media = $twitterAds->upload(['media'=> 'twitter-gif.gif', 'media_type' => 'image/gif'], true);
-$tweet = Tweet::create($account, 'Tweet with chunked upload GIF...'.rand().' http://twitter.com',['media_ids'=> $media->media_id]);
+$media = $twitterAds->upload(['media' => 'twitter-gif.gif', 'media_type' => 'image/gif'], true);
+$tweet = Tweet::create($account, 'Tweet with chunked upload GIF...' . rand() . ' http://twitter.com', ['media_ids' => $media->media_id]);

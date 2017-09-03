@@ -7,13 +7,14 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\PromotedAccountFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class PromotedAccount extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/promoted_accounts';
-    const RESOURCE = 'accounts/{account_id}/promoted_accounts/{id}';
-    const RESOURCE_STATS = 'stats/accounts/{account_id}/promoted_accounts/{id}';
+    const RESOURCE            = 'accounts/{account_id}/promoted_accounts/{id}';
+    const RESOURCE_STATS      = 'stats/accounts/{account_id}/promoted_accounts/{id}';
 
     /** Read Only */
     protected $id;
@@ -23,9 +24,9 @@ class PromotedAccount extends Resource
     protected $deleted;
 
     protected $properties = [
-        'line_item_id',
-        'user_id',
-        'paused',
+        PromotedAccountFields::LINE_ITEM_ID,
+        PromotedAccountFields::USER_ID,
+        PromotedAccountFields::PAUSED,
     ];
 
     /** Writable */

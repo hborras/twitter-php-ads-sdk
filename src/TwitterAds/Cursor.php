@@ -7,10 +7,11 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-class Cursor implements \IteratorAggregate
+use Hborras\TwitterAdsSDK\TwitterAds;
+
+class Cursor implements \Iterator, \Countable, \arrayaccess
 {
-    private $account;
-    /** @var Resource  */
+    /** @var Resource */
     private $resource;
     private $params;
     private $next_cursor = null;
@@ -18,13 +19,35 @@ class Cursor implements \IteratorAggregate
     private $total_count = 0;
     /** @var  array */
     private $collection;
+    /** @var  TwitterAds */
+    private $twitterAds;
+
+    /**
+     * @var int|null
+     */
+    protected $indexLeft;
+
+    /**
+     * @var int|null
+     */
+    protected $indexRight;
+
+    /**
+     * @var bool
+     */
+    protected static $defaultUseImplicitFetch = false;
+
+    /**
+     * @var bool
+     */
+    protected $useImplicitFetch;
 
     public function __construct(/* @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hborras\TwitterAdsSDK\TwitterAds\Resource $resource, Account $account, $request, $params)
+        \Hborras\TwitterAdsSDK\TwitterAds\Resource $resource, TwitterAds $twitterAds, $request, $params)
     {
         $this->resource = $resource;
-        $this->account = $account;
         $this->params = $params;
+        $this->twitterAds = $twitterAds;
         $this->fromResponse($request);
     }
 
@@ -45,14 +68,6 @@ class Cursor implements \IteratorAggregate
     }
 
     /**
-     * @return Resource
-     */
-    public function first()
-    {
-        return $this->next();
-    }
-
-    /**
      * @return int
      */
     public function fetched()
@@ -65,19 +80,19 @@ class Cursor implements \IteratorAggregate
      */
     public function next()
     {
-        if ($this->current_index < count($this->collection)) {
-            $value = $this->collection[$this->current_index];
-            ++$this->current_index;
-
-            return $value;
-        } elseif (!is_null($this->next_cursor)) {
-            $this->fetchNext();
-
-            return $this->next();
+        if ($this->current_index == $this->getIndexRight()) {
+            if ($this->getUseImplicitFetch()) {
+                $this->fetchNext();
+                if ($this->current_index == $this->getIndexRight()) {
+                    $this->current_index = null;
+                } else {
+                    ++$this->current_index;
+                }
+            } else {
+                $this->current_index = null;
+            }
         } else {
-            $this->current_index = 0;
-
-            return 0;
+            ++$this->current_index;
         }
     }
 
@@ -87,23 +102,29 @@ class Cursor implements \IteratorAggregate
      */
     public function fetchNext($params = [])
     {
-        $params['cursor'] = $this->next_cursor;
-        switch ($this->account->getTwitterAds()->getMethod()) {
+        $requestParams = $this->params;
+        if (count($params) > 0) {
+            foreach ($params as $key => $value) {
+                $requestParams[$key] = $value;
+            }
+        }
+        $requestParams['cursor'] = $this->next_cursor;
+        switch ($this->getTwitterAds()->getMethod()) {
             case 'GET':
-                $response = $this->account->getTwitterAds()->get($this->account->getTwitterAds()->getResource(), $params);
-            break;
+                $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $requestParams);
+                break;
             case 'POST':
-                $response = $this->account->getTwitterAds()->post($this->account->getTwitterAds()->getResource(), $params);
-            break;
+                $response = $this->getTwitterAds()->post($this->getTwitterAds()->getResource(), $params);
+                break;
             case 'PUT':
-                $response = $this->account->getTwitterAds()->put($this->account->getTwitterAds()->getResource(), $params);
-            break;
+                $response = $this->getTwitterAds()->put($this->getTwitterAds()->getResource(), $params);
+                break;
             case 'DELETE':
-                $response = $this->account->getTwitterAds()->delete($this->account->getTwitterAds()->getResource());
-            break;
+                $response = $this->getTwitterAds()->delete($this->getTwitterAds()->getResource());
+                break;
             default:
-                $response = $this->account->getTwitterAds()->get($this->account->getTwitterAds()->getResource(), $params);
-            break;
+                $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $params);
+                break;
         }
 
         return $this->fromResponse($response->getBody());
@@ -121,17 +142,21 @@ class Cursor implements \IteratorAggregate
         }
         foreach ($request->data as $item) {
             if (method_exists($this->resource, 'fromResponse')) {
-                if ($this->resource instanceof Account) {
-                    $obj = new $this->resource($this->account->getTwitterAds());
-                } else {
-                    $obj = new $this->resource();
-                }
-                $obj->setAccount($this->account);
+                /** @var \Hborras\TwitterAdsSDK\TwitterAds\Resource $obj */
+                $obj = new $this->resource();
                 $this->collection[] = $obj->fromResponse($item);
             } else {
                 $this->collection[] = $item;
             }
         }
+
+        if ($this->indexRight === null) {
+            $this->indexLeft = 0;
+            $this->indexRight = -1;
+            $this->current_index = 0;
+        }
+
+        $this->indexRight += count($request->data);
 
         return $this;
     }
@@ -161,18 +186,196 @@ class Cursor implements \IteratorAggregate
     }
 
     /**
-     * @return Account
+     * @return TwitterAds
      */
-    public function getAccount()
+    public function getTwitterAds()
     {
-        return $this->account;
+        return $this->twitterAds;
     }
 
     /**
-     * @param Account $account
+     * @param TwitterAds $twitterAds
      */
-    public function setAccount($account)
+    public function setTwitterAds($twitterAds)
     {
-        $this->account = $account;
+        $this->twitterAds = $twitterAds;
+    }
+
+    /**
+     * Return the current element
+     * @link http://php.net/manual/en/iterator.current.php
+     * @return mixed Can return any type.
+     * @since 5.0.0
+     */
+    public function current()
+    {
+        return isset($this->collection[$this->current_index])
+            ? $this->collection[$this->current_index]
+            : false;
+    }
+
+    /**
+     * Return the key of the current element
+     * @link http://php.net/manual/en/iterator.key.php
+     * @return mixed scalar on success, or null on failure.
+     * @since 5.0.0
+     */
+    public function key()
+    {
+        return $this->current_index;
+    }
+
+    /**
+     * Checks if current position is valid
+     * @link http://php.net/manual/en/iterator.valid.php
+     * @return boolean The return value will be casted to boolean and then evaluated.
+     * Returns true on success or false on failure.
+     * @since 5.0.0
+     */
+    public function valid()
+    {
+        return isset($this->collection[$this->current_index]);
+    }
+
+    /**
+     * Rewind the Iterator to the first element
+     * @link http://php.net/manual/en/iterator.rewind.php
+     * @return void Any returned value is ignored.
+     * @since 5.0.0
+     */
+    public function rewind()
+    {
+        $this->current_index = $this->current_index--;
+    }
+
+    /**
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     * @since 5.0.0
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->collection[$offset]);
+    }
+
+    /**
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     * @since 5.0.0
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->collection[$offset]) ? $this->collection[$offset] : null;
+    }
+
+    /**
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetSet($offset, $value)
+    {
+        if ($offset === null) {
+            $this->collection[] = $value;
+        } else {
+            $this->collection[$offset] = $value;
+        }
+    }
+
+    /**
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->collection[$offset]);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function getDefaultUseImplicitFetch()
+    {
+        return static::$defaultUseImplicitFetch;
+    }
+
+    /**
+     * @param bool $use_implicit_fetch
+     */
+    public static function setDefaultUseImplicitFetch($use_implicit_fetch)
+    {
+        static::$defaultUseImplicitFetch = $use_implicit_fetch;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseImplicitFetch()
+    {
+        return $this->useImplicitFetch !== null
+            ? $this->useImplicitFetch
+            : static::$defaultUseImplicitFetch;
+    }
+
+    /**
+     * @param bool $useImplicitFetch
+     */
+    public function setUseImplicitFetch($useImplicitFetch)
+    {
+        $this->useImplicitFetch = $useImplicitFetch;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIndexLeft()
+    {
+        return $this->indexLeft;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIndexRight()
+    {
+        return $this->indexRight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+    /**
+     * @param mixed $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
     }
 }

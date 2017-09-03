@@ -7,12 +7,13 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\VideoFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class Video extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/videos';
-    const RESOURCE = 'accounts/{account_id}/videos/{id}';
+    const RESOURCE            = 'accounts/{account_id}/videos/{id}';
 
     /** Read Only */
     protected $id;
@@ -26,9 +27,9 @@ class Video extends Resource
     protected $deleted;
 
     protected $properties = [
-        'title',
-        'description',
-        'video_media_id',
+        VideoFields::TITLE,
+        VideoFields::DESCRIPTION,
+        VideoFields::VIDEO_MEDIA_ID,
     ];
 
     /** Writable */

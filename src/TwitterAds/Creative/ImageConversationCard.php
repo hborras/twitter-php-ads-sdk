@@ -7,12 +7,13 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\ImageConversationCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class ImageConversationCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/image_conversation';
-    const RESOURCE = 'accounts/{account_id}/cards/image_conversation/{id}';
+    const RESOURCE            = 'accounts/{account_id}/cards/image_conversation/{id}';
 
     /** Read Only */
     protected $id;
@@ -22,15 +23,15 @@ class ImageConversationCard extends Resource
     protected $deleted;
 
     protected $properties = [
-        'name',
-        'title',
-        'first_cta',
-        'first_cta_tweet',
-        'second_cta',
-        'second_cta_tweet',
-        'thank_you_text',
-        'thank_you_url',
-        'image_media_id',
+        ImageConversationCardFields::NAME,
+        ImageConversationCardFields::TITLE,
+        ImageConversationCardFields::FIRST_CTA,
+        ImageConversationCardFields::FIRST_CTA_TWEET,
+        ImageConversationCardFields::SECOND_CTA,
+        ImageConversationCardFields::SECOND_CTA_TWEET,
+        ImageConversationCardFields::THANK_YOU_TEXT,
+        ImageConversationCardFields::THANK_YOU_URL,
+        ImageConversationCardFields::IMAGE_MEDIA_ID,
     ];
 
     /** Writable */

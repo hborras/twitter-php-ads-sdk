@@ -9,6 +9,20 @@ Installation
     # installing the latest signed release
     composer require hborras/twitter-php-ads-sdk
 
+Breaking Changes
+''''''''''''''''
+
+This new version includes some breaking changes that make incompatible with the previous library.
+
+I've tried to make it easier to use it, you now only needs to instantiate one time the API class, and you can forget
+about it. Before you needed to move it across all your classes and made the code more difficult
+
+
+Future changes
+''''''''''''''''
+
+Implement Twitter Ads API v2
+
 Quick Start
 '''''''''''
 
@@ -20,11 +34,17 @@ Quick Start
     const ACCESS_TOKEN_SECRET = 'access token secret';
     const ACCOUNT_ID = 'account id';
 
-    // Create twitter ads client
-    $twitterAds = new TwitterAds(CONSUMER_KEY,CONSUMER_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET);
 
-    // Retrieve account information
-    $account = $twitterAds->getAccounts(ACCOUNT_ID);
+    // Create Twitter Ads Api Instance
+    $api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+
+    $accounts = $api->getAccounts();
+    // load up the account instance, campaign and line item
+    $account = new Account(ACCOUNT_ID);
+    $account->read();
+    $campaigns = $account->getCampaigns('', [CampaignFields::COUNT => 1]);
+    $campaigns->setUseImplicitFetch(false);
+    $campaignsData = [];
 
     // Create your campaign
     $campaign = new Campaign();
@@ -35,6 +55,56 @@ Quick Start
     $campaign->setPaused(false);
     $campaign->setStartTime(new \DateTime());
     $campaign->save();
+
+    // Automatic fetch from API when collection arrives to end:
+    $campaign->setUseImplicitFetch(true);
+
+    // Default fetch from API when collection arrives to end (GLOBAL):
+    Cursor::setDefaultUseImplicitFetch(true);
+
+    // Disable it
+    Cursor::setDefaultUseImplicitFetch(false);
+
+    // Async stats
+    $stats = $lineItem->stats(
+        [
+            AnalyticsFields::METRIC_GROUPS_BILLING,
+            AnalyticsFields::METRIC_GROUPS_MOBILE_CONVERSION,
+            AnalyticsFields::METRIC_GROUPS_ENGAGEMENT,
+        ],
+        [
+            AnalyticsFields::START_TIME => $date[0],
+            AnalyticsFields::END_TIME => $date[1],
+            AnalyticsFields::GRANULARITY => Enumerations::GRANULARITY_TOTAL,
+            AnalyticsFields::PLACEMENT => Enumerations::PLACEMENT_ALL_ON_TWITTER
+        ], true
+    );
+    
+    // Sync stats, set parameter to false, or not include it
+    $stats = $lineItem->stats(
+        [
+           AnalyticsFields::METRIC_GROUPS_BILLING,
+            AnalyticsFields::METRIC_GROUPS_MOBILE_CONVERSION,
+            AnalyticsFields::METRIC_GROUPS_ENGAGEMENT,
+        ],
+        [
+            AnalyticsFields::START_TIME => $date[0],
+            AnalyticsFields::END_TIME => $date[1],
+            AnalyticsFields::GRANULARITY => Enumerations::GRANULARITY_TOTAL,
+            AnalyticsFields::PLACEMENT => Enumerations::PLACEMENT_ALL_ON_TWITTER
+        ], false
+    );
+    
+Field Constants
+---------------
+
+    Now, there are able Fields classes for every included class to make easier filter and create data
+    .. code:: php
+    AnalyticsFields::GRANULARITY -> 'granularity'
+    AnalyticsFields::PLACEMENT -> 'placement'
+    .
+    .
+    .
 
 
 Development
@@ -79,6 +149,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 .. |Build Status| image:: https://travis-ci.org/hborras/twitter-php-ads-sdk.svg?branch=master
-   :target: https://travis-ci.org/hborras/twitter-php-ads-sdk
+:target: https://travis-ci.org/hborras/twitter-php-ads-sdk
 .. |Scrutinizer Status| image:: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk/badges/quality-score.png?b=master
-   :target: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk
+:target: https://scrutinizer-ci.com/g/hborras/twitter-php-ads-sdk

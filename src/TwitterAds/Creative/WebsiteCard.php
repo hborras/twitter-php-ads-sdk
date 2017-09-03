@@ -7,12 +7,13 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\WebsiteCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class WebsiteCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/website';
-    const RESOURCE = 'accounts/{account_id}/cards/website/{id}';
+    const RESOURCE            = 'accounts/{account_id}/cards/website/{id}';
 
     /** Read Only */
     protected $id;
@@ -22,10 +23,10 @@ class WebsiteCard extends Resource
     protected $deleted;
 
     protected $properties = [
-        'name',
-        'website_title',
-        'website_url',
-        'image_media_id',
+        WebsiteCardFields::NAME,
+        WebsiteCardFields::WEBSITE_TITLE,
+        WebsiteCardFields::WEBSITE_URL,
+        WebsiteCardFields::IMAGE_MEDIA_ID,
     ];
 
     /** Writable */

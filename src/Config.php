@@ -22,7 +22,7 @@ class Config
      */
     protected $decodeJsonAsArray = false;
     /** @var string User-Agent header */
-    protected $userAgent = 'TwitterAds';
+    protected $userAgent = 'TwitterAdsPhpSdk';
     /** @var array Store proxy connection details */
     protected $proxy = [];
 
@@ -34,8 +34,8 @@ class Config
      */
     public function setTimeouts($connectionTimeout, $timeout)
     {
-        $this->connectionTimeout = (int) $connectionTimeout;
-        $this->timeout = (int) $timeout;
+        $this->connectionTimeout = (int)$connectionTimeout;
+        $this->timeout = (int)$timeout;
     }
 
     /**
@@ -43,7 +43,7 @@ class Config
      */
     public function setDecodeJsonAsArray($value)
     {
-        $this->decodeJsonAsArray = (bool) $value;
+        $this->decodeJsonAsArray = (bool)$value;
     }
 
     /**
@@ -51,7 +51,7 @@ class Config
      */
     public function setUserAgent($userAgent)
     {
-        $this->userAgent = (string) $userAgent;
+        $this->userAgent = (string)$userAgent;
     }
 
     /**

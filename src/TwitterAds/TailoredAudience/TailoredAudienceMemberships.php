@@ -15,12 +15,12 @@ use Hborras\TwitterAdsSDK\TwitterAds\Batch;
 final class TailoredAudienceMemberships extends Batch
 {
     const MAX_BATCH_SIZE = 100;
-    const RESOURCE = 'tailored_audience_memberships';
-    const OPERATION = 'Update';
+    const RESOURCE       = 'tailored_audience_memberships';
+    const OPERATION      = 'Update';
 
-    public function __construct(Account $account=null, $members=[])
+    public function __construct(TwitterAds $twitterAds = null, $members = [])
     {
-        parent::__construct($account, self::MAX_BATCH_SIZE, $members);
+        parent::__construct($twitterAds, self::MAX_BATCH_SIZE, $members);
     }
 
     /**
@@ -29,9 +29,9 @@ final class TailoredAudienceMemberships extends Batch
     public function save()
     {
         return $this->fromResponse(
-            $this->getAccount()->getTwitterAds()->post(self::RESOURCE, [
+            $this->getTwitterAds()->post(self::RESOURCE, [
                 'operation_type' => self::OPERATION,
-                'params'         => $this->toParams(),
-        ]));
+                'params' => $this->toParams(),
+            ]));
     }
 }

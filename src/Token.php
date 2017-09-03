@@ -13,7 +13,7 @@ class Token
     public $secret;
 
     /**
-     * @param string $key    The OAuth Token
+     * @param string $key The OAuth Token
      * @param string $secret The OAuth Token Secret
      */
     public function __construct($key, $secret)

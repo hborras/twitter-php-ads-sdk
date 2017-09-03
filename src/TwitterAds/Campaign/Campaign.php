@@ -8,13 +8,15 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
 
 class Campaign extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/campaigns';
-    const RESOURCE = 'accounts/{account_id}/campaigns/{id}';
-
-    const ENTITY = 'CAMPAIGN';
+    const RESOURCE            = 'accounts/{account_id}/campaigns/{id}';
+    const ENTITY              = 'CAMPAIGN';
 
     /** Read Only */
     protected $id;
@@ -23,17 +25,20 @@ class Campaign extends Analytics
     protected $created_at;
     protected $updated_at;
     protected $deleted;
+    protected $currency;
+    protected $entity_status;
 
     protected $properties = [
-        'name',
-        'funding_instrument_id',
-        'start_time',
-        'end_time',
-        'paused',
-        'currency',
-        'standard_delivery',
-        'daily_budget_amount_local_micro',
-        'total_budget_amount_local_micro',
+        CampaignFields::NAME,
+        CampaignFields::FUNDING_INSTRUMENT_ID,
+        CampaignFields::START_TIME,
+        CampaignFields::END_TIME,
+        CampaignFields::PAUSED,
+        CampaignFields::STANDARD_DELIVERY,
+        CampaignFields::DAILY_BUDGET_AMOUNT_LOCAL_MICRO,
+        CampaignFields::TOTAL_BUDGET_AMOUNT_LOCAL_MICRO,
+        CampaignFields::DURATION_IN_DAYS,
+        CampaignFields::FREQUENCY_CAP,
     ];
 
     /** Writable */
@@ -42,10 +47,34 @@ class Campaign extends Analytics
     protected $start_time;
     protected $end_time;
     protected $paused;
-    protected $currency;
     protected $standard_delivery;
     protected $daily_budget_amount_local_micro;
     protected $total_budget_amount_local_micro;
+    protected $duration_in_days;
+    protected $frequency_cap;
+
+    /**
+     * @param array $params
+     * @return \Hborras\TwitterAdsSDK\TwitterAds\Cursor|Resource
+     */
+    public function getLineItems($params = [])
+    {
+        $params[CampaignFields::CAMPAIGN_IDS] = $this->getId();
+        $lineItemClass = new LineItem();
+        return $lineItemClass->loadResource('', $params);
+    }
+
+    /**
+     * @param $metricGroups
+     * @param array $params
+     * @param bool $async
+     * @return mixed
+     */
+    public function stats($metricGroups, $params = [], $async = false)
+    {
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::CAMPAIGN;
+        return parent::stats($metricGroups, $params, $async);
+    }
 
     /**
      * @return mixed
@@ -72,7 +101,7 @@ class Campaign extends Analytics
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -253,5 +282,45 @@ class Campaign extends Analytics
     public function setProperties($properties)
     {
         $this->properties = $properties;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDurationInDays()
+    {
+        return $this->duration_in_days;
+    }
+
+    /**
+     * @param mixed $duration_in_days
+     */
+    public function setDurationInDays($duration_in_days)
+    {
+        $this->duration_in_days = $duration_in_days;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFrequencyCap()
+    {
+        return $this->frequency_cap;
+    }
+
+    /**
+     * @param mixed $frequency_cap
+     */
+    public function setFrequencyCap($frequency_cap)
+    {
+        $this->frequency_cap = $frequency_cap;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntityStatus()
+    {
+        return $this->entity_status;
     }
 }

@@ -16,10 +16,10 @@ use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidOperation
 final class TailoredAudienceChanges extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/tailored_audience_changes';
-    const RESOURCE = 'accounts/{account_id}/tailored_audience_changes/{id}';
+    const RESOURCE            = 'accounts/{account_id}/tailored_audience_changes/{id}';
 
-    const ADD = 'ADD';
-    const REMOVE = 'REMOVE';
+    const ADD     = 'ADD';
+    const REMOVE  = 'REMOVE';
     const REPLACE = 'REPLACE';
 
     protected $input_file_path;

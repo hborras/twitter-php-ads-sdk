@@ -16,40 +16,14 @@ use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
     /** @var TwitterAds */
-    protected $twitter;
+    protected $api;
 
     /**
      * Set up the client
      */
     protected function setUp()
     {
-        $this->twitter = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, false);
-    }
-
-    public function testAccountsCanBeConvertedToAnArray()
-    {
-        $types = [
-            'id'                    => function($v) { return is_string($v); },
-            'name'                  => function($v) { return is_string($v); },
-            'salt'                  => function($v) { return is_string($v); },
-            'timezone'              => function($v) { return is_string($v); },
-            'timezone_switch_at'    => function($v) { return $v instanceof \DateTimeInterface; },
-            'created_at'            => function($v) { return $v instanceof \DateTimeInterface; },
-            'updated_at'            => function($v) { return $v instanceof \DateTimeInterface; },
-            'deleted'               => function($v) { return is_bool($v); },
-            'approval_status'       => function($v) { return is_string($v); },
-            'properties'            => function($v) { return is_array($v); },
-            'business_id'           => function($v) { return is_string($v) || is_null($v); },
-            'business_name'         => function($v) { return is_string($v) || is_null($v); },
-        ];
-        $accounts = $this->twitter->getAccounts();
-
-        foreach($accounts as $account) {
-            $array = $account->toArray();
-            foreach ($array as $key => $value) {
-                $this->assertTrue($types[$key]($value));
-            }
-        }
+        $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, ACCOUNT_ID, false);
     }
 
     /**
@@ -57,7 +31,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAccounts()
     {
-        $cursor = $this->twitter->getAccounts();
+        $cursor = $this->api->getAccounts();
         $this->assertInstanceOf(Cursor::class, $cursor);
         return $cursor;
     }
@@ -70,8 +44,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     public function testGetAccount($accounts)
     {
         /** @var Account $firstAccount */
-        $firstAccount = $accounts->next();
-        $account = $this->twitter->getAccounts($firstAccount->getId());
+        $firstAccount = $accounts->current();
+        $account = new Account($firstAccount->getId());
+        $account->read();
         $this->assertEquals($firstAccount->getId(), $account->getId());
         return $account;
     }
@@ -116,8 +91,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     public function testGetFundingInstrument($fundingInstruments)
     {
         /** @var FundingInstrument $firstFundingInstrument */
-        $firstFundingInstrument = $fundingInstruments->next();
-        $account = $firstFundingInstrument->getAccount();
+        $firstFundingInstrument = $fundingInstruments->current();
+        $account = new Account($firstFundingInstrument->getTwitterAds()->getAccountId());
+        $account->read();
         $fundingInstrument = $account->getFundingInstruments($firstFundingInstrument->getId());
         $this->assertEquals($fundingInstrument->getId(), $firstFundingInstrument->getId());
         return $account;
@@ -143,8 +119,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     public function testGetCampaign($campaigns)
     {
         /** @var Campaign $firstCampaign */
-        $firstCampaign = $campaigns->next();
-        $account = $firstCampaign->getAccount();
+        $firstCampaign = $campaigns->current();
+        $account = new Account($firstCampaign->getTwitterAds()->getAccountId());
+        $account->read();
         $campaign = $account->getCampaigns($firstCampaign->getId());
         $this->assertEquals($campaign->getId(), $firstCampaign->getId());
         return $campaign;
@@ -170,8 +147,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     public function testGetPromotableUser(Cursor $promotableUsers)
     {
         /** @var PromotableUser $firstPromotableUser */
-        $firstPromotableUser = $promotableUsers->next();
-        $account = $firstPromotableUser->getAccount();
+        $firstPromotableUser = $promotableUsers->current();
+        $account = new Account($firstPromotableUser->getTwitterAds()->getAccountId());
+        $account->read();
         $promotableUser = $account->getPromotableUsers($firstPromotableUser->getId());
         $this->assertEquals($promotableUser->getId(), $firstPromotableUser->getId());
         return $promotableUser;
@@ -197,8 +175,9 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     public function testGetLineItem($lineItems)
     {
         /** @var LineItem $firstLineItem */
-        $firstLineItem = $lineItems->next();
-        $account = $firstLineItem->getAccount();
+        $firstLineItem = $lineItems->current();
+        $account = new Account($firstLineItem->getTwitterAds()->getAccountId());
+        $account->read();
         $lineItem = $account->getLineItems($firstLineItem->getId());
         $this->assertEquals($lineItem->getId(), $firstLineItem->getId());
         return $lineItem;
@@ -226,9 +205,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     public function testGetTargetingCriteria($targetingCriterias)
     {
         /** @var TargetingCriteria $firstTargetingCriteria */
-        $firstTargetingCriteria = $targetingCriterias->next();
+        $firstTargetingCriteria = $targetingCriterias->current();
         $targetingCriteria = new TargetingCriteria();
-        $targetingCriteria->setAccount($firstTargetingCriteria->getAccount());
         $targetingCriteria->load($firstTargetingCriteria->getId());
         $this->assertEquals($targetingCriteria->getId(), $firstTargetingCriteria->getId());
         return $targetingCriteria;

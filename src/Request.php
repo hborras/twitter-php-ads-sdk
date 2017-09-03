@@ -15,8 +15,8 @@ class Request
     /**
      * Constructor.
      *
-     * @param string     $httpMethod
-     * @param string     $httpUrl
+     * @param string $httpMethod
+     * @param string $httpUrl
      * @param array|null $parameters
      */
     public function __construct($httpMethod, $httpUrl, array $parameters = [])
@@ -31,10 +31,10 @@ class Request
      * pretty much a helper function to set up the request.
      *
      * @param Consumer $consumer
-     * @param Token    $token
-     * @param string   $httpMethod
-     * @param string   $httpUrl
-     * @param array    $parameters
+     * @param Token $token
+     * @param string $httpMethod
+     * @param string $httpUrl
+     * @param array $parameters
      *
      * @return Request
      */
@@ -44,7 +44,8 @@ class Request
         $httpMethod,
         $httpUrl,
         array $parameters = []
-    ) {
+    )
+    {
         $defaults = [
             'oauth_version' => self::$version,
             'oauth_nonce' => self::generateNonce(),
@@ -55,9 +56,9 @@ class Request
             $defaults['oauth_token'] = $token->key;
         }
 
-        if(isset($parameters['raw'])){
+        if (isset($parameters['raw'])) {
             $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1($parameters['raw'], TRUE))]);
-        } else if(empty($parameters)){
+        } else if (empty($parameters)) {
             $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1('', TRUE))]);
         } else {
             $parameters = array_merge($defaults, $parameters);
@@ -177,7 +178,7 @@ class Request
         $postData = $this->toPostdata();
         $out = $this->getNormalizedHttpUrl();
         if ($postData) {
-            $out .= '?'.$postData;
+            $out .= '?' . $postData;
         }
 
         return $out;
@@ -212,7 +213,7 @@ class Request
                 throw new TwitterOAuthException('Arrays not supported in headers');
             }
             $out .= ($first) ? ' ' : ', ';
-            $out .= Util::urlencodeRfc3986($k).'="'.Util::urlencodeRfc3986($v).'"';
+            $out .= Util::urlencodeRfc3986($k) . '="' . Util::urlencodeRfc3986($v) . '"';
             $first = false;
         }
 
@@ -229,8 +230,8 @@ class Request
 
     /**
      * @param SignatureMethod $signatureMethod
-     * @param Consumer        $consumer
-     * @param Token           $token
+     * @param Consumer $consumer
+     * @param Token $token
      */
     public function signRequest(SignatureMethod $signatureMethod, Consumer $consumer, Token $token = null)
     {
@@ -241,8 +242,8 @@ class Request
 
     /**
      * @param SignatureMethod $signatureMethod
-     * @param Consumer        $consumer
-     * @param Token           $token
+     * @param Consumer $consumer
+     * @param Token $token
      *
      * @return string
      */
@@ -256,6 +257,6 @@ class Request
      */
     public static function generateNonce()
     {
-        return md5(microtime().mt_rand());
+        return md5(microtime() . mt_rand());
     }
 }

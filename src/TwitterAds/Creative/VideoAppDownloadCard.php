@@ -7,12 +7,13 @@
  */
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\VideoAppDownloadCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class VideoAppDownloadCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/video_app_download';
-    const RESOURCE = 'accounts/{account_id}/cards/video_app_download/{id}';
+    const RESOURCE            = 'accounts/{account_id}/cards/video_app_download/{id}';
 
     /** Read Only */
     protected $id;
@@ -24,17 +25,17 @@ class VideoAppDownloadCard extends Resource
     protected $deleted;
 
     protected $properties = [
-        'name',
-        'app_country_code',
-        'iphone_app_id',
-        'iphone_deep_link',
-        'ipad_app_id',
-        'ipad_deep_link',
-        'googleplay_app_id',
-        'googleplay_deep_link',
-        'app_cta',
-        'image_media_id',
-        'video_id',
+        VideoAppDownloadCardFields::NAME,
+        VideoAppDownloadCardFields::APP_COUNTRY_CODE,
+        VideoAppDownloadCardFields::IPHONE_APP_ID,
+        VideoAppDownloadCardFields::IPAD_DEEP_LINK,
+        VideoAppDownloadCardFields::IPAD_APP_ID,
+        VideoAppDownloadCardFields::IPAD_DEEP_LINK,
+        VideoAppDownloadCardFields::GOOGLEPLAY_APP_ID,
+        VideoAppDownloadCardFields::GOOGLEPLAY_DEEP_LINK,
+        VideoAppDownloadCardFields::APP_CTA,
+        VideoAppDownloadCardFields::IMAGE_MEDIA_ID,
+        VideoAppDownloadCardFields::VIDEO_ID,
     ];
 
     /** Writable */

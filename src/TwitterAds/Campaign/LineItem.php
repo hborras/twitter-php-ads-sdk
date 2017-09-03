@@ -8,8 +8,10 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemFields;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 class LineItem extends Analytics
@@ -26,25 +28,25 @@ class LineItem extends Analytics
     protected $deleted;
 
     protected $properties = [
-        'campaign_id',
-        'bid_amount_local_micro',
-        'name',
-        'bid_type',
-        'automatically_select_bid',
-        'product_type',
-        'placements',
-        'objective',
-        'paused',
-        'include_sentiment',
-        'total_budget_amount_local_micro',
-        'start_time',
-        'end_time',
-        'primary_web_event_tag',
-        'optimization',
-        'bid_unit',
-        'charge_by',
-        'advertiser_domain',
-        'advertiser_user_id',
+        LineItemFields::CAMPAIGN_ID,
+        LineItemFields::BID_AMOUNT_LOCAL_MICRO,
+        LineItemFields::NAME,
+        LineItemFields::BID_TYPE,
+        LineItemFields::AUTOMATICALLY_SELECT_BID,
+        LineItemFields::PRODUCT_TYPE,
+        LineItemFields::PLACEMENTS,
+        LineItemFields::OBJECTIVE,
+        LineItemFields::PAUSED,
+        LineItemFields::INCLUDE_SENTIMENT,
+        LineItemFields::TOTAL_BUDGET_AMOUNT_LOCAL_MICRO,
+        LineItemFields::START_TIME,
+        LineItemFields::END_TIME,
+        LineItemFields::PRIMARY_WEB_EVENT_TAG,
+        LineItemFields::OPTIMIZATION,
+        LineItemFields::BID_UNIT,
+        LineItemFields::CHARGE_BY,
+        LineItemFields::ADVERTISER_DOMAIN,
+        LineItemFields::ADVERTISER_USER_ID
     ];
 
     /** Writable */
@@ -69,6 +71,25 @@ class LineItem extends Analytics
     protected $tracking_tags;
     protected $advertiser_user_id;
 
+    public function getPromotedTweets($params = [])
+    {
+        $params[LineItemFields::LINE_ITEM_IDS] = $this->getId();
+        $promotedTweetClass = new PromotedTweet();
+        return $promotedTweetClass->loadResource('', $params);
+    }
+
+    /**
+     * @param $metricGroups
+     * @param array $params
+     * @param bool $async
+     * @return mixed
+     */
+    public function stats($metricGroups, $params = [], $async = false)
+    {
+        $params[AnalyticsFields::ENTITY] = AnalyticsFields::LINE_ITEM;
+        return parent::stats($metricGroups, $params, $async);
+    }
+
     /**
      * Returns a collection of targeting criteria available to the
      * current line item.
@@ -83,7 +104,6 @@ class LineItem extends Analytics
     public function getTargetingCriteria($id = '', $params = [])
     {
         $targetingCriteria = new TargetingCriteria();
-        $targetingCriteria->setAccount($this->getAccount());
 
         $this->validateLoaded();
         if ($id == '') {

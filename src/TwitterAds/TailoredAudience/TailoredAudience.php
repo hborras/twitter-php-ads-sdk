@@ -11,12 +11,12 @@ use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidType;
 final class TailoredAudience extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/tailored_audiences';
-    const RESOURCE = 'accounts/{account_id}/tailored_audiences/{id}';
+    const RESOURCE            = 'accounts/{account_id}/tailored_audiences/{id}';
 
-    const LIST_TYPE_EMAIL = 'EMAIL';
-    const LIST_TYPE_DEVICE_ID = 'DEVICE_ID';
-    const LIST_TYPE_TWITTER_ID = 'TWITTER_ID';
-    const LIST_TYPE_HANDLE = 'HANDLE';
+    const LIST_TYPE_EMAIL        = 'EMAIL';
+    const LIST_TYPE_DEVICE_ID    = 'DEVICE_ID';
+    const LIST_TYPE_TWITTER_ID   = 'TWITTER_ID';
+    const LIST_TYPE_HANDLE       = 'HANDLE';
     const LIST_TYPE_PHONE_NUMBER = 'PHONE_NUMBER';
 
     /** Writable */
@@ -68,7 +68,7 @@ final class TailoredAudience extends Resource
         $this->createAudience($name, $listType);
         $location = $upload->perform();
         $tailoredAudienceChange = new TailoredAudienceChanges($this->getAccount());
-        $tailoredAudienceChange->updateAudience($this->getId(),$location, $listType, TailoredAudienceChanges::ADD);
+        $tailoredAudienceChange->updateAudience($this->getId(), $location, $listType, TailoredAudienceChanges::ADD);
 
         return $this->reload();
     }
@@ -82,7 +82,7 @@ final class TailoredAudience extends Resource
      */
     public function createAudience($name, $listType)
     {
-        $params = ['name'=> $name, 'list_type' => $listType];
+        $params = ['name' => $name, 'list_type' => $listType];
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE_COLLECTION);
         $response = $this->getAccount()->getTwitterAds()->post($resource, $params);
 

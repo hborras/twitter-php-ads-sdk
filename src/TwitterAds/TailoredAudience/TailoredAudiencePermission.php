@@ -11,8 +11,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidType;
 
 final class TailoredAudiencePermission extends Resource
 {
-    const RESOURCE_COLLECTION = 'accounts/{account_id}/tailored_audiences/{tailored_audience_id/permissions}';
-    const RESOURCE = 'accounts/{account_id}/tailored_audiences/{tailored_audience_id/permissions}/{id}';
+    const RESOURCE_COLLECTION                   = 'accounts/{account_id}/tailored_audiences/{tailored_audience_id/permissions}';
+    const RESOURCE                              = 'accounts/{account_id}/tailored_audiences/{tailored_audience_id/permissions}/{id}';
     const RESOURCE_TAILORED_AUDIENCE_ID_REPLACE = '{tailored_audience_id}';
 
 
@@ -57,7 +57,7 @@ final class TailoredAudiencePermission extends Resource
      */
     public function save()
     {
-        if(!$this->getId()){
+        if (!$this->getId()) {
             $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
             $resource = str_replace(self::RESOURCE_TAILORED_AUDIENCE_ID_REPLACE, $this->getTailoredAudienceId(), $resource);
             $response = $this->getAccount()->getTwitterAds()->post($resource, []);
