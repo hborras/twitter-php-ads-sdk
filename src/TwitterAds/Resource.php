@@ -75,6 +75,7 @@ abstract class Resource implements Arrayable
     public function read($params = [])
     {
         return $this->load($this->getId(), $params);
+        
     }
 
     /**

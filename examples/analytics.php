@@ -27,6 +27,7 @@ $campaigns = $account->getCampaigns('', [TwitterAds\Fields\CampaignFields::COUNT
 $campaigns->setUseImplicitFetch(false);
 $campaignsData = [];
 
+
 /** @var Campaign $campaign */
 foreach ($campaigns as $campaign) {
     $campaignsData[] = $campaign;
