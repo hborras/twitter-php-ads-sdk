@@ -22,7 +22,7 @@ $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS
 
 // load up the account instance, campaign and line item
 /** @var Account $account */
-$account = $twitterAds->getAccounts(ACCOUNT_ID);
+$account = new Account(ACCOUNT_ID);
 
 // create request for a simple nullcasted tweet
 $media = $twitterAds->upload(['media' => 'twitter-gif.gif', 'media_type' => 'image/gif'], true);
