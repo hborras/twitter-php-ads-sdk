@@ -337,7 +337,7 @@ class TwitterAds extends Config
     private function uploadMediaChunked($path, $parameters)
     {
         if ($parameters['media_type'] == 'video/mp4') {
-            $parameters['media_category'] = "tweet_video";
+            $parameters['media_category'] = "amplify_video";
         } elseif ($parameters['media_type'] == 'image/gif') {
             $parameters['media_category'] = 'tweet_gif';
         } else {
