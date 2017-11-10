@@ -1,6 +1,7 @@
 <?php
 
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
 
 
@@ -19,7 +20,7 @@ $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS
 $twitterAds->setTimeouts(5, 45);
 
 // Retrieve account information
-$account = $twitterAds->getAccounts(ACCOUNT_ID);
+$account = new Account(ACCOUNT_ID);
 
 /** If the file is not hashed line by line, you need to hash it, for example for emails is this code*/
 
