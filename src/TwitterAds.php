@@ -337,22 +337,30 @@ class TwitterAds extends Config
     private function uploadMediaChunked($path, $parameters)
     {
         if ($parameters['media_type'] == 'video/mp4') {
-            $parameters['media_category'] = "amplify_video";
+            $parameters['media_category'] = "tweet_video";
         } elseif ($parameters['media_type'] == 'image/gif') {
             $parameters['media_category'] = 'tweet_gif';
+        } else {
+            $parameters['media_category'] = 'tweet_image';
         }
 
         // Init
+        $initParameters = [
+            'command' => 'INIT',
+            'media_type' => $parameters['media_type'],
+            'media_category' => $parameters['media_category'],
+            'total_bytes' => filesize($parameters['media'])
+        ];
+
+        if (isset($parameters['additional_owners']) && is_array($parameters['additional_owners'])) {
+            $initParameters['additional_owners'] = implode(',', $parameters['additional_owners']);
+        }
+
         $init = $this->http(
             'POST',
             self::UPLOAD_HOST,
             $path,
-            [
-                'command' => 'INIT',
-                'media_type' => $parameters['media_type'],
-                'media_category' => $parameters['media_category'],
-                'total_bytes' => filesize($parameters['media'])
-            ]
+            $initParameters
         )->getBody();
 
         // Append
