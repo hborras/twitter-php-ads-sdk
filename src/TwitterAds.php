@@ -340,19 +340,27 @@ class TwitterAds extends Config
             $parameters['media_category'] = "amplify_video";
         } elseif ($parameters['media_type'] == 'image/gif') {
             $parameters['media_category'] = 'tweet_gif';
+        } else {
+            $parameters['media_category'] = 'tweet_image';
         }
 
         // Init
+        $initParameters = [
+            'command' => 'INIT',
+            'media_type' => $parameters['media_type'],
+            'media_category' => $parameters['media_category'],
+            'total_bytes' => filesize($parameters['media'])
+        ];
+
+        if (isset($parameters['additional_owners']) && is_array($parameters['additional_owners'])) {
+            $initParameters['additional_owners'] = implode(',', $parameters['additional_owners']);
+        }
+
         $init = $this->http(
             'POST',
             self::UPLOAD_HOST,
             $path,
-            [
-                'command' => 'INIT',
-                'media_type' => $parameters['media_type'],
-                'media_category' => $parameters['media_category'],
-                'total_bytes' => filesize($parameters['media'])
-            ]
+            $initParameters
         )->getBody();
 
         // Append

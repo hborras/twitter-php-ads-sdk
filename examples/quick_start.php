@@ -1,6 +1,7 @@
 <?php
 
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\TargetingCriteria;
@@ -18,7 +19,7 @@ const ACCOUNT_ID = 'account id';
 $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 // Retrieve account information
-$account = $twitterAds->getAccounts(ACCOUNT_ID);
+$account = new Account(ACCOUNT_ID);
 
 // Create your campaign
 $campaign = new Campaign($account);

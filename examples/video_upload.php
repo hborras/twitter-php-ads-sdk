@@ -2,13 +2,7 @@
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Tweet;
-use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
-use Hborras\TwitterAdsSDK\TwitterAds\Creative\WebsiteCard;
-use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
 
 require '../autoload.php';
 
@@ -23,7 +17,7 @@ $twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS
 
 // load up the account instance, campaign and line item
 /** @var Account $account */
-$account = $twitterAds->getAccounts(ACCOUNT_ID);
+$account = new Account(ACCOUNT_ID);
 
 /** Upload media */
 $media = $twitterAds->upload(['media' => 'video.mp4', 'media_type' => 'video/mp4'], true);
