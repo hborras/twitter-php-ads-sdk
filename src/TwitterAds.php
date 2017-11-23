@@ -477,7 +477,6 @@ class TwitterAds extends Config
             case 503:
                 throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $response->errors, $this->response->getsHeaders());
             default:
-                print_r($response->errors);
                 throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
         }
     }
