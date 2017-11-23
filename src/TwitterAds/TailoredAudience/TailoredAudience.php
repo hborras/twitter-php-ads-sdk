@@ -4,7 +4,6 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
 use Hborras\TwitterAdsSDK\TONUpload;
 use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidType;
 
@@ -42,17 +41,6 @@ final class TailoredAudience extends Resource
     protected $metadata;
 
     /**
-     * TailoredAudience constructor.
-     * @param Account|null $account
-     * @param null $id
-     */
-    public function __construct(Account $account = null, $id = null)
-    {
-        parent::__construct($account);
-        $this->id = $id;
-    }
-
-    /**
      * Uploads and creates a new tailored audience
      *
      * @param $filePath
@@ -63,11 +51,11 @@ final class TailoredAudience extends Resource
      */
     public function create($filePath, $name, $listType)
     {
-        $upload = new TONUpload($this->getAccount()->getTwitterAds(), $filePath);
+        $upload = new TONUpload($this->getTwitterAds(), $filePath);
 
         $this->createAudience($name, $listType);
         $location = $upload->perform();
-        $tailoredAudienceChange = new TailoredAudienceChanges($this->getAccount());
+        $tailoredAudienceChange = new TailoredAudienceChanges();
         $tailoredAudienceChange->updateAudience($this->getId(), $location, $listType, TailoredAudienceChanges::ADD);
 
         return $this->reload();
@@ -83,8 +71,8 @@ final class TailoredAudience extends Resource
     public function createAudience($name, $listType)
     {
         $params = ['name' => $name, 'list_type' => $listType];
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE_COLLECTION);
-        $response = $this->getAccount()->getTwitterAds()->post($resource, $params);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
+        $response = $this->getTwitterAds()->post($resource, $params);
 
         return $this->fromResponse($response->getBody()->data);
     }
@@ -95,7 +83,7 @@ final class TailoredAudience extends Resource
      */
     public function status()
     {
-        $tailoredAudienceChange = new TailoredAudienceChanges($this->getAccount());
+        $tailoredAudienceChange = new TailoredAudienceChanges();
         return $tailoredAudienceChange->status($this->getId());
     }
 

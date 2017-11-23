@@ -45,17 +45,17 @@ final class TailoredAudienceChanges extends Resource
             'operation' => $operation
         ];
 
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), TailoredAudienceChanges::RESOURCE_COLLECTION);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), TailoredAudienceChanges::RESOURCE_COLLECTION);
 
-        return $this->getAccount()->getTwitterAds()->post($resource, $params);
+        return $this->getTwitterAds()->post($resource, $params);
     }
 
     public function status($tailoredAudienceId)
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), TailoredAudienceChanges::RESOURCE_COLLECTION);
-        $response = $this->getAccount()->getTwitterAds()->get($resource, []);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), TailoredAudienceChanges::RESOURCE_COLLECTION);
+        $response = $this->getTwitterAds()->get($resource, []);
 
-        $tailoredAudienceChanges = new Cursor($this, $this->getAccount(), $response->getBody(), []);
+        $tailoredAudienceChanges = new Cursor($this, $this->getTwitterAds(), $response->getBody(), []);
 
         foreach ($tailoredAudienceChanges as $tailoredAudienceChange) {
             if ($tailoredAudienceChange->getTailoredAudienceId() == $tailoredAudienceId) {

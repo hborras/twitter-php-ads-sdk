@@ -2,12 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
-use Hborras\TwitterAdsSDK\TONUpload;
 use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
-use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidType;
 
 final class TailoredAudiencePermission extends Resource
 {
@@ -42,12 +39,12 @@ final class TailoredAudiencePermission extends Resource
      */
     public function all($tailoredAudienceId, $params = [])
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
         $resource = str_replace(self::RESOURCE_TAILORED_AUDIENCE_ID_REPLACE, $tailoredAudienceId, $resource);
 
-        $response = $this->getAccount()->getTwitterAds()->get($resource, $params);
+        $response = $this->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->getAccount(), $response->getBody(), $params);
+        return new Cursor($this, $this->getTwitterAds(), $response->getBody(), $params);
     }
 
     /**
@@ -58,14 +55,14 @@ final class TailoredAudiencePermission extends Resource
     public function save()
     {
         if (!$this->getId()) {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
             $resource = str_replace(self::RESOURCE_TAILORED_AUDIENCE_ID_REPLACE, $this->getTailoredAudienceId(), $resource);
-            $response = $this->getAccount()->getTwitterAds()->post($resource, []);
+            $response = $this->getTwitterAds()->post($resource, []);
         } else {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
+            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
             $resource = str_replace(self::RESOURCE_TAILORED_AUDIENCE_ID_REPLACE, $this->getTailoredAudienceId(), $resource);
             $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-            $response = $this->getAccount()->getTwitterAds()->put($resource, []);
+            $response = $this->getTwitterAds()->put($resource, []);
         }
 
         return $this->fromResponse($response->getBody()->data);
@@ -78,10 +75,10 @@ final class TailoredAudiencePermission extends Resource
      */
     public function delete()
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getAccount()->getId(), static::RESOURCE);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
         $resource = str_replace(self::RESOURCE_TAILORED_AUDIENCE_ID_REPLACE, $this->getTailoredAudienceId(), $resource);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
-        $response = $this->getAccount()->getTwitterAds()->delete($resource, []);
+        $response = $this->getTwitterAds()->delete($resource, []);
 
         return $this->fromResponse($response->getBody()->data);
     }

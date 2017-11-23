@@ -14,18 +14,19 @@ const ACCESS_TOKEN_SECRET = 'your access token secret';
 const ACCOUNT_ID = 'account id';
 
 /** Create twitter ads client */
-$twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+$api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 /** If the file is too large, I highly recommend increase the timeout */
-$twitterAds->setTimeouts(5, 45);
+$api->setTimeouts(5, 45);
 
 // Retrieve account information
 $account = new Account(ACCOUNT_ID);
+$account->read();
 
 /** If the file is not hashed line by line, you need to hash it, for example for emails is this code*/
 
-$file = fopen("path/to/list.txt", "r");
-$newFile = fopen('path/to/new_list.txt', 'w');
+$file = fopen("list.txt", "r");
+$newFile = fopen('new_list.txt', 'w');
 while (!feof($file)) {
     $line = fgets($file);
     $normalized_email = strtolower(trim($line, " \t\r\n\0\x0B."));
@@ -35,8 +36,8 @@ while (!feof($file)) {
 }
 fclose($newFile);
 fclose($file);
-$audience = new TailoredAudience($account);
-$audience->create('path/to/new_list.txt', 'Test List', TailoredAudience::LIST_TYPE_EMAIL);
+$audience = new TailoredAudience();
+$audience->create('new_list.txt', 'Test List', TailoredAudience::LIST_TYPE_EMAIL);
 
 /** @var TwitterAds\TailoredAudience\TailoredAudienceChanges $status */
 $status = $audience->status();
