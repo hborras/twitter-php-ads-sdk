@@ -8,6 +8,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
@@ -82,7 +83,7 @@ class LineItem extends Analytics
      * @param $metricGroups
      * @param array $params
      * @param bool $async
-     * @return mixed
+     * @return Job| mixed
      */
     public function stats($metricGroups, $params = [], $async = false)
     {

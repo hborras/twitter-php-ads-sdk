@@ -80,7 +80,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
      */
     public function next()
     {
-        if ($this->current_index == $this->getIndexRight()) {
+        if ($this->current_index == $this->getIndexRight() && !is_null($this->next_cursor)) {
             if ($this->getUseImplicitFetch()) {
                 $this->fetchNext();
                 if ($this->current_index == $this->getIndexRight()) {

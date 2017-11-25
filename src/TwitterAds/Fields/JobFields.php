@@ -23,4 +23,7 @@ class JobFields
     const UPDATED_AT        = 'updated_at';
     const METRIC_GROUPS     = 'metric_groups';
     const JOB_IDS           = 'job_ids';
+    const PROCESSING        = 'PROCESSING';
+    const SUCCESS           = 'SUCCESS';
+    const CANCELLED         = 'CANCELLED';
 }

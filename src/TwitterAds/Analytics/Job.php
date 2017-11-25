@@ -8,11 +8,12 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\JobFields;
 
 class Job extends Analytics
 {
     const RESOURCE_COLLECTION = 'stats/jobs/accounts/{account_id}';
-    const RESOURCE            = 'stats/jobs/accounts/{account_id}/{id}';
+    const RESOURCE            = 'stats/jobs/accounts/{account_id}';
     const ENTITY              = 'JOBS';
 
     /** Read Only */
@@ -34,6 +35,27 @@ class Job extends Analytics
     protected $metric_groups;
 
     protected $properties = [];
+
+
+    public function read($params = [])
+    {
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
+        $params[JobFields::JOB_IDS] = $this->id;
+        $response = $this->getTwitterAds()->get($resource, $params);
+        if(isset($response->getBody()->data[0])){
+            return $this->fromResponse($response->getBody()->data[0]);
+        } else {
+            return $this;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return mixed

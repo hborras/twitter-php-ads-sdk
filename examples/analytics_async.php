@@ -59,12 +59,12 @@ foreach ($campaignsData as $campaign) {
         }
         $l = 1;
         try {
-            $async = false;
+            $async = true;
             $startDate = new \DateTime($campaign->getStartTime()->format('Y-m-d 00:00:00'));
             $endDate = new \DateTime('now');
             $dates = dateRanges($startDate, $endDate);
             foreach ($dates as $date) {
-                $stats = $lineItem->stats(
+                $job = $lineItem->stats(
                     [
                         TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_BILLING,
                         TwitterAds\Fields\AnalyticsFields::METRIC_GROUPS_MOBILE_CONVERSION,
@@ -77,20 +77,31 @@ foreach ($campaignsData as $campaign) {
                         AnalyticsFields::PLACEMENT => Enumerations::PLACEMENT_ALL_ON_TWITTER
                     ], $async
                 );
-                $stats = $stats[0]->id_data[0]->metrics;
-                if (!is_null($stats->billed_charge_local_micro)) {
-                    echo "\t\t\t Start: " . $date[0]->format('Y-m-d H:i:s') . PHP_EOL;
-                    echo "\t\t\t End: " . $date[1]->format('Y-m-d H:i:s') . PHP_EOL;
-                    echo "\t\t\t " . ($stats->billed_charge_local_micro[0] / 1000000) . "€" . PHP_EOL;
-                    echo "\t\t\t\t App clicks: ";
-                    getStats($stats->app_clicks);
-                    echo "\t\t\t\t Installs:" . PHP_EOL;
-                    getStats($stats->mobile_conversion_installs);
-                    echo "\t\t\t\t Checkouts:" . PHP_EOL;
-                    getStats($stats->mobile_conversion_checkouts_initiated);
+                while($job->getStatus() == TwitterAds\Fields\JobFields::PROCESSING){
+                    echo "Job is still processing. Waiting 5 more seconds".PHP_EOL;
+                    $job->read();
+                    sleep(5);
+                }
+
+                if($job->getStatus() == TwitterAds\Fields\JobFields::SUCCESS){
+                    $result = gzfile($job->getUrl());
+                    $result = implode("", $result);
+                    $stats = json_decode($result)->data;
+                    $stats = $stats[0]->id_data[0]->metrics;
+                    if (!is_null($stats->billed_charge_local_micro)) {
+                        echo "\t\t\t Start: " . $date[0]->format('Y-m-d H:i:s') . PHP_EOL;
+                        echo "\t\t\t End: " . $date[1]->format('Y-m-d H:i:s') . PHP_EOL;
+                        echo "\t\t\t " . ($stats->billed_charge_local_micro[0] / 1000000) . "€" . PHP_EOL;
+                        echo "\t\t\t\t App clicks: ";
+                        getStats($stats->app_clicks);
+                        echo "\t\t\t\t Installs:" . PHP_EOL;
+                        getStats($stats->mobile_conversion_installs);
+                        echo "\t\t\t\t Checkouts:" . PHP_EOL;
+                        getStats($stats->mobile_conversion_checkouts_initiated);
+                    }
                 }
             }
-
+    
         } catch (\Hborras\TwitterAdsSDK\TwitterAdsException $e) {
             print_r($e->getErrors());
         }
@@ -126,7 +137,7 @@ function getStats($stat)
  */
 function dateRanges($startTime, $endTime)
 {
-    $interval = new \DateInterval('P7D');
+    $interval = new \DateInterval('P60D');
     $dateRange = new \DatePeriod($startTime, $interval, $endTime);
 
     $previous = null;

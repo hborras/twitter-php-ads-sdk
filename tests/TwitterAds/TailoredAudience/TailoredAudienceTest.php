@@ -20,12 +20,12 @@ class TailoredAudienceTest extends \PHPUnit_Framework_TestCase
 
     public function testTailoredAudiencesCanBeAddedFetchedAndDeletedSuccessfully()
     {
-        $audience = new TailoredAudience($this->account);
+        $audience = new TailoredAudience();
         $audience->setListType(TailoredAudience::LIST_TYPE_EMAIL);
         $audience->setName('test audience');
         $newAudience = $audience->save();
 
-        $fetched = (new TailoredAudience($this->account))->load($newAudience->getId());
+        $fetched = (new TailoredAudience())->load($newAudience->getId());
         $this->assertEquals($fetched->getId(), $newAudience->getId());
         $this->assertEquals($fetched->getName(), $newAudience->getName());
         $this->assertEquals($fetched->getListType(), $newAudience->getListType());
@@ -35,7 +35,7 @@ class TailoredAudienceTest extends \PHPUnit_Framework_TestCase
 
     public function testTailoredAudiencesCanBeFetched()
     {
-        $audience = new TailoredAudience($this->account);
+        $audience = new TailoredAudience();
         $result = iterator_to_array($audience->all());
 
         $this->assertGreaterThan(0, $result);

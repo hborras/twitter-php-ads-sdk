@@ -34,4 +34,9 @@ class LineItemFields
     const ADVERTISER_DOMAIN               = 'advertiser_domain';
     const ADVERTISER_USER_ID              = 'advertiser_user_id';
     const LINE_ITEM_IDS                   = 'line_item_ids';
+    const WITH_DELETED                    = 'with_deleted';
+    const COUNT                           = 'count';
+    const SORT_BY                         = 'sort_by';
+    const DRAFT_ONLY                      = 'draft_only';
+    const ENTITY_STATUS                   = 'entity_status';
 }

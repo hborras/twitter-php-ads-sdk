@@ -16,6 +16,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
 
@@ -172,9 +173,15 @@ class Account extends Analytics
     }
 
 
-    public function getTailoredAudiences($id = '', $params = [])
+    /**
+     * @param array $params
+     * @return Cursor|Resource
+     */
+    public function getTailoredAudiences($params = [])
     {
-        // TODO: Next Release
+        $tailoredAudienceClass = new TailoredAudience();
+
+        return $tailoredAudienceClass->loadResource('', $params);
     }
 
     /**
