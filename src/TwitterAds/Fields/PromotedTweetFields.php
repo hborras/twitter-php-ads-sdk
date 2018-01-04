@@ -20,4 +20,5 @@ class PromotedTweetFields
     const TWEET_ID        = 'tweet_id';
     const TWEET_IDS       = 'tweet_ids';
     const PAUSED          = 'paused';
+    const WITH_TOTAL_COUNT   = 'with_total_count';
 }

@@ -8,7 +8,6 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
-use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
 
@@ -26,14 +25,13 @@ class Campaign extends Analytics
     protected $updated_at;
     protected $deleted;
     protected $currency;
-    protected $entity_status;
 
     protected $properties = [
         CampaignFields::NAME,
         CampaignFields::FUNDING_INSTRUMENT_ID,
         CampaignFields::START_TIME,
         CampaignFields::END_TIME,
-        CampaignFields::PAUSED,
+        CampaignFields::ENTITY_STATUS,
         CampaignFields::STANDARD_DELIVERY,
         CampaignFields::DAILY_BUDGET_AMOUNT_LOCAL_MICRO,
         CampaignFields::TOTAL_BUDGET_AMOUNT_LOCAL_MICRO,
@@ -46,7 +44,7 @@ class Campaign extends Analytics
     protected $funding_instrument_id;
     protected $start_time;
     protected $end_time;
-    protected $paused;
+    protected $entity_status;
     protected $standard_delivery;
     protected $daily_budget_amount_local_micro;
     protected $total_budget_amount_local_micro;
@@ -191,17 +189,17 @@ class Campaign extends Analytics
     /**
      * @return mixed
      */
-    public function getPaused()
+    public function getEntityStatus()
     {
-        return $this->paused;
+        return $this->entity_status;
     }
 
     /**
-     * @param mixed $paused
+     * @param mixed $entityStatus
      */
-    public function setPaused($paused)
+    public function setEntityStatus($entityStatus)
     {
-        $this->paused = $paused;
+        $this->entity_status = $entityStatus;
     }
 
     /**
@@ -314,13 +312,5 @@ class Campaign extends Analytics
     public function setFrequencyCap($frequency_cap)
     {
         $this->frequency_cap = $frequency_cap;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEntityStatus()
-    {
-        return $this->entity_status;
     }
 }

@@ -28,4 +28,5 @@ class VideoConversationCardFields
     const THANK_YOU_URL    = 'thank_you_url';
     const IMAGE_MEDIA_ID   = 'image_media_id';
     const VIDEO_ID         = 'video_id';
+    const WITH_TOTAL_COUNT = 'with_total_count';
 }

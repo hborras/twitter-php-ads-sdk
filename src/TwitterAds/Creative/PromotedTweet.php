@@ -27,13 +27,11 @@ class PromotedTweet extends Analytics
     protected $deleted;
 
     protected $properties = [
-        PromotedTweetFields::LINE_ITEM_ID,
         PromotedTweetFields::TWEET_ID,
         PromotedTweetFields::PAUSED,
     ];
 
     /** Writable */
-    protected $line_item_id;
     protected $tweet_id;
     protected $paused;
 
@@ -126,14 +124,6 @@ class PromotedTweet extends Analytics
     /**
      * @return mixed
      */
-    public function getLineItemId()
-    {
-        return $this->line_item_id;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getTweetId()
     {
         return $this->tweet_id;
@@ -153,14 +143,6 @@ class PromotedTweet extends Analytics
     public function setProperties($properties)
     {
         $this->properties = $properties;
-    }
-
-    /**
-     * @param mixed $line_item_id
-     */
-    public function setLineItemId($line_item_id)
-    {
-        $this->line_item_id = $line_item_id;
     }
 
     /**

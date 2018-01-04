@@ -21,7 +21,6 @@ class CampaignFields
     const FUNDING_INSTRUMENT_ID           = 'funding_instrument_id';
     const START_TIME                      = 'start_time';
     const END_TIME                        = 'end_time';
-    const PAUSED                          = 'paused';
     const CURRENCY                        = 'currency';
     const STANDARD_DELIVERY               = 'standard_delivery';
     const DAILY_BUDGET_AMOUNT_LOCAL_MICRO = 'daily_budget_amount_local_micro';
@@ -33,6 +32,6 @@ class CampaignFields
     const WITH_DELETED                    = 'with_deleted';
     const COUNT                           = 'count';
     const SORT_BY                         = 'sort_by';
-    const DRAFT_ONLY                      = 'draft_only';
     const ENTITY_STATUS                   = 'entity_status';
+    const WITH_TOTAL_COUNT                = 'with_total_count';
 }

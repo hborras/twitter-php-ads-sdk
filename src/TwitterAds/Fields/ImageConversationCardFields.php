@@ -25,4 +25,5 @@ class ImageConversationCardFields
     const THANK_YOU_TEXT   = 'thank_you_text';
     const THANK_YOU_URL    = 'thank_you_url';
     const IMAGE_MEDIA_ID   = 'image_media_id';
+    const WITH_TOTAL_COUNT = 'with_total_count';
 }

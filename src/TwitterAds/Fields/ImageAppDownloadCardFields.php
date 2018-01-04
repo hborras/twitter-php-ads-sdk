@@ -26,4 +26,5 @@ class ImageAppDownloadCardFields
     const GOOGLEPLAY_DEEP_LINK    = 'googleplay_deep_link';
     const APP_CTA                 = 'app_cta';
     const WIDE_APP_IMAGE_MEDIA_ID = 'wide_app_image_media_id';
+    const WITH_TOTAL_COUNT        = 'with_total_count';
 }

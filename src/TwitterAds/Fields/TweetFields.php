@@ -12,6 +12,7 @@ class TweetFields
 {
     const MEDIA_IDS = 'media_ids';
     const ID        = 'id';
-    const STATUS    = 'status';
+    const TEXT      = 'text';
+    const CARD_URI  = 'card_uri';
 
 }

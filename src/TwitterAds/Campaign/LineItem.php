@@ -37,7 +37,7 @@ class LineItem extends Analytics
         LineItemFields::PRODUCT_TYPE,
         LineItemFields::PLACEMENTS,
         LineItemFields::OBJECTIVE,
-        LineItemFields::PAUSED,
+        LineItemFields::ENTITY_STATUS,
         LineItemFields::INCLUDE_SENTIMENT,
         LineItemFields::TOTAL_BUDGET_AMOUNT_LOCAL_MICRO,
         LineItemFields::START_TIME,
@@ -59,7 +59,7 @@ class LineItem extends Analytics
     protected $product_type;
     protected $placements;
     protected $objective;
-    protected $paused;
+    protected $entity_status;
     protected $include_sentiment;
     protected $total_budget_amount_local_micro;
     protected $start_time;
@@ -295,17 +295,17 @@ class LineItem extends Analytics
     /**
      * @return mixed
      */
-    public function getPaused()
+    public function getEntityStatus()
     {
-        return $this->paused;
+        return $this->entity_status;
     }
 
     /**
-     * @param mixed $paused
+     * @param mixed $entity_status
      */
-    public function setPaused($paused)
+    public function setEntityStatus($entity_status)
     {
-        $this->paused = $paused;
+        $this->entity_status = $entity_status;
     }
 
     /**

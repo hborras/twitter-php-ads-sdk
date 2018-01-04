@@ -21,4 +21,5 @@ class FundingInstrumentFields
     const CREATED_AT                = 'created_at';
     const UPDATED_AT                = 'updated_at';
     const DELETED                   = 'deleted';
+    const WITH_TOTAL_COUNT          = 'with_total_count';
 }

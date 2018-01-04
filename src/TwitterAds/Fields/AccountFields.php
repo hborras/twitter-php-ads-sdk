@@ -20,4 +20,5 @@ class AccountFields
     const DELETED            = 'deleted';
     const APPROVAL_STATUS    = 'approval_status';
     const USER_IDS           = 'user_ids';
+    const WITH_TOTAL_COUNT   = 'with_total_count';
 }

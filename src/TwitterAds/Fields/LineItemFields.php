@@ -22,7 +22,6 @@ class LineItemFields
     const PRODUCT_TYPE                    = 'product_type';
     const PLACEMENTS                      = 'placements';
     const OBJECTIVE                       = 'objective';
-    const PAUSED                          = 'paused';
     const INCLUDE_SENTIMENT               = 'include_sentiment';
     const TOTAL_BUDGET_AMOUNT_LOCAL_MICRO = 'total_budget_amount_local_micro';
     const START_TIME                      = 'start_time';
@@ -37,6 +36,6 @@ class LineItemFields
     const WITH_DELETED                    = 'with_deleted';
     const COUNT                           = 'count';
     const SORT_BY                         = 'sort_by';
-    const DRAFT_ONLY                      = 'draft_only';
     const ENTITY_STATUS                   = 'entity_status';
+    const WITH_TOTAL_COUNT                = 'with_total_count';
 }

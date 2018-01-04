@@ -45,14 +45,14 @@ class Tweet
      * Creates a "Promoted-Only" Tweet using the specialized Ads API end point.
      *
      * @param Account $account
-     * @param $status
+     * @param $text
      * @param array $params
      *
      * @return mixed
      */
-    public static function create(Account $account, $status, $params = [])
+    public static function create(Account $account, $text, $params = [])
     {
-        $params[TweetFields::STATUS] = $status;
+        $params[TweetFields::TEXT] = $text;
 
         if (isset($params[TweetFields::MEDIA_IDS]) && is_array($params[TweetFields::MEDIA_IDS])) {
             $params[TweetFields::MEDIA_IDS] = implode(',', $params[TweetFields::MEDIA_IDS]);
