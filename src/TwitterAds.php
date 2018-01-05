@@ -116,7 +116,8 @@ class TwitterAds extends Config
      */
     public function getAccounts()
     {
-        return (new Account($this))->all();
+        // First param should be null (or $this->accountId?)
+        return (new Account(null, $this))->all();
     }
 
     /**

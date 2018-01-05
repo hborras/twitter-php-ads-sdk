@@ -143,7 +143,10 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
         foreach ($request->data as $item) {
             if (method_exists($this->resource, 'fromResponse')) {
                 /** @var \Hborras\TwitterAdsSDK\TwitterAds\Resource $obj */
-                $obj = new $this->resource();
+
+                // New Resource needs at least $this->twitterAds
+                $obj = new $this->resource(null, $this->twitterAds);
+
                 $this->collection[] = $obj->fromResponse($item);
             } else {
                 $this->collection[] = $item;
