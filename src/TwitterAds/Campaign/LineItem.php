@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 3/04/16
- * Time: 11:59.
- */
+
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
@@ -27,6 +22,8 @@ class LineItem extends Analytics
     protected $created_at;
     protected $updated_at;
     protected $deleted;
+    protected $target_cpa_local_micro;
+    protected $currency;
 
     protected $properties = [
         LineItemFields::CAMPAIGN_ID,
@@ -47,7 +44,8 @@ class LineItem extends Analytics
         LineItemFields::BID_UNIT,
         LineItemFields::CHARGE_BY,
         LineItemFields::ADVERTISER_DOMAIN,
-        LineItemFields::ADVERTISER_USER_ID
+        LineItemFields::ADVERTISER_USER_ID,
+        LineItemFields::CATEGORIES
     ];
 
     /** Writable */
@@ -71,6 +69,7 @@ class LineItem extends Analytics
     protected $advertiser_domain;
     protected $tracking_tags;
     protected $advertiser_user_id;
+    protected $categories;
 
     public function getPromotedTweets($params = [])
     {
@@ -482,5 +481,45 @@ class LineItem extends Analytics
     public function setAdvertiserUserId($advertiser_user_id)
     {
         $this->advertiser_user_id = $advertiser_user_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTargetCpaLocalMicro()
+    {
+        return $this->target_cpa_local_micro;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAutomaticallySelectBid()
+    {
+        return $this->automatically_select_bid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param mixed $categories
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }

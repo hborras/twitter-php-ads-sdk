@@ -30,6 +30,5 @@ class CampaignFields extends Fields
     const ACCOUNT_ID = 'account_id';
     const CAMPAIGN_IDS                    = 'campaign_ids';
     const FUNDING_INSTRUMENT_IDS          = 'funding_instrument_ids';
-    const DRAFT_ONLY = 'draft_only';
 
 }

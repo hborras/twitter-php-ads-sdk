@@ -32,10 +32,18 @@ class LineItemFields
     const CHARGE_BY                       = 'charge_by';
     const ADVERTISER_DOMAIN               = 'advertiser_domain';
     const ADVERTISER_USER_ID              = 'advertiser_user_id';
-    const LINE_ITEM_IDS                   = 'line_item_ids';
     const WITH_DELETED                    = 'with_deleted';
     const COUNT                           = 'count';
     const SORT_BY                         = 'sort_by';
     const ENTITY_STATUS                   = 'entity_status';
     const WITH_TOTAL_COUNT                = 'with_total_count';
+    const TARGET_CPA_LOCAL_MICRO = 'target_cpa_local_micro';
+    const CATEGORIES = 'categories';
+    const CURRENCY = 'currency';
+    const TRACKING_TAGS = 'tracking_tags';
+    const LOOKALIKE_EXPANSION = 'lookalike_expansion';
+
+    const CAMPAIGN_IDS = 'campaign_ids';
+    const FUNDING_INSTRUMENT_IDS = 'funding_instrument_ids';
+    const LINE_ITEM_IDS = 'line_item_ids';
 }
