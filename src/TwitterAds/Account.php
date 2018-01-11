@@ -306,5 +306,4 @@ class Account extends Analytics
     {
         return $this->business_name;
     }
-
 }

@@ -2,13 +2,8 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 12/05/17
- * Time: 18:19
- */
-class AccountFields
+
+class AccountFields extends Fields
 {
     const ID                 = 'id';
     const SALT               = 'salt';
@@ -21,4 +16,8 @@ class AccountFields
     const APPROVAL_STATUS    = 'approval_status';
     const USER_IDS           = 'user_ids';
     const WITH_TOTAL_COUNT   = 'with_total_count';
+    const BUSINESS_NAME      = 'business_name';
+    const BUSINESS_ID        = 'business_id';
+
+    const ACCOUNT_IDS        = 'account_ids';
 }
