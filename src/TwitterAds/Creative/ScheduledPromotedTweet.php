@@ -9,13 +9,13 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\PromotedTweetFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\ScheduledPromotedTweetFields;
 
-class PromotedTweet extends Analytics
+class ScheduledTweet extends Analytics
 {
-    const RESOURCE_COLLECTION = 'accounts/{account_id}/promoted_tweets';
-    const RESOURCE            = 'accounts/{account_id}/promoted_tweets/{id}';
-    const RESOURCE_STATS      = 'stats/accounts/{account_id}/promoted_tweets/{id}';
+    const RESOURCE_COLLECTION = 'accounts/{account_id}/scheduled_promoted_tweets';
+    const RESOURCE            = 'accounts/{account_id}/scheduled_promoted_tweets/{id}';
+    const RESOURCE_STATS      = 'stats/accounts/{account_id}/scheduled_promoted_tweets/{id}';
 
     const ENTITY = 'PROMOTED_TWEET';
 
@@ -27,13 +27,13 @@ class PromotedTweet extends Analytics
     protected $deleted;
 
     protected $properties = [
-        PromotedTweetFields::TWEET_ID,
-        PromotedTweetFields::ENTITY_STATUS,
+        ScheduledPromotedTweetFields::TWEET_ID,
+        ScheduledPromotedTweetFields::ENTITY_STATUS,
     ];
 
     /** Writable */
     protected $tweet_id;
-    protected $entity_status;
+    protected $paused;
 
     /**
      * @param $metricGroups
@@ -54,9 +54,9 @@ class PromotedTweet extends Analytics
     public function save()
     {
         $params = $this->toParams();
-        if (isset($params[PromotedTweetFields::TWEET_ID])) {
-            $params[PromotedTweetFields::TWEET_IDS] = $params[PromotedTweetFields::TWEET_ID];
-            unset($params[PromotedTweetFields::TWEET_ID]);
+        if (isset($params[ScheduledPromotedTweetFields::TWEET_ID])) {
+            $params[ScheduledPromotedTweetFields::TWEET_IDS] = $params[ScheduledPromotedTweetFields::TWEET_ID];
+            unset($params[ScheduledPromotedTweetFields::TWEET_ID]);
         }
 
         if ($this->getId()) {
@@ -130,6 +130,14 @@ class PromotedTweet extends Analytics
     }
 
     /**
+     * @return mixed
+     */
+    public function getPaused()
+    {
+        return $this->paused;
+    }
+
+    /**
      * @param array $properties
      */
     public function setProperties($properties)
@@ -146,18 +154,10 @@ class PromotedTweet extends Analytics
     }
 
     /**
-     * @return mixed
+     * @param mixed $paused
      */
-    public function getEntityStatus()
+    public function setPaused($paused)
     {
-        return $this->entity_status;
-    }
-
-    /**
-     * @param mixed $entity_status
-     */
-    public function setEntityStatus($entity_status)
-    {
-        $this->entity_status = $entity_status;
+        $this->paused = $paused;
     }
 }
