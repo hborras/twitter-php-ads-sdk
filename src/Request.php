@@ -10,7 +10,7 @@ class Request
     protected $parameters;
     protected $httpMethod;
     protected $httpUrl;
-    public static $version = '1.0';
+    public static $version = '2.0';
 
     /**
      * Constructor.
