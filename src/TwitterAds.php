@@ -22,7 +22,7 @@ use Hborras\TwitterAdsSDK\Util\JsonDecoder;
  */
 class TwitterAds extends Config
 {
-    const API_VERSION      = '2';
+    const API_VERSION      = '3';
     const API_REST_VERSION = '1.1';
     const API_HOST         = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
@@ -433,9 +433,9 @@ class TwitterAds extends Config
             $url = $path;
         } else {
             if ($host == self::UPLOAD_HOST) {
-                $url = sprintf('%s/%s/%s', $host, self::API_REST_VERSION, $path);
+                $url = sprintf('%s/%s/%s', $host, static::API_REST_VERSION, $path);
             } else {
-                $url = sprintf('%s/%s/%s', $host, self::API_VERSION, $path);
+                $url = sprintf('%s/%s/%s', $host, static::API_VERSION, $path);
             }
         }
 
