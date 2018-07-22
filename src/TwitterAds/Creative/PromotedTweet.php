@@ -28,6 +28,7 @@ class PromotedTweet extends Analytics
 
     /** Writable */
     protected $tweet_id;
+    protected $line_item_id;
     protected $entity_status;
 
     /**
@@ -35,6 +36,7 @@ class PromotedTweet extends Analytics
      * @param array $params
      * @param bool $async
      * @return mixed
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest
      */
     public function stats($metricGroups, $params = [], $async = false)
     {
@@ -154,5 +156,21 @@ class PromotedTweet extends Analytics
     public function setEntityStatus($entity_status)
     {
         $this->entity_status = $entity_status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLineItemId()
+    {
+        return $this->line_item_id;
+    }
+
+    /**
+     * @param mixed $line_item_id
+     */
+    public function setLineItemId($line_item_id): void
+    {
+        $this->line_item_id = $line_item_id;
     }
 }
