@@ -8,12 +8,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\Arrayable;
 
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 2/04/16
- * Time: 12:17.
- */
+
 abstract class Resource implements Arrayable
 {
     use DateTimeFormatter;

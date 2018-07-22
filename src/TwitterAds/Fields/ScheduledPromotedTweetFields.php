@@ -4,7 +4,6 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
 class ScheduledPromotedTweetFields extends Fields
 {
-    const DELETED         = 'deleted';
     const APPROVAL_STATUS = 'approval_status';
     const LINE_ITEM_ID    = 'line_item_id';
     const TWEET_ID        = 'tweet_id';

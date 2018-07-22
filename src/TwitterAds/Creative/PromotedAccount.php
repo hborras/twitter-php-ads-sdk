@@ -21,13 +21,11 @@ class PromotedAccount extends Resource
     protected $properties = [
         PromotedAccountFields::LINE_ITEM_ID,
         PromotedAccountFields::USER_ID,
-        PromotedAccountFields::PAUSED,
     ];
 
     /** Writable */
     protected $line_item_id;
     protected $user_id;
-    protected $paused;
 
     /**
      * @return mixed
@@ -99,22 +97,6 @@ class PromotedAccount extends Resource
     public function setUserId($user_id)
     {
         $this->user_id = $user_id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPaused()
-    {
-        return $this->paused;
-    }
-
-    /**
-     * @param mixed $paused
-     */
-    public function setPaused($paused)
-    {
-        $this->paused = $paused;
     }
 
     /**
