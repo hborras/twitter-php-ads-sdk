@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 2/04/16
- * Time: 23:14.
- */
+
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 use Hborras\TwitterAdsSDK\TwitterAds;
@@ -43,8 +38,11 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     protected $useImplicitFetch;
 
     public function __construct(/* @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hborras\TwitterAdsSDK\TwitterAds\Resource $resource, TwitterAds $twitterAds, $request, $params)
-    {
+        \Hborras\TwitterAdsSDK\TwitterAds\Resource $resource,
+        TwitterAds $twitterAds,
+        $request,
+        $params
+    ) {
         $this->resource = $resource;
         $this->params = $params;
         $this->twitterAds = $twitterAds;

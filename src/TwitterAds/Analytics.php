@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 23/04/16
- * Time: 10:47
- */
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
-
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 3/04/16
- * Time: 11:59.
- */
+
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Account;

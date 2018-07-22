@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 11/01/18
- * Time: 20:00
- */
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
-
 
 class Fields
 {

@@ -2,7 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-
 class PromotedAccountFields extends Fields
 {
     const APPROVAL_STATUS    = 'approval_status';

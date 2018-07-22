@@ -2,7 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-
 class AccountFields extends Fields
 {
     const ID                 = 'id';

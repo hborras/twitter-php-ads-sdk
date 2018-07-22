@@ -1,20 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 11/01/18
- * Time: 20:06
- */
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
-
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 
 class Feature
 {
-
     const RESOURCE_COLLECTION = 'features';
     const RESOURCE_REPLACE    = '{account_id}';
 
@@ -27,7 +19,6 @@ class Feature
      */
     public function __construct(TwitterAds $twitterAds)
     {
-
         $this->twitterAds = static::assureApi($twitterAds);
     }
 
@@ -37,7 +28,8 @@ class Feature
         if (!$instance) {
             throw new \InvalidArgumentException(
                 'An Api instance must be provided as argument or ' .
-                'set as instance in the \TwitterAds\Api');
+                'set as instance in the \TwitterAds\Api'
+            );
         }
         return $instance;
     }

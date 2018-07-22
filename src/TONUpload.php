@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 1/07/16
- * Time: 21:35
- */
 
 namespace Hborras\TwitterAdsSDK;
-
 
 class TONUpload
 {
@@ -43,7 +36,7 @@ class TONUpload
 
         if ($extension == 'csv') {
             $this->contentType = 'text/csv';
-        } else if ($extension == 'tsv') {
+        } elseif ($extension == 'tsv') {
             $this->contentType = 'text/tab-separated-values';
         } else {
             $this->contentType = 'text/plain';

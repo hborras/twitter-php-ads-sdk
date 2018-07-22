@@ -48,7 +48,8 @@ abstract class Resource implements Arrayable
         if (!$instance) {
             throw new \InvalidArgumentException(
                 'An Api instance must be provided as argument or ' .
-                'set as instance in the \TwitterAds\Api');
+                'set as instance in the \TwitterAds\Api'
+            );
         }
         return $instance;
     }
@@ -75,7 +76,6 @@ abstract class Resource implements Arrayable
     public function read($params = [])
     {
         return $this->load($this->getId(), $params);
-        
     }
 
     /**

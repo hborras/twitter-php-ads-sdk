@@ -32,6 +32,7 @@ final class TailoredAudienceMemberships extends Batch
             $this->getTwitterAds()->post(self::RESOURCE, [
                 'operation_type' => self::OPERATION,
                 'params' => $this->toParams(),
-            ]));
+            ])
+        );
     }
 }

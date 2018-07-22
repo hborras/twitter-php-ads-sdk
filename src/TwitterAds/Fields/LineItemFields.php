@@ -2,12 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 12/05/17
- * Time: 18:19
- */
 class LineItemFields
 {
     const ID                              = 'id';
@@ -28,7 +22,7 @@ class LineItemFields
     const END_TIME                        = 'end_time';
     const PRIMARY_WEB_EVENT_TAG           = 'primary_web_event_tag';
     const OPTIMIZATION                    = 'optimization';
-    CONST BID_UNIT                        = 'bid_unit';
+    const BID_UNIT                        = 'bid_unit';
     const CHARGE_BY                       = 'charge_by';
     const ADVERTISER_DOMAIN               = 'advertiser_domain';
     const ADVERTISER_USER_ID              = 'advertiser_user_id';

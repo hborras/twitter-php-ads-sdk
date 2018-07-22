@@ -104,7 +104,6 @@ class TwitterAds extends Config
      */
     public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
-
         $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
         static::setInstance($api);
 
@@ -510,7 +509,6 @@ class TwitterAds extends Config
         } else {
             return $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters, $headers);
         }
-
     }
 
     /**
