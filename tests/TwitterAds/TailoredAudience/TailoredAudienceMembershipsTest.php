@@ -4,8 +4,9 @@ use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMemberships;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceMember;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use PHPUnit\Framework\TestCase;
 
-class TailoredAudienceMembershipsTest extends \PHPUnit_Framework_TestCase
+class TailoredAudienceMembershipsTest extends TestCase
 {
     /**
      * @expectedException Hborras\TwitterAdsSDK\TwitterAds\Errors\BatchLimitExceeded

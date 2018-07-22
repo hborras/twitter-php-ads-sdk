@@ -3,8 +3,9 @@
 namespace Hborras\TwitterAdsSDK\Tests;
 
 use Hborras\TwitterAdsSDK\Consumer;
+use PHPUnit\Framework\TestCase;
 
-class ConsumerTest extends \PHPUnit_Framework_TestCase
+class ConsumerTest extends TestCase
 {
     public function testToString()
     {

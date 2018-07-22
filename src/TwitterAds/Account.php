@@ -38,6 +38,7 @@ class Account extends Analytics
     protected $approval_status;
     protected $business_id;
     protected $business_name;
+    protected $industry_type;
 
     /**
      * @param $metricGroups
@@ -299,5 +300,21 @@ class Account extends Analytics
     public function getBusinessName()
     {
         return $this->business_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIndustryType()
+    {
+        return $this->industry_type;
+    }
+
+    /**
+     * @param mixed $industry_type
+     */
+    public function setIndustryType($industry_type)
+    {
+        $this->industry_type = $industry_type;
     }
 }
