@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 11/01/18
- * Time: 21:28
- */
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
-
 
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemAppFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;

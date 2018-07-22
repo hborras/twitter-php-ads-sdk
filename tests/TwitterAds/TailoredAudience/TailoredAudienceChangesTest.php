@@ -5,8 +5,9 @@ use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudienceChanges;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use PHPUnit\Framework\TestCase;
 
-class TailoredAudienceChangesTest extends \PHPUnit_Framework_TestCase
+class TailoredAudienceChangesTest extends TestCase
 {
     /** @var TwitterAds */
     protected $twitter;

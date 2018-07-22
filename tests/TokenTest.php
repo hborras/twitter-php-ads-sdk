@@ -3,8 +3,9 @@
 namespace Hborras\TwitterAdsSDK\Tests;
 
 use Hborras\TwitterAdsSDK\Token;
+use PHPUnit\Framework\TestCase;
 
-class TokenTest extends \PHPUnit_Framework_TestCase
+class TokenTest extends TestCase
 {
     /**
      * @dataProvider tokenProvider

@@ -22,7 +22,7 @@ use Hborras\TwitterAdsSDK\Util\JsonDecoder;
  */
 class TwitterAds extends Config
 {
-    const API_VERSION      = '2';
+    const API_VERSION      = '3';
     const API_REST_VERSION = '1.1';
     const API_HOST         = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
@@ -104,7 +104,6 @@ class TwitterAds extends Config
      */
     public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
-
         $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
         static::setInstance($api);
 
@@ -510,7 +509,6 @@ class TwitterAds extends Config
         } else {
             return $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters, $headers);
         }
-
     }
 
     /**

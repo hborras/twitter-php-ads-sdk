@@ -7,8 +7,9 @@ namespace Hborras\TwitterAdsSDK\Test;
 use Hborras\TwitterAdsSDK\Response;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use PHPUnit\Framework\TestCase;
 
-class TwitterAdsTest extends \PHPUnit_Framework_TestCase
+class TwitterAdsTest extends TestCase
 {
     /** @var TwitterAds */
     protected $api;
@@ -148,6 +149,9 @@ class TwitterAdsTest extends \PHPUnit_Framework_TestCase
                 return is_string($v) || is_null($v);
             },
             'business_name' => function ($v) {
+                return is_string($v) || is_null($v);
+            },
+            'industry_type' => function ($v) {
                 return is_string($v) || is_null($v);
             },
         ];

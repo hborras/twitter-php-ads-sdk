@@ -1,13 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 12/04/16
- * Time: 23:01.
- */
+
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\MethodNotAllowedException;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\TargetingCriteriaFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
@@ -52,6 +48,16 @@ class TargetingCriteria extends Resource
         $request = $this->getTwitterAds()->get($resource, $params);
 
         return new Cursor($this, $this->getTwitterAds(), $request->getBody(), $params);
+    }
+
+    
+    public function save()
+    {
+        if ($this->getId()) {
+            throw new MethodNotAllowedException();
+        } else {
+            return parent::save();
+        }
     }
 
     /**

@@ -2,8 +2,9 @@
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
+use PHPUnit\Framework\TestCase;
 
-class TailoredAudienceTest extends \PHPUnit_Framework_TestCase
+class TailoredAudienceTest extends TestCase
 {
     /** @var TwitterAds */
     protected $twitter;

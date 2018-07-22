@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 3/04/16
- * Time: 11:59.
- */
+
 namespace Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
@@ -13,7 +8,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\JobFields;
 class Job extends Analytics
 {
     const RESOURCE_COLLECTION = 'stats/jobs/accounts/{account_id}';
-    const RESOURCE            = 'stats/jobs/accounts/{account_id}';
+    const RESOURCE            = 'stats/jobs/accounts/{account_id}/{id}';
     const ENTITY              = 'JOBS';
 
     /** Read Only */
@@ -42,7 +37,7 @@ class Job extends Analytics
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
         $params[JobFields::JOB_IDS] = $this->id;
         $response = $this->getTwitterAds()->get($resource, $params);
-        if(isset($response->getBody()->data[0])){
+        if (isset($response->getBody()->data[0])) {
             return $this->fromResponse($response->getBody()->data[0]);
         } else {
             return $this;
@@ -184,6 +179,4 @@ class Job extends Analytics
     {
         return $this->properties;
     }
-
-
 }

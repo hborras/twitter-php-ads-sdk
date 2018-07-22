@@ -12,5 +12,3 @@ class Forbidden extends TwitterAdsException
         parent::__construct($message, $code, null, $errors);
     }
 }
-
-

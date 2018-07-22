@@ -5,12 +5,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 3/04/16
- * Time: 10:43.
- */
+
 class FundingInstrument extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/funding_instruments';

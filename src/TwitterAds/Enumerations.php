@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 17/04/16
- * Time: 18:28.
- */
+
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 class Enumerations
@@ -52,6 +47,4 @@ class Enumerations
     const GRANULARITY_HOUR  = "HOUR";
     const GRANULARITY_DAY   = "DAY";
     const GRANULARITY_TOTAL = "TOTAL";
-
-
 }

@@ -23,5 +23,3 @@ class ServiceUnavailable extends TwitterAdsException
         return $this->retryAfter;
     }
 }
-
-

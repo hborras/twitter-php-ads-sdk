@@ -4,8 +4,9 @@ use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\GlobalOptOut;
+use PHPUnit\Framework\TestCase;
 
-class GlobalOptOutTest extends \PHPUnit_Framework_TestCase
+class GlobalOptOutTest extends TestCase
 {
     /** @var TwitterAds */
     protected $twitter;

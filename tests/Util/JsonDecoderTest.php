@@ -3,8 +3,9 @@
 namespace Hborras\TwitterAdsSDK\Tests;
 
 use Hborras\TwitterAdsSDK\Util\JsonDecoder;
+use PHPUnit\Framework\TestCase;
 
-class JsonDecoderTest extends \PHPUnit_Framework_TestCase
+class JsonDecoderTest extends TestCase
 {
     /**
      * @dataProvider jsonProvider

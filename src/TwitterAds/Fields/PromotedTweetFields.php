@@ -2,13 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 12/05/17
- * Time: 18:19
- */
 class PromotedTweetFields extends Fields
 {
     const DELETED            = 'deleted';

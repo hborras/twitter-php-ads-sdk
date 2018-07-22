@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 27/03/16
- * Time: 13:16.
- */
+
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 use Hborras\TwitterAdsSDK\TwitterAds;
@@ -22,7 +17,6 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
 
 class Account extends Analytics
 {
-
     const RESOURCE_REPLACE          = '{account_id}';
     const RESOURCE_COLLECTION       = 'accounts';
     const RESOURCE                  = 'accounts/{account_id}';
@@ -44,6 +38,7 @@ class Account extends Analytics
     protected $approval_status;
     protected $business_id;
     protected $business_name;
+    protected $industry_type;
 
     /**
      * @param $metricGroups
@@ -305,5 +300,21 @@ class Account extends Analytics
     public function getBusinessName()
     {
         return $this->business_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIndustryType()
+    {
+        return $this->industry_type;
+    }
+
+    /**
+     * @param mixed $industry_type
+     */
+    public function setIndustryType($industry_type)
+    {
+        $this->industry_type = $industry_type;
     }
 }

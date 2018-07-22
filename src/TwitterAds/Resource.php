@@ -8,12 +8,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\Arrayable;
 
-/**
- * Created by PhpStorm.
- * User: hborras
- * Date: 2/04/16
- * Time: 12:17.
- */
+
 abstract class Resource implements Arrayable
 {
     use DateTimeFormatter;
@@ -48,7 +43,8 @@ abstract class Resource implements Arrayable
         if (!$instance) {
             throw new \InvalidArgumentException(
                 'An Api instance must be provided as argument or ' .
-                'set as instance in the \TwitterAds\Api');
+                'set as instance in the \TwitterAds\Api'
+            );
         }
         return $instance;
     }
@@ -75,7 +71,6 @@ abstract class Resource implements Arrayable
     public function read($params = [])
     {
         return $this->load($this->getId(), $params);
-        
     }
 
     /**

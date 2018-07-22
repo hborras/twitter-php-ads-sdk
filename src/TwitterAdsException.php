@@ -33,5 +33,3 @@ class TwitterAdsException extends \Exception
         return $this->errors;
     }
 }
-
-

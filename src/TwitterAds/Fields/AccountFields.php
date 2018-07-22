@@ -2,7 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-
 class AccountFields extends Fields
 {
     const ID                 = 'id';
@@ -18,6 +17,7 @@ class AccountFields extends Fields
     const WITH_TOTAL_COUNT   = 'with_total_count';
     const BUSINESS_NAME      = 'business_name';
     const BUSINESS_ID        = 'business_id';
+    const INDUSTRY_TYPE      = 'industry_type';
 
     const ACCOUNT_IDS        = 'account_ids';
 }
