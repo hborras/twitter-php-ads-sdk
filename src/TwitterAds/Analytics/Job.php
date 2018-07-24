@@ -8,7 +8,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\JobFields;
 class Job extends Analytics
 {
     const RESOURCE_COLLECTION = 'stats/jobs/accounts/{account_id}';
-    const RESOURCE            = 'stats/jobs/accounts/{account_id}/{id}';
+    const RESOURCE            = 'stats/jobs/accounts/{account_id}';
     const ENTITY              = 'JOBS';
 
     /** Read Only */
