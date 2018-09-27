@@ -24,6 +24,7 @@ class PromotedTweet extends Analytics
     protected $properties = [
         PromotedTweetFields::TWEET_ID,
         PromotedTweetFields::ENTITY_STATUS,
+        PromotedTweetFields::LINE_ITEM_ID
     ];
 
     /** Writable */
