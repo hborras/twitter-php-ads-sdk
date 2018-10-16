@@ -2,7 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\WebsiteCardFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\PollCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
 class PollCard extends Resource
@@ -19,18 +19,19 @@ class PollCard extends Resource
 
     protected $properties = [
         PollCardFields::NAME,
-        PollCardFields::DURATION_IN_MINITUES,
+        PollCardFields::DURATION_IN_MINUTES,
         PollCardFields::FIRST_CHOICE,
         PollCardFields::SECOND_CHOICE,
     ];
 
     /** Writable */
     protected $name;
-    protected $duration_in_minitues;
+    protected $duration_in_minutes;
     protected $first_choice;
     protected $second_choice;
     protected $third_choice;
     protected $fourth_choice;
+    protected $media_key;
 
     /**
      * @return mixed
@@ -83,9 +84,25 @@ class PollCard extends Resource
     /**
      * @param mixed $duration_in_minitues
      */
-    public function setDurationInMinutes($duration_in_minitues)
+    public function setDurationInMinutes($duration_in_minutes)
     {
-        $this->duration_in_minitues = $duration_in_minitues;
+        $this->duration_in_minutes = $duration_in_minutes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMediaKey()
+    {
+        return $this->media_key;
+    }
+
+    /**
+     * @param mixed $media_key
+     */
+    public function setMediaKey($media_key)
+    {
+        $this->media_key = $media_key;
     }
 
     /**
@@ -175,8 +192,17 @@ class PollCard extends Resource
         return $this->deleted;
     }
 
-    public function create(Account $account, $text, $params = [])
+    public function toParam()
     {
-        $params
+        $params = parent::toParam();
+        if (isset($third_choice)) {
+            $params[PollCardFields::THIRD_CHOICE] = $third_choice;
+        }
+        if (isset($fourth_choice)) {
+            $params[PollCardFields::FOURTH_CHOICE] = $fourth_choice;
+        }
+        if (isset($media_key)) {
+            $params[PollCardFields::MEDIA_KEY] = $media_key;
+        }
     }
 }

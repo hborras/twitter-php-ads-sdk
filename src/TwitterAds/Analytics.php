@@ -8,9 +8,10 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
 class Analytics extends Resource
 {
-    const ENTITY              = "";
-    const RESOURCE_STATS      = 'stats/accounts/{account_id}/';
-    const RESOURCE_STATS_JOBS = 'stats/jobs/accounts/{account_id}/';
+    const ENTITY                    = "";
+    const RESOURCE_STATS            = 'stats/accounts/{account_id}/';
+    const RESOURCE_STATS_JOBS       = 'stats/jobs/accounts/{account_id}/';
+    const RESOURCE_STATS_CAMPAIGN   = 'stats/accounts/{account_id}/reach/campaigns';
 
     /**
      * Pulls a list of metrics for the current object instance.
@@ -25,8 +26,23 @@ class Analytics extends Resource
         return $this->all_stats([$this->getId()], $metricGroups, $params, $async);
     }
 
+    public function stats_campaign($campaignIds, $params)
+    {
+        $endTime = isset($params[AnalyticsFields::END_TIME]) ? $params[AnalyticsFields::END_TIME] : new \DateTime('now');
+        $endTime->setTime($endTime->format('H'), 0, 0);
+        $startTime = isset($params[AnalyticsFields::START_TIME]) ? $params[AnalyticsFields::START_TIME] : new \DateTime($endTime->format('c') . " - 7 days");
+        $startTime->setTime($startTime->format('H'), 0, 0);
+        $params = [
+            AnalyticsFields::CAMPAIGN_IDS => implode(",", $campaignIds),
+            AnalyticsFields::START_TIME => $startTime->format('c'),
+            AnalyticsFields::END_TIME => $endTime->format('c'),
+        ];
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS_CAMPAIGN);
+        $response = $this->getTwitterAds()->get($resource, $params);
+    }
 
-    public function all_stats($ids, $metricGroups, $params = [], $async = false)
+
+    public function all_stats($ids, $metricGroups, $params = [], $async = false, $reachCampaign = false)
     {
         $endTime = isset($params[AnalyticsFields::END_TIME]) ? $params[AnalyticsFields::END_TIME] : new \DateTime('now');
         $endTime->setTime($endTime->format('H'), 0, 0);
@@ -87,6 +103,6 @@ class Analytics extends Resource
 
     public function getId()
     {
-        return parent::getId();
+        return $this->id;
     }
 }

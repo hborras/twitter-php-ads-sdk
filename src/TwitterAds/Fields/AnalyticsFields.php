@@ -19,6 +19,7 @@ class AnalyticsFields
     const METRIC_GROUPS                                   = 'metric_groups';
     const ENTITY                                          = 'entity';
     const ENTITY_IDS                                      = 'entity_ids';
+    const CAMPAIGN_IDS                                    = 'campaign_ids';
     const ACCOUNT                                         = 'ACCOUNT';
     const FUNDING_INSTRUMENT                              = 'FUNDING_INSTRUMENT';
     const CAMPAIGN                                        = 'CAMPAIGN';
