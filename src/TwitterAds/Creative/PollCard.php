@@ -192,17 +192,18 @@ class PollCard extends Resource
         return $this->deleted;
     }
 
-    public function toParam()
+    public function toParams()
     {
-        $params = parent::toParam();
-        if (isset($third_choice)) {
-            $params[PollCardFields::THIRD_CHOICE] = $third_choice;
+        $params = parent::toParams();
+        if (isset($this->third_choice)) {
+            $params[PollCardFields::THIRD_CHOICE] = $this->third_choice;
         }
-        if (isset($fourth_choice)) {
-            $params[PollCardFields::FOURTH_CHOICE] = $fourth_choice;
+        if (isset($this->fourth_choice)) {
+            $params[PollCardFields::FOURTH_CHOICE] = $this->fourth_choice;
         }
-        if (isset($media_key)) {
-            $params[PollCardFields::MEDIA_KEY] = $media_key;
+        if (isset($this->media_key)) {
+            $params[PollCardFields::MEDIA_KEY] = $this->media_key;
         }
+        return $params;
     }
 }
