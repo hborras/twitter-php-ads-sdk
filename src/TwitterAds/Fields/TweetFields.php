@@ -8,4 +8,5 @@ class TweetFields
     const ID        = 'id';
     const TEXT      = 'text';
     const CARD_URI  = 'card_uri';
+    const UESR_ID   = 'as_user_id';
 }
