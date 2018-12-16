@@ -13,10 +13,10 @@ abstract class Resource implements Arrayable
 {
     use DateTimeFormatter;
 
-    const RESOURCE            = '';
+    const RESOURCE = '';
     const RESOURCE_COLLECTION = '';
     const RESOURCE_ID_REPLACE = '{id}';
-    const RESOURCE_REPLACE    = '{account_id}';
+    const RESOURCE_REPLACE = '{account_id}';
 
     private $properties = [];
 
@@ -117,12 +117,18 @@ abstract class Resource implements Arrayable
      * @param $response
      *
      * @return $this
+     * @throws \Exception
      */
     public function fromResponse($response)
     {
+        if ($this instanceof Account) {
+            $timezone = $response->timezone;
+        } else {
+            $timezone = $this->getTwitterAds()->getAccountTimezone();
+        }
         foreach (get_object_vars($response) as $key => $value) {
             if (($key == 'created_at' || $key == 'updated_at' || $key == 'start_time' || $key == 'end_time' || $key == 'timezone_switch_at') && !is_null($value)) {
-                $this->$key = $this->toDateTimeImmutable($value);
+                $this->$key = $this->toDateTimeImmutable($value, $timezone);
             } else {
                 $this->$key = $value;
             }

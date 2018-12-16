@@ -4,7 +4,6 @@ namespace Hborras\TwitterAdsSDK;
 
 use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
@@ -22,14 +21,14 @@ use Hborras\TwitterAdsSDK\Util\JsonDecoder;
  */
 class TwitterAds extends Config
 {
-    const API_VERSION      = '3';
+    const API_VERSION = '3';
     const API_REST_VERSION = '1.1';
-    const API_HOST         = 'https://ads-api.twitter.com';
+    const API_HOST = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
-    const API_HOST_OAUTH   = 'https://api.twitter.com';
-    const UPLOAD_HOST      = 'https://upload.twitter.com';
-    const UPLOAD_PATH      = 'media/upload.json';
-    const UPLOAD_CHUNK     = 40960; // 1024 * 40
+    const API_HOST_OAUTH = 'https://api.twitter.com';
+    const UPLOAD_HOST = 'https://upload.twitter.com';
+    const UPLOAD_PATH = 'media/upload.json';
+    const UPLOAD_CHUNK = 40960; // 1024 * 40
 
     /** @var TwitterAds */
     protected static $instance;
@@ -49,8 +48,9 @@ class TwitterAds extends Config
     private $signatureMethod;
     /** @var  bool Sandbox allows to make requests thought sandbox environment */
     private $sandbox;
-    /** @var string */
-    private $accountId;
+
+    /** @var Account */
+    private $account;
 
     /**
      * @return TwitterAds|null
@@ -75,10 +75,10 @@ class TwitterAds extends Config
      * @param string $consumerSecret The Application Consumer Secret
      * @param string|null $oauthToken The Client Token
      * @param string|null $oauthTokenSecret The Client Token Secret
-     * @param string $accountId
+     * @param Account $account | null
      * @param bool $sandbox The Sandbox environment (optional)
      */
-    public function __construct($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
+    public function __construct($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $account = null, $sandbox = false)
     {
         $this->resetLastResponse();
         $this->signatureMethod = new HmacSha1();
@@ -90,7 +90,7 @@ class TwitterAds extends Config
             $this->bearer = $oauthTokenSecret;
         }
         $this->sandbox = $sandbox;
-        $this->accountId = $accountId;
+        $this->account = $account;
     }
 
     /**
@@ -98,13 +98,13 @@ class TwitterAds extends Config
      * @param $consumerSecret
      * @param $oauthToken
      * @param $oauthTokenSecret
-     * @param string $accountId
+     * @param Account $account | null
      * @param bool $sandbox
      * @return static
      */
-    public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
+    public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $account = null, $sandbox = false)
     {
-        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
+        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $account, $sandbox);
         static::setInstance($api);
 
         return $api;
@@ -683,15 +683,29 @@ class TwitterAds extends Config
      */
     public function getAccountId()
     {
-        return $this->accountId;
+        if(!$this->account instanceof Account){
+            return '';
+        }
+        return $this->account->getId();
     }
 
     /**
-     * @param string $accountId
+     * @return string
      */
-    public function setAccountId($accountId)
+    public function getAccountTimezone()
     {
-        $this->accountId = $accountId;
+        if(!$this->account instanceof Account){
+            return 'UTC';
+        }
+        return $this->account->getTimezone();
+    }
+
+    /**
+     * @param Account $account
+     */
+    public function setAccount($account)
+    {
+        $this->account = $account;
     }
 
     public function getRequestToken($oauth_callback)
