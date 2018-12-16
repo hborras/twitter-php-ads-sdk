@@ -690,6 +690,17 @@ class TwitterAds extends Config
     }
 
     /**
+     * @return string
+     */
+    public function getAccountTimezone()
+    {
+        if(!$this->account instanceof Account){
+            return 'UTC';
+        }
+        return $this->account->getTimezone();
+    }
+
+    /**
      * @param Account $account
      */
     public function setAccount($account)
