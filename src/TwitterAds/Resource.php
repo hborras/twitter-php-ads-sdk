@@ -117,6 +117,7 @@ abstract class Resource implements Arrayable
      * @param $response
      *
      * @return $this
+     * @throws \Exception
      */
     public function fromResponse($response)
     {

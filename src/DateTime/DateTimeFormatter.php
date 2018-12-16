@@ -17,6 +17,7 @@ trait DateTimeFormatter
      *
      * @param string
      * @return DateTime
+     * @throws \Exception
      */
     public function toDateTime($datestr)
     {
@@ -28,6 +29,7 @@ trait DateTimeFormatter
      *
      * @param string
      * @return DateTimeImmutable
+     * @throws \Exception
      */
     public function toDateTimeImmutable($datestr)
     {
