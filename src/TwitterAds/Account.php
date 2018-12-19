@@ -2,14 +2,15 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AppList;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AuthenticatedUserAccess;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\DeleteOnlyInSandBoxException;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
@@ -198,6 +199,8 @@ class Account extends Analytics
      *
      * @param $ids
      * @param $params
+     * @return
+     * @throws Errors\ServerError
      */
     public function getScopedTimeline($ids, $params)
     {
@@ -213,6 +216,33 @@ class Account extends Analytics
 
         return $response->getBody()->data;
     }
+
+    /**
+     * @return Account
+     * @throws DeleteOnlyInSandBoxException
+     */
+    public function delete()
+    {
+        if(!$this->getTwitterAds()->isSandBox()){
+            throw new DeleteOnlyInSandBoxException();
+        }
+
+        return parent::delete();
+    }
+
+    /**
+     * @return AuthenticatedUserAccess
+     * @throws Errors\AuthenticatedUserAccess\UndefinedPermissions
+     * @throws Errors\AuthenticatedUserAccess\UndefinedUserId
+     */
+    public function authenticatedUserAccess()
+    {
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(),
+            static::AUTHENTICATED_USER_ACCESS);
+        $response = $this->getTwitterAds()->get($resource);
+        return AuthenticatedUserAccess::fromResponse($response->getBody()->data);
+    }
+
 
     /**
      * @return string

@@ -4,6 +4,7 @@ namespace Hborras\TwitterAdsSDK;
 
 use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\BiddingRule;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
@@ -29,6 +30,8 @@ class TwitterAds extends Config
     const UPLOAD_HOST = 'https://upload.twitter.com';
     const UPLOAD_PATH = 'media/upload.json';
     const UPLOAD_CHUNK = 40960; // 1024 * 40
+
+    const BIDDING_RULES = 'bidding_rules';
 
     /** @var TwitterAds */
     protected static $instance;
@@ -116,6 +119,23 @@ class TwitterAds extends Config
     public function getAccounts()
     {
         return (new Account($this))->all();
+    }
+
+    /**
+     * @param string $currency
+     * @return BiddingRule[]
+     */
+    public function biddingRules($currency = '')
+    {
+        $resource = self::BIDDING_RULES;
+
+        $params = [];
+        if($currency !== ''){
+            $params = ['currency' => $currency];
+        }
+
+        $response = $this->get($resource, $params);
+        return BiddingRule::fromResponse($response->getBody()->data);
     }
 
     /**
@@ -461,9 +481,9 @@ class TwitterAds extends Config
     public function manageErrors($response)
     {
         $errors = [];
-        if(isset($response->errors)){
+        if (isset($response->errors)) {
             $errors = $response->errors;
-        } else if(isset($response->operation_errors)){
+        } else if (isset($response->operation_errors)) {
             $errors = $response->operation_errors;
         }
 
@@ -692,7 +712,7 @@ class TwitterAds extends Config
      */
     public function getAccountId()
     {
-        if(!$this->account instanceof Account){
+        if (!$this->account instanceof Account) {
             return '';
         }
         return $this->account->getId();
@@ -703,7 +723,7 @@ class TwitterAds extends Config
      */
     public function getAccountTimezone()
     {
-        if(!$this->account instanceof Account){
+        if (!$this->account instanceof Account) {
             return 'UTC';
         }
         return $this->account->getTimezone();
@@ -823,5 +843,13 @@ class TwitterAds extends Config
         } else {
             return $this->authenticateURL() . "?oauth_token={$token}";
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSandbox()
+    {
+        return $this->sandbox;
     }
 }

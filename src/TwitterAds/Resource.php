@@ -237,7 +237,7 @@ abstract class Resource
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
         $resource = str_replace(static::RESOURCE_ID_REPLACE, $this->getId(), $resource);
         $response = $this->getTwitterAds()->delete($resource);
-        $this->fromResponse($response->getBody()->data);
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**
