@@ -6,10 +6,9 @@ use Hborras\TwitterAdsSDK\DateTime\DateTimeFormatter;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
-use Hborras\TwitterAdsSDK\Arrayable;
 
 
-abstract class Resource implements Arrayable
+abstract class Resource
 {
     use DateTimeFormatter;
 
@@ -138,6 +137,22 @@ abstract class Resource implements Arrayable
     }
 
     /**
+     * @param array $batchResponse
+     * @return array
+     * @throws \Exception
+     */
+    public function fromBatchResponse(array $batchResponse)
+    {
+        $results = [];
+
+        foreach ($batchResponse as $response) {
+            $results[] = $this->fromResponse($response);
+        }
+
+        return $results;
+    }
+
+    /**
      * Generates a Hash of property values for the current object. This helper
      * handles all necessary type coercions as it generates its output.
      */
@@ -148,6 +163,9 @@ abstract class Resource implements Arrayable
             if (is_null($this->$property)) {
                 continue;
             }
+            if ($this->$property instanceof Resource) {
+                $params[$property] = $this->$property->getId();
+            } else
             if ($this->$property instanceof \DateTimeInterface) {
                 $params[$property] = $this->$property->format('c');
             } elseif (is_array($this->$property)) {

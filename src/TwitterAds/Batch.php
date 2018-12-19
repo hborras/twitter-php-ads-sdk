@@ -2,59 +2,58 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
-use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\Arrayable;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BatchLimitExceeded;
 
-abstract class Batch extends Resource
+class Batch extends Analytics
 {
-    private $batch = [];
-    private $batchSize;
-    private $account;
+    const RESOURCE_BATCH = '';
 
-    public function __construct(TwitterAds $twitterAds = null, $batchSize = 10, $batch = [])
-    {
-        parent::__construct('', $twitterAds);
-        $this->batchSize = $batchSize;
-        $this->batch = $this->assureBatchSize($batch);
-    }
+    const OPERATION_TYPE = 'operation_type';
+    const OPERATION_TYPE_CREATE = 'Create';
+    const OPERATION_TYPE_UPDATE = 'Update';
+    const OPERATION_TYPE_DELETE = 'Delete';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        //Always use POST request by setting the ID to null
-        return null;
-    }
+    const PARAMS = 'params';
+    const ENTITY_TYPE = '';
+    const BATCH_SIZE = 0;
 
-    public function getAccount()
-    {
-        return $this->account;
-    }
+    /** @var Resource[] */
+    protected $batch = [];
 
     /**
-     * {@inheritdoc}
+     * @return mixed
      */
-    public function toParams()
+    public function saveBatch()
     {
-        $data = [];
+        $body = [];
 
-        foreach ($this->batch as $member) {
-            $data[] = $member->toArray();
+        /** @var Resource $item */
+        foreach ($this->batch as $item) {
+            $itemJson = [];
+            $itemJson[self::PARAMS] = $item->toParams();
+
+            if(!$item->getId()){
+                $itemJson[self::OPERATION_TYPE] = self::OPERATION_TYPE_CREATE;
+            } else if($item->getToDelete()){
+                $itemJson[self::OPERATION_TYPE] = self::OPERATION_TYPE_DELETE;
+            } else {
+                $itemJson[self::OPERATION_TYPE] = self::OPERATION_TYPE_UPDATE;
+                $itemJson[self::PARAMS][static::ENTITY_TYPE.'_id'] = $item->getId();
+            }
+
+            $body[] = $itemJson;
         }
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_BATCH);
+        $headers = [
+            'Content-Type: application/json'
+        ];
+        $params = ['batch' => json_encode($body)];
+        $response = $this->getTwitterAds()->post($resource, $params, $headers);
 
-        return json_encode($data);
+        return $this->fromBatchResponse($response->getBody()->data);
     }
 
-    public function getBatch()
-    {
-        return $this->batch;
-    }
-
-    public function add(Arrayable $data)
+    public function addBatch(Resource $data)
     {
         $this->assureBatchSize();
 
@@ -66,18 +65,17 @@ abstract class Batch extends Resource
      *
      * @param $batch |null
      *
-     * @throws BatchLimitExceeded when the batch is full
-     * @return $batch|$this->batch
+     * @return array $batch|$this->batch
      */
     public function assureBatchSize($batch = null)
     {
-        if (count($batch ?: $this->batch) < $this->batchSize) {
+        if (count($batch ?: $this->batch) < static::BATCH_SIZE) {
             return $batch ?: $this->batch;
         }
 
         throw new BatchLimitExceeded(sprintf(
             'Cannot add data to batch. Max size is %s',
-            $this->batchSize
+            static::BATCH_SIZE
         ));
     }
 }

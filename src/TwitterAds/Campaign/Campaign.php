@@ -2,15 +2,21 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Batch;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
 
-class Campaign extends Analytics
+class Campaign extends Batch
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/campaigns';
-    const RESOURCE            = 'accounts/{account_id}/campaigns/{id}';
-    const ENTITY              = 'CAMPAIGN';
+    const RESOURCE_BATCH = 'batch/accounts/{account_id}/campaigns';
+    const RESOURCE = 'accounts/{account_id}/campaigns/{id}';
+    const ENTITY = 'CAMPAIGN';
+    const BATCH_SIZE = 20;
+    const ENTITY_TYPE = 'campaign';
+
+    const STATUS_ACTIVE = 'ACTIVE';
+    const STATUS_PAUSED = 'PAUSED';
 
     /** Read Only */
     protected $id;
@@ -45,6 +51,9 @@ class Campaign extends Analytics
     protected $total_budget_amount_local_micro;
     protected $duration_in_days;
     protected $frequency_cap;
+
+    /** sdk */
+    protected $toDelete;
 
     /**
      * @param array $params
@@ -307,5 +316,21 @@ class Campaign extends Analytics
     public function setFrequencyCap($frequency_cap)
     {
         $this->frequency_cap = $frequency_cap;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToDelete()
+    {
+        return $this->toDelete;
+    }
+
+    /**
+     * @param mixed $toDelete
+     */
+    public function setToDelete($toDelete)
+    {
+        $this->toDelete = $toDelete;
     }
 }

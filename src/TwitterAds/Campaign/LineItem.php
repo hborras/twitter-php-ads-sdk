@@ -2,19 +2,22 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
+use Hborras\TwitterAdsSDK\TwitterAds\Batch;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemFields;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
-class LineItem extends Analytics
+class LineItem extends Batch
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/line_items';
+    const RESOURCE_BATCH = 'batch/accounts/{account_id}/line_items';
     const RESOURCE            = 'accounts/{account_id}/line_items/{id}';
 
+    const BATCH_SIZE = 20;
+    const ENTITY_TYPE = 'line_item';
     const ENTITY = "LINE_ITEM";
 
     /** Read Only */
@@ -70,6 +73,9 @@ class LineItem extends Analytics
     protected $tracking_tags;
     protected $advertiser_user_id;
     protected $categories;
+
+    /** sdk */
+    protected $toDelete;
 
     public function getPromotedTweets($params = [])
     {
@@ -521,5 +527,21 @@ class LineItem extends Analytics
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToDelete()
+    {
+        return $this->toDelete;
+    }
+
+    /**
+     * @param mixed $toDelete
+     */
+    public function setToDelete($toDelete)
+    {
+        $this->toDelete = $toDelete;
     }
 }
