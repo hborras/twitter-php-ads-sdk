@@ -5,6 +5,8 @@
  */
 namespace Hborras\TwitterAdsSDK;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\TwitterOAuthException;
+
 class Request
 {
     protected $parameters;

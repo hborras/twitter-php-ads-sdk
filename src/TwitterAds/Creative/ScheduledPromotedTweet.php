@@ -6,7 +6,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\ScheduledPromotedTweetFields;
 
-class ScheduledTweet extends Analytics
+class ScheduledPromotedTweet extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/scheduled_promoted_tweets';
     const RESOURCE            = 'accounts/{account_id}/scheduled_promoted_tweets/{id}';
@@ -35,6 +35,7 @@ class ScheduledTweet extends Analytics
      * @param array $params
      * @param bool $async
      * @return mixed
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest
      */
     public function stats($metricGroups, $params = [], $async = false)
     {

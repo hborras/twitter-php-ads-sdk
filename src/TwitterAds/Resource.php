@@ -99,7 +99,7 @@ abstract class Resource
     public function reload($params = [])
     {
         if (!$this->getId()) {
-            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
+            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null);
         }
 
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
@@ -183,7 +183,7 @@ abstract class Resource
     public function validateLoaded()
     {
         if (!$this->getId()) {
-            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
+            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null);
         }
     }
 

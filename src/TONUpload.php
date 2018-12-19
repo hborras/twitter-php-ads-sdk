@@ -15,6 +15,8 @@ class TONUpload
     private $twitterAds;
     private $params;
 
+    private $contentType;
+
     public function __construct(TwitterAds $twitterAds, $filePath, $params = [])
     {
         if (!file_exists($filePath)) {

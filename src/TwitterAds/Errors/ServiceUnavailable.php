@@ -9,7 +9,7 @@ class ServiceUnavailable extends TwitterAdsException
 {
     private $retryAfter;
 
-    public function __construct($message, $code, Exception $previous = null, $errors, $headers)
+    public function __construct($message, $code, $errors, $headers)
     {
         parent::__construct($message, $code, null, $errors);
         $this->retryAfter = $headers['retry-after'];

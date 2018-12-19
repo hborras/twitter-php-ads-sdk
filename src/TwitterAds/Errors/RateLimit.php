@@ -10,7 +10,7 @@ class RateLimit extends TwitterAdsException
     private $retryAfter;
     private $resetAt;
 
-    public function __construct($message, $code, Exception $previous = null, $errors, $headers)
+    public function __construct($message, $code, $errors, $headers)
     {
         parent::__construct($message, $code, null, $errors);
         $this->retryAfter = $headers['x_rate_limit_limit'];

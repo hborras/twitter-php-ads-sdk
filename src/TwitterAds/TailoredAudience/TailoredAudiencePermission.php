@@ -2,7 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
-use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
@@ -33,14 +32,13 @@ final class TailoredAudiencePermission extends Resource
     /**
      * Returns a Cursor instance for the given tailored audience permission resource.
      *
-     * @param array $tailoredAudienceId
      * @param array $params
      * @return Cursor
      */
-    public function all($tailoredAudienceId, $params = [])
+    public function all($params = [])
     {
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
-        $resource = str_replace(self::RESOURCE_TAILORED_AUDIENCE_ID_REPLACE, $tailoredAudienceId, $resource);
+        $resource = str_replace(self::RESOURCE_TAILORED_AUDIENCE_ID_REPLACE, $params['tailored_audience_id'], $resource);
 
         $response = $this->getTwitterAds()->get($resource, $params);
 
@@ -51,6 +49,7 @@ final class TailoredAudiencePermission extends Resource
      * Saves or updates the current tailored audience permission.
      *
      * @return $this
+     * @throws \Exception
      */
     public function save()
     {
@@ -72,6 +71,7 @@ final class TailoredAudiencePermission extends Resource
      * Saves or updates the current tailored audience permission.
      *
      * @return $this
+     * @throws \Exception
      */
     public function delete()
     {

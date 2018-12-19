@@ -66,7 +66,7 @@ final class TailoredAudience extends Resource
      *
      * @param $name
      * @param $listType
-     * @return $this
+     * @return void
      */
     public function createAudience($name, $listType)
     {
@@ -74,7 +74,7 @@ final class TailoredAudience extends Resource
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
         $response = $this->getTwitterAds()->post($resource, $params);
 
-        return $this->fromResponse($response->getBody()->data);
+        //return $this->fromResponse($response->getBody()->data);
     }
 
     /**
@@ -83,8 +83,7 @@ final class TailoredAudience extends Resource
      */
     public function status()
     {
-        $tailoredAudienceChange = new TailoredAudienceChanges();
-        return $tailoredAudienceChange->status($this->getId());
+
     }
 
     /**

@@ -71,6 +71,7 @@ class Campaign extends Batch
      * @param array $params
      * @param bool $async
      * @return mixed
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest
      */
     public function stats($metricGroups, $params = [], $async = false)
     {

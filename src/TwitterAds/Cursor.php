@@ -2,9 +2,12 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use ArrayAccess;
+use Countable;
 use Hborras\TwitterAdsSDK\TwitterAds;
+use Iterator;
 
-class Cursor implements \Iterator, \Countable, \arrayaccess
+class Cursor implements Iterator, Countable, ArrayAccess
 {
     /** @var Resource */
     private $resource;
@@ -131,6 +134,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     /**
      * @param $request
      * @return $this
+     * @throws \Exception
      */
     public function fromResponse($request)
     {

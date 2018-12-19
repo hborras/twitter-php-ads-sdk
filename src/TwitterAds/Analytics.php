@@ -37,10 +37,10 @@ class Analytics extends Resource
         if (isset($params[AnalyticsFields::ENTITY])) {
             $entity = $params[AnalyticsFields::ENTITY];
         } else {
-            throw new BadRequest('Entity parameter is mandatory', 500, []);
+            throw new BadRequest('Entity parameter is mandatory', 500, null);
         }
         if (!self::inAvailableEntities($entity)) {
-            throw new BadRequest('Entity must be one of ACCOUNT,FUNDING_INSTRUMENT,CAMPAIGN,LINE_ITEM,PROMOTED_TWEET,ORGANIC_TWEET', 500, []);
+            throw new BadRequest('Entity must be one of ACCOUNT,FUNDING_INSTRUMENT,CAMPAIGN,LINE_ITEM,PROMOTED_TWEET,ORGANIC_TWEET', 500, null);
         }
         $segmentationType = isset($params[AnalyticsFields::SEGMENTATION_TYPE]) ? $params[AnalyticsFields::SEGMENTATION_TYPE] : null;
 

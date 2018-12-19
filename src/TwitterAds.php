@@ -469,21 +469,21 @@ class TwitterAds extends Config
 
         switch ($this->getLastHttpCode()) {
             case 400:
-                throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $errors);
+                throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, $errors);
             case 401:
-                throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, null, $errors);
+                throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, $errors);
             case 403:
-                throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, null, $errors);
+                throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, $errors);
             case 404:
-                throw new NotFound(TwitterAdsException::NOT_FOUND, 404, null, $errors);
+                throw new NotFound(TwitterAdsException::NOT_FOUND, 404, $errors);
             case 429:
-                throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, null, $errors, $this->response->getsHeaders());
+                throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, $errors, $this->response->getsHeaders());
             case 500:
-                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $errors);
+                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, $errors);
             case 503:
-                throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $errors, $this->response->getsHeaders());
+                throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, $errors, $this->response->getsHeaders());
             default:
-                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $errors);
+                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, $errors);
         }
     }
 
