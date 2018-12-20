@@ -1,6 +1,6 @@
 <?php
 
-namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
+namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\AuthenticatedUserAccess\NotAvailablePermission;
@@ -23,7 +23,7 @@ class AuthenticatedUserAccess
     /** @var array  */
     private $permissions;
 
-    public function __construct( $userId, array $permissions)
+    public function __construct(string $userId, array $permissions)
     {
         $this->userId = $userId;
         $this->permissions = $permissions;
@@ -60,7 +60,7 @@ class AuthenticatedUserAccess
     /**
      * @return string
      */
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->userId;
     }
@@ -68,7 +68,7 @@ class AuthenticatedUserAccess
     /**
      * @return array
      */
-    public function getPermissions()
+    public function getPermissions(): array
     {
         return $this->permissions;
     }

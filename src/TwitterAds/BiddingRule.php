@@ -1,6 +1,6 @@
 <?php
 
-namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
+namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 
 class BiddingRule

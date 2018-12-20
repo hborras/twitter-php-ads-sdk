@@ -4,7 +4,7 @@ namespace Hborras\TwitterAdsSDK;
 
 use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\BiddingRule;
+use Hborras\TwitterAdsSDK\TwitterAds\BiddingRule;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
