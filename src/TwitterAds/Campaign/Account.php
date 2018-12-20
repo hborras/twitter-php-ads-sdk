@@ -4,8 +4,10 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Account;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
+use Hborras\TwitterAdsSDK\TwitterAds\AuthenticatedUserAccess;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AppList;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Features;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
@@ -13,7 +15,6 @@ use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\DeleteOnlyInSandBoxException;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
 
 class Account extends Analytics
@@ -28,6 +29,7 @@ class Account extends Analytics
 
     const ENTITY = 'ACCOUNT';
 
+    /** @var string */
     protected $id;
     protected $salt;
     protected $name;
@@ -54,34 +56,60 @@ class Account extends Analytics
     }
 
     /**
-     * @param array $params
      * @return Account
      */
-    public function read($params = [])
+    public function read()
     {
-        $this->getTwitterAds()->setAccount($this);
-        return parent::read($params);
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->id, static::RESOURCE);
+        $response = $this->getTwitterAds()->get($resource, []);
+
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**
-     * Returns a collection of features available to the current account.
-     *
-     * @return mixed
-     *
-     * @throws TwitterAdsException
+     * @return Feature[]
      */
-    public function getFeatures()
+    public function features()
     {
-        $this->validateLoaded();
-
         $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::FEATURES);
         $response = $this->getTwitterAds()->get($resource);
 
-        return $response->getBody()->data;
+        return Features::fromResponse($response->getBody()->data);
     }
 
     /**
-     * Returns a collection of promotable users available to the current account.
+     * @param $response
+     * @return Account
+     * @throws \Exception
+     */
+    public function fromResponse($response)
+    {
+        $timezone = $response->timezone;
+        foreach (get_object_vars($response) as $key => $value) {
+            if (($key == 'created_at' || $key == 'updated_at' || $key == 'start_time' || $key == 'end_time' || $key == 'timezone_switch_at') && !is_null($value)) {
+                $this->$key = $this->toDateTimeImmutable($value, $timezone);
+            } else {
+                $this->$key = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @param array $params
+     * @return FundingInstrument|Cursor
+     */
+    public function getFundingInstruments($id = '', $params = [])
+    {
+        $fundingInstrumentClass = new FundingInstrument();
+
+        return $fundingInstrumentClass->loadResource($id, $params);
+    }
+
+    /**
      *
      * @param string $id
      *
@@ -96,23 +124,6 @@ class Account extends Analytics
     }
 
     /**
-     * Returns a collection of funding instruments available to the current account.
-     *
-     * @param string $id
-     *
-     * @param array $params
-     * @return FundingInstrument|Cursor
-     */
-    public function getFundingInstruments($id = '', $params = [])
-    {
-        $fundingInstrumentClass = new FundingInstrument();
-
-        return $fundingInstrumentClass->loadResource($id, $params);
-    }
-
-    /**
-     * Returns a collection of campaigns available to the current account.
-     *
      * @param string $id
      *
      * @param array $params
@@ -126,8 +137,6 @@ class Account extends Analytics
     }
 
     /**
-     * Returns a collection of line items available to the current account.
-     *
      * @param string $id
      *
      * @param array $params
@@ -141,8 +150,6 @@ class Account extends Analytics
     }
 
     /**
-     * Returns a collection of app lists available to the current account.
-     *
      * @param string $id
      *
      * @param array $params
@@ -156,8 +163,6 @@ class Account extends Analytics
     }
 
     /**
-     * Returns a collection of jobs. Can specify job_ids parameter to filter
-     *
      * @param array $params
      * @return Cursor|Resource
      */
@@ -181,8 +186,6 @@ class Account extends Analytics
     }
 
     /**
-     * Returns a collection of videos available to the current account.
-     *
      * @param string $id
      * @param array $params
      * @return Cursor|Video
@@ -195,8 +198,6 @@ class Account extends Analytics
     }
 
     /**
-     * Returns the most recent promotable Tweets created by one or more specified Twitter users.
-     *
      * @param $ids
      * @param $params
      * @return
@@ -227,13 +228,13 @@ class Account extends Analytics
             throw new DeleteOnlyInSandBoxException();
         }
 
-        return parent::delete();
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
+        $response = $this->getTwitterAds()->delete($resource);
+        return $this->fromResponse($response->getBody()->data);
     }
 
     /**
      * @return AuthenticatedUserAccess
-     * @throws Errors\AuthenticatedUserAccess\UndefinedPermissions
-     * @throws Errors\AuthenticatedUserAccess\UndefinedUserId
      */
     public function authenticatedUserAccess()
     {

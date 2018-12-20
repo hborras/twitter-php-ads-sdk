@@ -1,59 +1,33 @@
 <?php
 
-namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
+namespace Hborras\TwitterAdsSDK\TwitterAds\Account;
 
-use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Exception\FeatureKeyNotFoundException;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\FeatureFields;
 
 class Feature
 {
-    const RESOURCE_COLLECTION = 'features';
-    const RESOURCE_REPLACE    = '{account_id}';
-
-    /** @var  TwitterAds $twitterAds */
-    private $twitterAds;
+    /** @var string  */
+    private $featureKey;
 
     /**
-     * Feature constructor.
-     * @param TwitterAds $twitterAds
+     * Features constructor.
+     * @param string $featureKey
      */
-    public function __construct(TwitterAds $twitterAds)
+    public function __construct(string $featureKey)
     {
-        $this->twitterAds = static::assureApi($twitterAds);
-    }
-
-    protected static function assureApi(TwitterAds $instance = null)
-    {
-        $instance = $instance ?: TwitterAds::instance();
-        if (!$instance) {
-            throw new \InvalidArgumentException(
-                'An Api instance must be provided as argument or ' .
-                'set as instance in the \TwitterAds\Api'
-            );
+        if(!in_array($featureKey, FeatureFields::FEATURES)){
+            throw new FeatureKeyNotFoundException();
         }
-        return $instance;
+        $this->featureKey = $featureKey;
     }
 
     /**
-     * Returns a Cursor instance for a given resource.
-     *
-     * @param $params
-     *
-     * @return Cursor
+     * @return string
      */
-    public function all($params = [])
+    public function featureKey()
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
-        $response = $this->getTwitterAds()->get($resource, $params);
-
-        return new Cursor($response->getBody()->data, $this->getTwitterAds(), $response->getBody(), $params);
-    }
-
-    /**
-     * @return TwitterAds
-     */
-    public function getTwitterAds()
-    {
-        return $this->twitterAds;
+        return $this->featureKey;
     }
 }

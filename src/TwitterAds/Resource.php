@@ -118,7 +118,7 @@ abstract class Resource
      * @return $this
      * @throws \Exception
      */
-    public function fromResponse($response)
+/*    public function fromResponse($response)
     {
         if ($this instanceof Account) {
             $timezone = $response->timezone;
@@ -134,7 +134,7 @@ abstract class Resource
         }
 
         return $this;
-    }
+    }*/
 
     /**
      * @param array $batchResponse
