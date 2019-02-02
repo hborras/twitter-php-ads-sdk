@@ -4,6 +4,7 @@ namespace Hborras\TwitterAdsSDK;
 
 use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
@@ -23,12 +24,12 @@ class TwitterAds extends Config
 {
     const API_VERSION      = '4';
     const API_REST_VERSION = '1.1';
-    const API_HOST = 'https://ads-api.twitter.com';
+    const API_HOST         = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
-    const API_HOST_OAUTH = 'https://api.twitter.com';
-    const UPLOAD_HOST = 'https://upload.twitter.com';
-    const UPLOAD_PATH = 'media/upload.json';
-    const UPLOAD_CHUNK = 40960; // 1024 * 40
+    const API_HOST_OAUTH   = 'https://api.twitter.com';
+    const UPLOAD_HOST      = 'https://upload.twitter.com';
+    const UPLOAD_PATH      = 'media/upload.json';
+    const UPLOAD_CHUNK     = 40960; // 1024 * 40
 
     /** @var TwitterAds */
     protected static $instance;
@@ -48,9 +49,8 @@ class TwitterAds extends Config
     private $signatureMethod;
     /** @var  bool Sandbox allows to make requests thought sandbox environment */
     private $sandbox;
-
-    /** @var Account */
-    private $account;
+    /** @var string */
+    private $accountId;
 
     /**
      * @return TwitterAds|null
@@ -75,10 +75,10 @@ class TwitterAds extends Config
      * @param string $consumerSecret The Application Consumer Secret
      * @param string|null $oauthToken The Client Token
      * @param string|null $oauthTokenSecret The Client Token Secret
-     * @param Account $account | null
+     * @param string $accountId
      * @param bool $sandbox The Sandbox environment (optional)
      */
-    public function __construct($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $account = null, $sandbox = false)
+    public function __construct($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
         $this->resetLastResponse();
         $this->signatureMethod = new HmacSha1();
@@ -90,7 +90,7 @@ class TwitterAds extends Config
             $this->bearer = $oauthTokenSecret;
         }
         $this->sandbox = $sandbox;
-        $this->account = $account;
+        $this->accountId = $accountId;
     }
 
     /**
@@ -98,13 +98,13 @@ class TwitterAds extends Config
      * @param $consumerSecret
      * @param $oauthToken
      * @param $oauthTokenSecret
-     * @param Account $account | null
+     * @param string $accountId
      * @param bool $sandbox
      * @return static
      */
-    public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $account = null, $sandbox = false)
+    public static function init($consumerKey, $consumerSecret, $oauthToken = '', $oauthTokenSecret = '', $accountId = '', $sandbox = false)
     {
-        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $account, $sandbox);
+        $api = new static($consumerKey, $consumerSecret, $oauthToken, $oauthTokenSecret, $accountId, $sandbox);
         static::setInstance($api);
 
         return $api;
@@ -461,30 +461,23 @@ class TwitterAds extends Config
      */
     public function manageErrors($response)
     {
-        $errors = [];
-        if(isset($response->errors)){
-            $errors = $response->errors;
-        } else if(isset($response->operation_errors)){
-            $errors = $response->operation_errors;
-        }
-
         switch ($this->getLastHttpCode()) {
             case 400:
-                throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $errors);
+                throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $response->errors);
             case 401:
-                throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, null, $errors);
+                throw new NotAuthorized(TwitterAdsException::NOT_AUTHORIZED, 401, null, $response->errors);
             case 403:
-                throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, null, $errors);
+                throw new Forbidden(TwitterAdsException::FORBIDDEN, 403, null, $response->errors);
             case 404:
-                throw new NotFound(TwitterAdsException::NOT_FOUND, 404, null, $errors);
+                throw new NotFound(TwitterAdsException::NOT_FOUND, 404, null, $response->errors);
             case 429:
-                throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, null, $errors, $this->response->getsHeaders());
+                throw new RateLimit(TwitterAdsException::RATE_LIMIT, 429, null, $response->errors, $this->response->getsHeaders());
             case 500:
-                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $errors);
+                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
             case 503:
-                throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $errors, $this->response->getsHeaders());
+                throw new ServiceUnavailable(TwitterAdsException::SERVICE_UNAVAILABLE, 503, null, $response->errors, $this->response->getsHeaders());
             default:
-                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $errors);
+                throw new ServerError(TwitterAdsException::SERVER_ERROR, 500, null, $response->errors);
         }
     }
 
@@ -564,8 +557,6 @@ class TwitterAds extends Config
                 $options[CURLOPT_POST] = true;
                 if (isset($postfields['raw'])) {
                     $options[CURLOPT_POSTFIELDS] = $postfields['raw'];
-                } else if (isset($postfields['batch'])) {
-                    $options[CURLOPT_POSTFIELDS] = $postfields['batch'];
                 } else {
                     $options[CURLOPT_POSTFIELDS] = Util::buildHttpQuery($postfields);
                 }
@@ -693,29 +684,15 @@ class TwitterAds extends Config
      */
     public function getAccountId()
     {
-        if(!$this->account instanceof Account){
-            return '';
-        }
-        return $this->account->getId();
+        return $this->accountId;
     }
 
     /**
-     * @return string
+     * @param string $accountId
      */
-    public function getAccountTimezone()
+    public function setAccountId($accountId)
     {
-        if(!$this->account instanceof Account){
-            return 'UTC';
-        }
-        return $this->account->getTimezone();
-    }
-
-    /**
-     * @param Account $account
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
+        $this->accountId = $accountId;
     }
 
     public function getRequestToken($oauth_callback)

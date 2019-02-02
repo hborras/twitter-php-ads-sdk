@@ -15,26 +15,22 @@ trait DateTimeFormatter
     /**
      * Returns a DateTime object from a date string.
      *
-     * @param $datestr
-     * @param string $timezone
+     * @param string
      * @return DateTime
-     * @throws \Exception
      */
-    public function toDateTime($datestr, $timezone = 'UTC')
+    public function toDateTime($datestr)
     {
-        return (new \DateTime($datestr))->setTimezone(new \DateTimeZone($timezone));
+        return (new \DateTime($datestr))->setTimezone(new \DateTimeZone('UTC'));
     }
 
     /**
      * Returns an ImmutableDateTime object from a date string.
      *
-     * @param $datestr
-     * @param string $timezone
+     * @param string
      * @return DateTimeImmutable
-     * @throws \Exception
      */
-    public function toDateTimeImmutable($datestr, $timezone = 'UTC')
+    public function toDateTimeImmutable($datestr)
     {
-        return (new \DateTimeImmutable($datestr))->setTimezone(new \DateTimeZone($timezone));
+        return (new \DateTimeImmutable($datestr))->setTimezone(new \DateTimeZone('UTC'));
     }
 }
