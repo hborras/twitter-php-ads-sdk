@@ -16,7 +16,7 @@ class TwitterAdsTest extends TestCase
 
     protected function setUp()
     {
-        $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, '', false);
+        $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, null, false);
     }
 
     public function testBuildClient()
@@ -43,23 +43,6 @@ class TwitterAdsTest extends TestCase
         $this->assertEquals('bearer', $result->token_type);
         return $result;
     }
-
-    // This causes issues for parallel run tests.
-    // /**
-    //  * @depends testBearerToken
-    //  */
-    // public function testOauth2TokenInvalidate($accessToken)
-    // {
-    //     $twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET);
-    //     // HACK: access_token is already urlencoded but gets urlencoded again breaking the invalidate request.
-    //     $result = $twitter->oauth2(
-    //         'oauth2/invalidate_token',
-    //         array('access_token' => urldecode($accessToken->access_token))
-    //     );
-    //     $this->assertEquals(200, $twitter->getLastHttpCode());
-    //     $this->assertObjectHasAttribute('access_token', $result);
-    //     return $result;
-    // }
 
     public function testOauthRequestToken()
     {

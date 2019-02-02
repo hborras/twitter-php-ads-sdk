@@ -58,7 +58,7 @@ class Account extends Analytics
      */
     public function read($params = [])
     {
-        $this->getTwitterAds()->setAccountId($this->getId());
+        $this->getTwitterAds()->setAccount($this);
         return parent::read($params);
     }
 
