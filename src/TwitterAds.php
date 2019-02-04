@@ -442,10 +442,9 @@ class TwitterAds extends Config
         $result = $this->oAuthRequest($url, $method, $parameters, $headers);
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
-        // Comment out to get raw response from twitter.
-        // if ($this->getLastHttpCode() > 399) {
-        //     $this->manageErrors($response);
-        // }
+        if ($this->getLastHttpCode() > 399) {
+            $this->manageErrors($response);
+        }
         return $this->response;
     }
 
