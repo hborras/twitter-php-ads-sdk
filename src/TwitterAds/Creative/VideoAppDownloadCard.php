@@ -21,7 +21,7 @@ class VideoAppDownloadCard extends Resource
 
     protected $properties = [
         VideoAppDownloadCardFields::NAME,
-        VideoAppDownloadCardFields::APP_COUNTRY_CODE,
+        VideoAppDownloadCardFields::COUNTRY_CODE,
         VideoAppDownloadCardFields::IPHONE_APP_ID,
         VideoAppDownloadCardFields::IPAD_DEEP_LINK,
         VideoAppDownloadCardFields::IPAD_APP_ID,
@@ -35,7 +35,7 @@ class VideoAppDownloadCard extends Resource
 
     /** Writable */
     protected $name;
-    protected $app_country_code;
+    protected $country_code;
     protected $iphone_app_id;
     protected $iphone_deep_link;
     protected $ipad_app_id;
@@ -121,17 +121,17 @@ class VideoAppDownloadCard extends Resource
     /**
      * @return mixed
      */
-    public function getAppCountryCode()
+    public function getCountryCode()
     {
-        return $this->app_country_code;
+        return $this->country_code;
     }
 
     /**
-     * @param mixed $app_country_code
+     * @param mixed $country_code
      */
-    public function setAppCountryCode($app_country_code)
+    public function setCountryCode($country_code)
     {
-        $this->app_country_code = $app_country_code;
+        $this->country_code = $country_code;
     }
 
     /**
