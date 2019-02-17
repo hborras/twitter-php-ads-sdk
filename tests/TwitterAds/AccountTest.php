@@ -15,18 +15,11 @@ class AccountTest extends TestCase
     protected $api;
 
     /**
-     * Set up the client
-     */
-    protected function setUp()
-    {
-        $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, ACCOUNT_ID, false);
-    }
-
-    /**
      * @return Account|Cursor
      */
     public function testGetAccounts()
     {
+        $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, ACCOUNT_ID, false);
         $cursor = $this->api->getAccounts();
         $this->assertInstanceOf(Cursor::class, $cursor);
         return $cursor;
