@@ -47,12 +47,15 @@ Quick Start
     $campaignsData = [];
 
     // Create your campaign
+
+    $fundingInstruments = $account->getFundingInstruments();
+    $fundingInstrument = $fundingInstruments->getCollection()[0];
+
     $campaign = new Campaign();
-    $campaign->setAccount($account);
-    $campaign->setFundingInstrumentId($account->getFundingInstruments()->first()->getId());
+    $campaign->setFundingInstrumentId($fundingInstrument->getId());
     $campaign->setDailyBudgetAmountLocalMicro(1000000);
-    $campaign->setName("My first campaign");
-    $campaign->setPaused(false);
+    $campaign->setName("My first campaign: ");
+    $campaign->setEntityStatus('PAUSED');
     $campaign->setStartTime(new \DateTime());
     $campaign->save();
 

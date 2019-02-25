@@ -115,7 +115,8 @@ class TwitterAds extends Config
      */
     public function getAccounts()
     {
-        return (new Account($this))->all();
+        $accountClass = new Account();
+        return $accountClass->all();
     }
 
     /**

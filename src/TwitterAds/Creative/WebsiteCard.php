@@ -12,7 +12,7 @@ class WebsiteCard extends Resource
 
     /** Read Only */
     protected $id;
-    protected $preview_url;
+    protected $card_uri;
     protected $created_at;
     protected $updated_at;
     protected $deleted;
@@ -121,9 +121,9 @@ class WebsiteCard extends Resource
     /**
      * @return mixed
      */
-    public function getPreviewUrl()
+    public function getCardUri()
     {
-        return $this->preview_url;
+        return $this->card_uri;
     }
 
     /**
