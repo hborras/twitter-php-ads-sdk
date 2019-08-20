@@ -31,11 +31,12 @@ class LineItemFields
     const SORT_BY                         = 'sort_by';
     const ENTITY_STATUS                   = 'entity_status';
     const WITH_TOTAL_COUNT                = 'with_total_count';
-    const TARGET_CPA_LOCAL_MICRO = 'target_cpa_local_micro';
-    const CATEGORIES = 'categories';
-    const CURRENCY = 'currency';
-    const TRACKING_TAGS = 'tracking_tags';
-    const LOOKALIKE_EXPANSION = 'lookalike_expansion';
+    const TARGET_CPA_LOCAL_MICRO          = 'target_cpa_local_micro';
+    const CATEGORIES                      = 'categories';
+    const CURRENCY                        = 'currency';
+    const TRACKING_TAGS                   = 'tracking_tags';
+    const LOOKALIKE_EXPANSION             = 'lookalike_expansion';
+    const WITH_DRAFT                      = 'with_draft';
 
     const CAMPAIGN_IDS = 'campaign_ids';
     const FUNDING_INSTRUMENT_IDS = 'funding_instrument_ids';
