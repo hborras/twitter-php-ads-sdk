@@ -5,6 +5,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\JobFields;
 
 class Analytics extends Resource
 {
@@ -43,6 +44,8 @@ class Analytics extends Resource
             throw new BadRequest('Entity must be one of ACCOUNT,FUNDING_INSTRUMENT,CAMPAIGN,LINE_ITEM,PROMOTED_TWEET,ORGANIC_TWEET', 500, []);
         }
         $segmentationType = isset($params[AnalyticsFields::SEGMENTATION_TYPE]) ? $params[AnalyticsFields::SEGMENTATION_TYPE] : null;
+        $country = isset($params[JobFields::COUNTRY]) ? $params[JobFields::COUNTRY] : null;
+        $platform = isset($params[JobFields::PLATFORM]) ? $params[JobFields::PLATFORM] : null;
 
         $params = [
             AnalyticsFields::METRIC_GROUPS => implode(",", $metricGroups),
@@ -62,6 +65,14 @@ class Analytics extends Resource
         } else {
             if (!is_null($segmentationType)) {
                 $params[AnalyticsFields::SEGMENTATION_TYPE] = $segmentationType;
+            }
+
+            if (!is_null($country)) {
+                $params[JobFields::COUNTRY] = $country;
+            }
+
+            if (!is_null($platform)) {
+                $params[JobFields::PLATFORM] = $platform;
             }
 
             $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS_JOBS);

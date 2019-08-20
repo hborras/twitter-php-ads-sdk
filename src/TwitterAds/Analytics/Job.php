@@ -34,7 +34,13 @@ class Job extends Analytics
 
     public function read($params = [])
     {
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
+        if (isset($params[JobFields::ACCOUNT_ID])) {
+            $account_id = $params[JobFields::ACCOUNT_ID];
+        } else {
+            $account_id = $this->getTwitterAds()->getAccountId();
+        }
+
+        $resource = str_replace(static::RESOURCE_REPLACE, $account_id, static::RESOURCE);
         $params[JobFields::JOB_IDS] = $this->id;
         $response = $this->getTwitterAds()->get($resource, $params);
         if (isset($response->getBody()->data[0])) {
