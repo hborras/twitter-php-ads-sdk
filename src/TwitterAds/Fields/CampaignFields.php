@@ -25,6 +25,7 @@ class CampaignFields extends Fields
     const SORT_BY                         = 'sort_by';
     const ENTITY_STATUS                   = 'entity_status';
     const WITH_TOTAL_COUNT                = 'with_total_count';
+    const WITH_DRAFT                      = 'with_draft';
 
     const ACCOUNT_ID = 'account_id';
     const CAMPAIGN_IDS                    = 'campaign_ids';

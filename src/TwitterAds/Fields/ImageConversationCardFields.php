@@ -8,7 +8,6 @@ class ImageConversationCardFields
     const CREATED_AT       = 'created_at';
     const UPDATED_AT       = 'updated_at';
     const DELETED          = 'delete';
-    const PREVIEW_URL      = 'preview_url';
     const NAME             = 'name';
     const TITLE            = 'title';
     const FIRST_CTA        = 'first_cta';

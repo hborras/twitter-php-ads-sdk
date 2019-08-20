@@ -42,7 +42,7 @@ class TargetingCriteria extends Resource
      */
     public function line_item_all($line_item_id, $params = [])
     {
-        $params[TargetingCriteriaFields::LINE_ITEM_ID] = $line_item_id;
+        $params[TargetingCriteriaFields::LINE_ITEM_IDS] = [$line_item_id];
 
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
         $request = $this->getTwitterAds()->get($resource, $params);
