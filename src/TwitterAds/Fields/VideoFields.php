@@ -12,7 +12,6 @@ class VideoFields
     const READY_TO_TWEET       = 'ready_to_tweet';
     const DURATION             = 'duration';
     const REASONS_NOT_SERVABLE = 'reasons_not_servable';
-    const PREVIEW_URL          = 'preview_url';
     const TITLE                = 'title';
     const DESCRIPTION          = 'description';
     const VIDEO_MEDIA_ID       = 'video_media_id';
