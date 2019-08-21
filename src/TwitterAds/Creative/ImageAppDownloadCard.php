@@ -12,14 +12,13 @@ class ImageAppDownloadCard extends Resource
 
     /** Read Only */
     protected $id;
-    protected $preview_url;
     protected $created_at;
     protected $updated_at;
     protected $deleted;
 
     protected $properties = [
         ImageAppDownloadCardFields::NAME,
-        ImageAppDownloadCardFields::APP_COUNTRY_CODE,
+        ImageAppDownloadCardFields::COUNTRY_CODE,
         ImageAppDownloadCardFields::IPHONE_APP_ID,
         ImageAppDownloadCardFields::IPHONE_DEEP_LINK,
         ImageAppDownloadCardFields::IPAD_APP_ID,
@@ -32,7 +31,7 @@ class ImageAppDownloadCard extends Resource
 
     /** Writable */
     protected $name;
-    protected $app_country_code;
+    protected $country_code;
     protected $iphone_app_id;
     protected $iphone_deep_link;
     protected $ipad_app_id;
@@ -48,14 +47,6 @@ class ImageAppDownloadCard extends Resource
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPreviewUrl()
-    {
-        return $this->preview_url;
     }
 
     /**
@@ -117,17 +108,17 @@ class ImageAppDownloadCard extends Resource
     /**
      * @return mixed
      */
-    public function getAppCountryCode()
+    public function getCountryCode()
     {
-        return $this->app_country_code;
+        return $this->country_code;
     }
 
     /**
-     * @param mixed $app_country_code
+     * @param mixed $country_code
      */
-    public function setAppCountryCode($app_country_code)
+    public function setCountryCode($country_code)
     {
-        $this->app_country_code = $app_country_code;
+        $this->country_code = $country_code;
     }
 
     /**

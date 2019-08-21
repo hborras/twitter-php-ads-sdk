@@ -22,7 +22,7 @@ use Hborras\TwitterAdsSDK\Util\JsonDecoder;
  */
 class TwitterAds extends Config
 {
-    const API_VERSION      = '4';
+    const API_VERSION      = '5';
     const API_REST_VERSION = '1.1';
     const API_HOST         = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
@@ -115,7 +115,8 @@ class TwitterAds extends Config
      */
     public function getAccounts()
     {
-        return (new Account($this))->all();
+        $accountClass = new Account();
+        return $accountClass->all();
     }
 
     /**

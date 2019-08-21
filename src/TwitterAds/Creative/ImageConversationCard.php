@@ -12,7 +12,6 @@ class ImageConversationCard extends Resource
 
     /** Read Only */
     protected $id;
-    protected $preview_url;
     protected $created_at;
     protected $updated_at;
     protected $deleted;
@@ -46,14 +45,6 @@ class ImageConversationCard extends Resource
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPreviewUrl()
-    {
-        return $this->preview_url;
     }
 
     /**

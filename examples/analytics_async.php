@@ -19,7 +19,6 @@ const ACCOUNT_ID = 'account id';
 // Create Twitter Ads Api Instance
 $api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
-$accounts = $api->getAccounts();
 // load up the account instance, campaign and line item
 $account = new Account(ACCOUNT_ID);
 $account->read();

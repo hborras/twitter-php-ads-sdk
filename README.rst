@@ -9,19 +9,6 @@ Installation
     # installing the latest signed release
     composer require hborras/twitter-php-ads-sdk
 
-Breaking Changes
-''''''''''''''''
-
-This new version includes some breaking changes that make incompatible with the previous library.
-
-I've tried to make it easier to use it, you now only needs to instantiate one time the API class, and you can forget
-about it. Before you needed to move it across all your classes and made the code more difficult
-
-
-Future changes
-''''''''''''''''
-
-Implement Twitter Ads API v2
 
 Quick Start
 '''''''''''
@@ -47,12 +34,15 @@ Quick Start
     $campaignsData = [];
 
     // Create your campaign
+
+    $fundingInstruments = $account->getFundingInstruments();
+    $fundingInstrument = $fundingInstruments->getCollection()[0];
+
     $campaign = new Campaign();
-    $campaign->setAccount($account);
-    $campaign->setFundingInstrumentId($account->getFundingInstruments()->first()->getId());
+    $campaign->setFundingInstrumentId($fundingInstrument->getId());
     $campaign->setDailyBudgetAmountLocalMicro(1000000);
-    $campaign->setName("My first campaign");
-    $campaign->setPaused(false);
+    $campaign->setName("My first campaign: ");
+    $campaign->setEntityStatus('PAUSED');
     $campaign->setStartTime(new \DateTime());
     $campaign->save();
 
@@ -128,7 +118,7 @@ License
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Hector Borras
+Copyright (c) 2019 Hector Borras
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

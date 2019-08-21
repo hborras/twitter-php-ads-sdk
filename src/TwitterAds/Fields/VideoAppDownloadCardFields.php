@@ -8,11 +8,10 @@ class VideoAppDownloadCardFields
     const CREATED_AT           = 'created_at';
     const UPDATED_AT           = 'updated_at';
     const DELETED              = 'delete';
-    const PREVIEW_URL          = 'preview_url';
     const VIDEO_URL            = 'video_url';
     const VIDEO_POSTER_URL     = 'video_poster_url';
     const NAME                 = 'name';
-    const APP_COUNTRY_CODE     = 'app_country_code';
+    const COUNTRY_CODE         = 'country_code';
     const IPHONE_APP_ID        = 'iphone_app_id';
     const IPHONE_DEEP_LINK     = 'iphone_deep_link';
     const IPAD_APP_ID          = 'ipad_app_id';
