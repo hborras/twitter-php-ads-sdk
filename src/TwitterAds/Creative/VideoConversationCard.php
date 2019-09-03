@@ -12,7 +12,6 @@ class VideoConversationCard extends Resource
 
     /** Read Only */
     protected $id;
-    protected $preview_url;
     protected $video_url;
     protected $video_poster_url;
     protected $created_at;
@@ -50,14 +49,6 @@ class VideoConversationCard extends Resource
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPreviewUrl()
-    {
-        return $this->preview_url;
     }
 
     /**

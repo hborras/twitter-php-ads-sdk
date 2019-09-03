@@ -18,12 +18,12 @@ const ACCESS_TOKEN_SECRET = 'your access token secret';
 const ACCOUNT_ID = 'account id';
 
 // Create twitter ads client
-$twitterAds = new TwitterAds(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+$api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 // load up the account instance, campaign and line item
 /** @var Account $account */
 $account = new Account(ACCOUNT_ID);
 
 // create request for a simple nullcasted tweet
-$media = $twitterAds->upload(['media' => 'twitter-gif.gif', 'media_type' => 'image/gif'], true);
+$media = $api->upload(['media' => 'kitten.jpg', 'media_type' => 'image/jpg'], true);
 $tweet = Tweet::create($account, 'Tweet with chunked upload GIF...' . rand() . ' http://twitter.com', ['media_ids' => $media->media_id]);

@@ -23,6 +23,7 @@ class PromotedTweet extends Analytics
 
     protected $properties = [
         PromotedTweetFields::TWEET_ID,
+        PromotedTweetFields::LINE_ITEM_ID,
         PromotedTweetFields::ENTITY_STATUS,
         PromotedTweetFields::LINE_ITEM_ID
     ];
@@ -170,7 +171,7 @@ class PromotedTweet extends Analytics
     /**
      * @param mixed $line_item_id
      */
-    public function setLineItemId($line_item_id): void
+    public function setLineItemId($line_item_id)
     {
         $this->line_item_id = $line_item_id;
     }

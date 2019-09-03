@@ -10,7 +10,6 @@ class VideoConversationCardFields
     const DELETED          = 'delete';
     const VIDEO_URL        = 'video_url';
     const VIDEO_POSTER_URL = 'video_poster_url';
-    const PREVIEW_URL      = 'preview_url';
     const NAME             = 'name';
     const TITLE            = 'title';
     const FIRST_CTA        = 'first_cta';
