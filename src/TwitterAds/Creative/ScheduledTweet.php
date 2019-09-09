@@ -35,6 +35,7 @@ class ScheduledTweet extends Analytics
      * @param array $params
      * @param bool $async
      * @return mixed
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest
      */
     public function stats($metricGroups, $params = [], $async = false)
     {
@@ -60,12 +61,12 @@ class ScheduledTweet extends Analytics
             $response = $this->getTwitterAds()->put($resource, $params);
 
             return $this->fromResponse($response->getBody()->data);
-        } else {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
-            $response = $this->getTwitterAds()->post($resource, $params);
-
-            return $this->fromResponse($response->getBody()->data[0]);
         }
+
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
+        $response = $this->getTwitterAds()->post($resource, $params);
+
+        return $this->fromResponse($response->getBody()->data[0]);
     }
 
     /**
@@ -106,14 +107,6 @@ class ScheduledTweet extends Analytics
     public function getDeleted()
     {
         return $this->deleted;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**
