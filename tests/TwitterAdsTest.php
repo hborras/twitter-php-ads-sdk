@@ -4,9 +4,11 @@
  */
 namespace Hborras\TwitterAdsSDK\Test;
 
-use Hborras\TwitterAdsSDK\Response;
+use DateTimeInterface;
+use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 use PHPUnit\Framework\TestCase;
 
 class TwitterAdsTest extends TestCase
@@ -56,7 +58,7 @@ class TwitterAdsTest extends TestCase
     }
 
     /**
-     * @expectedException \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @expectedException TwitterAdsException
      * @expectedExceptionMessage Could not authenticate you
      */
     public function testOauthRequestTokenException()
@@ -68,11 +70,11 @@ class TwitterAdsTest extends TestCase
     }
 
     /**
-     * @expectedException \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @expectedException TwitterAdsException
      * @expectedExceptionMessage Error processing your OAuth request: Invalid oauth_verifier parameter
      * @depends testOauthRequestToken
      * @param array $requestToken
-     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @throws Exception
      */
     public function testOauthAccessTokenTokenException(array $requestToken)
     {
@@ -83,7 +85,7 @@ class TwitterAdsTest extends TestCase
             $requestToken['oauth_token'],
             $requestToken['oauth_token_secret']
         );
-        $twitter->oauth("oauth/access_token", array("oauth_verifier" => "fake_oauth_verifier"));
+        $twitter->oauth('oauth/access_token', array('oauth_verifier' => 'fake_oauth_verifier'));
     }
 
     public function testUrl()
@@ -108,13 +110,13 @@ class TwitterAdsTest extends TestCase
                 return is_string($v);
             },
             'timezone_switch_at' => function ($v) {
-                return $v instanceof \DateTimeInterface;
+                return $v instanceof DateTimeInterface;
             },
             'created_at' => function ($v) {
-                return $v instanceof \DateTimeInterface;
+                return $v instanceof DateTimeInterface;
             },
             'updated_at' => function ($v) {
-                return $v instanceof \DateTimeInterface;
+                return $v instanceof DateTimeInterface;
             },
             'deleted' => function ($v) {
                 return is_bool($v);

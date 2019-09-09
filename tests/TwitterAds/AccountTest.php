@@ -7,6 +7,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\TargetingCriteria;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 use PHPUnit\Framework\TestCase;
 
 class AccountTest extends TestCase
@@ -29,6 +30,14 @@ class AccountTest extends TestCase
      * @depends testGetAccounts
      * @param Cursor $accounts
      * @return Account
+     * @throws TwitterAdsException
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
      */
     public function testGetAccount($accounts)
     {
@@ -43,6 +52,7 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
+     * @throws TwitterAdsException
      */
     public function testGetFeatures(Account $account)
     {
@@ -53,6 +63,14 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function testScopedTimeline(Account $account)
     {
@@ -75,7 +93,15 @@ class AccountTest extends TestCase
     /**
      * @depends testGetFundingInstruments
      * @param Cursor $fundingInstruments
-     * @return FundingInstrument
+     * @return Account
+     * @throws TwitterAdsException
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
      */
     public function testGetFundingInstrument($fundingInstruments)
     {
@@ -104,6 +130,14 @@ class AccountTest extends TestCase
      * @depends testGetCampaigns
      * @param Cursor $campaigns
      * @return Campaign
+     * @throws TwitterAdsException
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
      */
     public function testGetCampaign($campaigns)
     {
@@ -132,6 +166,14 @@ class AccountTest extends TestCase
      * @depends testGetPromotableUsers
      * @param Cursor $promotableUsers
      * @return PromotableUser
+     * @throws TwitterAdsException
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
      */
     public function testGetPromotableUser(Cursor $promotableUsers)
     {
@@ -160,6 +202,14 @@ class AccountTest extends TestCase
      * @depends testGetLineItems
      * @param Cursor $lineItems
      * @return LineItem
+     * @throws TwitterAdsException
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
      */
     public function testGetLineItem($lineItems)
     {
@@ -176,6 +226,7 @@ class AccountTest extends TestCase
      * @depends testGetLineItem
      * @param LineItem $lineItem
      * @return Cursor
+     * @throws TwitterAdsException
      */
     public function testGetTargetingCriterias($lineItem)
     {
@@ -190,6 +241,14 @@ class AccountTest extends TestCase
      * @depends testGetTargetingCriterias
      * @param Cursor $targetingCriterias
      * @return TargetingCriteria
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function testGetTargetingCriteria($targetingCriterias)
     {
