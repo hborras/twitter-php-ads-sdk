@@ -5,10 +5,8 @@
 namespace Hborras\TwitterAdsSDK\Test;
 
 use DateTimeInterface;
-use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
 use PHPUnit\Framework\TestCase;
 
 class TwitterAdsTest extends TestCase
@@ -58,23 +56,22 @@ class TwitterAdsTest extends TestCase
     }
 
     /**
-     * @expectedException TwitterAdsException
+     * @expectedException \Hborras\TwitterAdsSDK\TwitterAdsException
      * @expectedExceptionMessage Could not authenticate you
      */
     public function testOauthRequestTokenException()
     {
-
         $twitter = new TwitterAds('CONSUMER_KEY', 'CONSUMER_SECRET');
         $result = $twitter->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
         return $result;
     }
 
     /**
-     * @expectedException TwitterAdsException
+     * @expectedException \Hborras\TwitterAdsSDK\TwitterAdsException
      * @expectedExceptionMessage Error processing your OAuth request: Invalid oauth_verifier parameter
      * @depends testOauthRequestToken
      * @param array $requestToken
-     * @throws Exception
+     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
      */
     public function testOauthAccessTokenTokenException(array $requestToken)
     {
