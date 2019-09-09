@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class VideoFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class VideoFields
 {
     const ID                   = 'id';

@@ -2,13 +2,20 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use Hborras\TwitterAdsSDK\DateTime\DateTimeFormatter;
-use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Exception;
+use DateTimeInterface;
+use InvalidArgumentException;
 use Hborras\TwitterAdsSDK\Arrayable;
+use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\DateTime\DateTimeFormatter;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 
 
+/**
+ * Class Resource
+ * @package Hborras\TwitterAdsSDK\TwitterAds
+ */
 abstract class Resource implements Arrayable
 {
     use DateTimeFormatter;
@@ -23,6 +30,9 @@ abstract class Resource implements Arrayable
     /** @var  TwitterAds $twitterAds */
     private $twitterAds;
 
+    /**
+     * @return mixed
+     */
     abstract public function getId();
 
     /**
@@ -37,11 +47,15 @@ abstract class Resource implements Arrayable
         $this->twitterAds = static::assureApi($twitterAds);
     }
 
+    /**
+     * @param TwitterAds|null $instance
+     * @return TwitterAds|null
+     */
     protected static function assureApi(TwitterAds $instance = null)
     {
         $instance = $instance ?: TwitterAds::instance();
         if (!$instance) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'An Api instance must be provided as argument or ' .
                 'set as instance in the \TwitterAds\Api'
             );
@@ -52,9 +66,17 @@ abstract class Resource implements Arrayable
     /**
      * Returns a Cursor instance for a given resource.
      *
-     * @param $params
+     * @param array $params
      *
      * @return Cursor
+     * @throws Errors\BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServiceUnavailable
+     * @throws ServerError
+     * @throws TwitterAdsException
      */
     public function all($params = [])
     {
@@ -65,8 +87,16 @@ abstract class Resource implements Arrayable
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return Resource
+     * @throws Errors\BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServiceUnavailable
+     * @throws ServerError
+     * @throws TwitterAdsException
      */
     public function read($params = [])
     {
@@ -77,9 +107,17 @@ abstract class Resource implements Arrayable
      * Returns an object instance for a given resource.
      *
      * @param string $id
-     * @param $params
+     * @param array $params
      *
      * @return Resource
+     * @throws Errors\BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServiceUnavailable
+     * @throws ServerError
+     * @throws TwitterAdsException
      */
     public function load($id, $params = [])
     {
@@ -93,14 +131,21 @@ abstract class Resource implements Arrayable
     /**
      * Reloads all attributes for the current object instance from the API.
      *
-     * @param $params
+     * @param array $params
      * @return Resource
+     * @throws Errors\BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServiceUnavailable
      * @throws ServerError
+     * @throws TwitterAdsException
      */
     public function reload($params = [])
     {
         if (!$this->getId()) {
-            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
+            throw new ServerError(TwitterAdsException::SERVER_ERROR, 'Error loading entity', null, null);
         }
 
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE);
@@ -117,7 +162,7 @@ abstract class Resource implements Arrayable
      * @param $response
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function fromResponse($response)
     {
@@ -148,7 +193,7 @@ abstract class Resource implements Arrayable
             if (is_null($this->$property)) {
                 continue;
             }
-            if ($this->$property instanceof \DateTimeInterface) {
+            if ($this->$property instanceof DateTimeInterface) {
                 $params[$property] = $this->$property->format('c');
             } elseif (is_array($this->$property)) {
                 $params[$property] = implode(',', $this->$property);
@@ -164,13 +209,19 @@ abstract class Resource implements Arrayable
         return $params;
     }
 
+    /**
+     * @throws ServerError
+     */
     public function validateLoaded()
     {
         if (!$this->getId()) {
-            throw new ServerError(TwitterAdsException::SERVER_ERROR, "Error loading entity", null, null);
+            throw new ServerError(TwitterAdsException::SERVER_ERROR, 'Error loading entity', null, null);
         }
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         $data = [];
@@ -185,13 +236,26 @@ abstract class Resource implements Arrayable
         return $data;
     }
 
+    /**
+     * @param string $id
+     * @param array $params
+     * @return Cursor|Resource
+     * @throws Errors\BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServiceUnavailable
+     * @throws ServerError
+     * @throws TwitterAdsException
+     */
     public function loadResource($id = '', $params = [])
     {
         if ($id != '') {
             return $this->load($id, $params);
-        } else {
-            return $this->all($params);
         }
+
+        return $this->all($params);
     }
 
     /**

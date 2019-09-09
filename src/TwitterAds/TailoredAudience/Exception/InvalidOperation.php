@@ -2,7 +2,13 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception;
 
-final class InvalidOperation extends \DomainException
+use DomainException;
+
+/**
+ * Class InvalidOperation
+ * @package Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception
+ */
+final class InvalidOperation extends DomainException
 {
     //noop
 }
