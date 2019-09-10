@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class PromotableUserFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class PromotableUserFields
 {
     const ID                   = 'id';

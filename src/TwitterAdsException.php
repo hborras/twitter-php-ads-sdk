@@ -7,15 +7,15 @@ use Exception;
 /**
  * @author Hector Borras <hborrasaleixandre@gmail.com>
  */
-class TwitterAdsException extends \Exception
+class TwitterAdsException extends Exception
 {
-    const BAD_REQUEST         = "BAD_REQUEST";
-    const NOT_AUTHORIZED      = "NOT_AUTHORIZED";
-    const FORBIDDEN           = "FORBIDDEN";
-    const NOT_FOUND           = "NOT_FOUND";
-    const RATE_LIMIT          = "RATE_LIMIT";
-    const SERVER_ERROR        = "SERVER_ERROR";
-    const SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE";
+    const BAD_REQUEST         = 'BAD_REQUEST';
+    const NOT_AUTHORIZED      = 'NOT_AUTHORIZED';
+    const FORBIDDEN           = 'FORBIDDEN';
+    const NOT_FOUND           = 'NOT_FOUND';
+    const RATE_LIMIT          = 'RATE_LIMIT';
+    const SERVER_ERROR        = 'SERVER_ERROR';
+    const SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE';
 
     private $errors;
 

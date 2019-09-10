@@ -2,18 +2,26 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
-use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\Arrayable;
+use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BatchLimitExceeded;
 
+/**
+ * Class Batch
+ * @package Hborras\TwitterAdsSDK\TwitterAds
+ */
 abstract class Batch extends Resource
 {
     private $batch = [];
     private $batchSize;
     private $account;
 
+    /**
+     * Batch constructor.
+     * @param TwitterAds|null $twitterAds
+     * @param int $batchSize
+     * @param array $batch
+     */
     public function __construct(TwitterAds $twitterAds = null, $batchSize = 10, $batch = [])
     {
         parent::__construct('', $twitterAds);
@@ -30,6 +38,9 @@ abstract class Batch extends Resource
         return null;
     }
 
+    /**
+     * @return mixed
+     */
     public function getAccount()
     {
         return $this->account;
@@ -49,11 +60,17 @@ abstract class Batch extends Resource
         return json_encode($data);
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getBatch()
     {
         return $this->batch;
     }
 
+    /**
+     * @param Arrayable $data
+     */
     public function add(Arrayable $data)
     {
         $this->assureBatchSize();
@@ -66,8 +83,7 @@ abstract class Batch extends Resource
      *
      * @param $batch |null
      *
-     * @throws BatchLimitExceeded when the batch is full
-     * @return $batch|$this->batch
+     * @return array|mixed $batch|$this->batch
      */
     public function assureBatchSize($batch = null)
     {

@@ -3,16 +3,16 @@
 namespace Hborras\TwitterAdsSDK;
 
 use Exception;
-use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
 use Hborras\TwitterAdsSDK\Util\JsonDecoder;
+use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
 
 /**
  * TwitterAds class for interacting with the Twitter API.
@@ -112,6 +112,14 @@ class TwitterAds extends Config
 
     /**
      * @return Account|Cursor
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function getAccounts()
     {
@@ -218,6 +226,7 @@ class TwitterAds extends Config
      * @param array $parameters
      *
      * @return array|object
+     * @throws TwitterAdsException
      */
     public function oauth2($path, array $parameters = [])
     {
@@ -246,6 +255,14 @@ class TwitterAds extends Config
      * @param array $parameters
      *
      * @return Response
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function get($path, array $parameters = [])
     {
@@ -260,6 +277,14 @@ class TwitterAds extends Config
      *
      * @param array $headers
      * @return Response
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function post($path, array $parameters = [], array $headers = [])
     {
@@ -273,6 +298,14 @@ class TwitterAds extends Config
      * @param array $parameters
      *
      * @return Response
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function delete($path, array $parameters = [])
     {
@@ -285,7 +318,16 @@ class TwitterAds extends Config
      * @param string $path
      * @param array $parameters
      *
+     * @param array $headers
      * @return Response
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function put($path, array $parameters = [], array $headers = [])
     {
@@ -299,14 +341,22 @@ class TwitterAds extends Config
      * @param bool $chunked
      *
      * @return array|object
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function upload(array $parameters = [], $chunked = false)
     {
         if ($chunked) {
             return $this->uploadMediaChunked(self::UPLOAD_PATH, $parameters);
-        } else {
-            return $this->uploadMediaNotChunked(self::UPLOAD_PATH, $parameters)->getBody();
         }
+
+        return $this->uploadMediaNotChunked(self::UPLOAD_PATH, $parameters)->getBody();
     }
 
     /**
@@ -316,6 +366,14 @@ class TwitterAds extends Config
      * @param array $parameters
      *
      * @return array|object
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     private function uploadMediaNotChunked($path, $parameters)
     {
@@ -333,11 +391,19 @@ class TwitterAds extends Config
      * @param array $parameters
      *
      * @return array|object
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     private function uploadMediaChunked($path, $parameters)
     {
         if ($parameters['media_type'] == 'video/mp4') {
-            $parameters['media_category'] = "amplify_video";
+            $parameters['media_category'] = 'amplify_video';
         } elseif ($parameters['media_type'] == 'image/gif') {
             $parameters['media_category'] = 'tweet_gif';
         } else {
@@ -399,10 +465,8 @@ class TwitterAds extends Config
                     'media_id' => $finalize->media_id
                 );
                 $finalize = $this->http('GET', self::UPLOAD_HOST, $path, $data)->getBody();
-            } else {
-                if (isset($finalize->processing_info->state) && $finalize->processing_info->state == 'succeeded') {
-                    break;
-                }
+            } elseif (isset($finalize->processing_info->state) && $finalize->processing_info->state == 'succeeded') {
+                break;
             }
         }
 
@@ -423,6 +487,7 @@ class TwitterAds extends Config
      * @throws RateLimit
      * @throws ServerError
      * @throws ServiceUnavailable
+     * @throws TwitterAdsException
      */
     private function http($method, $host, $path, array $parameters, $headers = [])
     {
@@ -431,12 +496,10 @@ class TwitterAds extends Config
         $this->resetLastResponse();
         if (strpos($path, TONUpload::DEFAULT_DOMAIN) === 0) {
             $url = $path;
+        } elseif ($host == self::UPLOAD_HOST) {
+            $url = sprintf('%s/%s/%s', $host, self::API_REST_VERSION, $path);
         } else {
-            if ($host == self::UPLOAD_HOST) {
-                $url = sprintf('%s/%s/%s', $host, self::API_REST_VERSION, $path);
-            } else {
-                $url = sprintf('%s/%s/%s', $host, self::API_VERSION, $path);
-            }
+            $url = sprintf('%s/%s/%s', $host, self::API_VERSION, $path);
         }
 
         $this->response->setApiPath($path);
@@ -514,9 +577,9 @@ class TwitterAds extends Config
         }
         if (strpos($url, TONUpload::DEFAULT_DOMAIN) === 0) {
             return $this->request($url, $method, $authorization, $parameters, $headers);
-        } else {
-            return $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters, $headers);
         }
+
+        return $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters, $headers);
     }
 
     /**
@@ -723,9 +786,7 @@ class TwitterAds extends Config
         $parameters = array();
         $parameters['oauth_callback'] = $oauth_callback;
         $request = $this->oAuthRequest($this->requestTokenURL(), 'GET', $parameters);
-        $token = self::parse_parameters($request);
-
-        return $token;
+        return self::parse_parameters($request);
     }
 
     /**
@@ -737,15 +798,14 @@ class TwitterAds extends Config
      *                "oauth_token_secret" => "the-access-secret",
      * "user_id" => "9436992",
      * "screen_name" => "abraham")
+     * @throws TwitterAdsException
      */
     public function getAccessToken($oauth_verifier)
     {
         $parameters = array();
         $parameters['oauth_verifier'] = $oauth_verifier;
         $request = $this->oAuthRequest($this->accessTokenURL(), 'GET', $parameters);
-        $token = self::parse_parameters($request);
-
-        return $token;
+        return self::parse_parameters($request);
     }
 
     // This function takes a input like a=b&a=c&d=e and returns the parsed
@@ -788,15 +848,17 @@ class TwitterAds extends Config
     {
         if (is_array($input)) {
             return array_map(array(__CLASS__, 'urlencode_rfc3986'), $input);
-        } elseif (is_scalar($input)) {
+        }
+
+        if (is_scalar($input)) {
             return str_replace(
                 '',
                 ' ',
                 str_replace('%7E', '~', rawurlencode($input))
             );
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     // This decode function isn't taking into consideration the above
@@ -821,8 +883,8 @@ class TwitterAds extends Config
         }
         if (empty($sign_in_with_twitter)) {
             return $this->authorizeURL() . "?oauth_token={$token}";
-        } else {
-            return $this->authenticateURL() . "?oauth_token={$token}";
         }
+
+        return $this->authenticateURL() . "?oauth_token={$token}";
     }
 }

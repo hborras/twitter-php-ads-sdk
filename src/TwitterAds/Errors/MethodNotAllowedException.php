@@ -3,7 +3,13 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Errors;
 
 
-class MethodNotAllowedException extends \Exception
+use Exception;
+
+/**
+ * Class MethodNotAllowedException
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Errors
+ */
+class MethodNotAllowedException extends Exception
 {
 
 }

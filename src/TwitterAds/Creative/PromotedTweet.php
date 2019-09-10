@@ -3,9 +3,14 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\PromotedTweetFields;
 
+/**
+ * Class PromotedTweet
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
+ */
 class PromotedTweet extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/promoted_tweets';
@@ -37,7 +42,14 @@ class PromotedTweet extends Analytics
      * @param array $params
      * @param bool $async
      * @return mixed
-     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest
+     * @throws BadRequest
+     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable
      */
     public function stats($metricGroups, $params = [], $async = false)
     {
@@ -63,12 +75,12 @@ class PromotedTweet extends Analytics
             $response = $this->getTwitterAds()->put($resource, $params);
 
             return $this->fromResponse($response->getBody()->data);
-        } else {
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
-            $response = $this->getTwitterAds()->post($resource, $params);
-
-            return $this->fromResponse($response->getBody()->data[0]);
         }
+
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
+        $response = $this->getTwitterAds()->post($resource, $params);
+
+        return $this->fromResponse($response->getBody()->data[0]);
     }
 
     /**
@@ -109,14 +121,6 @@ class PromotedTweet extends Analytics
     public function getDeleted()
     {
         return $this->deleted;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

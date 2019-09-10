@@ -2,11 +2,17 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
+use DateTimeImmutable;
 use Hborras\TwitterAdsSDK\TONUpload;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidType;
 
+/**
+ * Class TailoredAudience
+ * @package Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience
+ */
 final class TailoredAudience extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/tailored_audiences';
@@ -47,7 +53,14 @@ final class TailoredAudience extends Resource
      * @param $name
      * @param $listType
      * @return Resource
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
      * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function create($filePath, $name, $listType)
     {
@@ -67,6 +80,14 @@ final class TailoredAudience extends Resource
      * @param $name
      * @param $listType
      * @return $this
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function createAudience($name, $listType)
     {
@@ -108,7 +129,7 @@ final class TailoredAudience extends Resource
      */
     public function getAudienceSize()
     {
-        return intval($this->audience_size);
+        return (int)$this->audience_size;
     }
 
     /**
@@ -120,7 +141,7 @@ final class TailoredAudience extends Resource
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable
      */
     public function getCreatedAt()
     {
@@ -128,7 +149,7 @@ final class TailoredAudience extends Resource
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable
      */
     public function getUpdatedAt()
     {
@@ -232,14 +253,6 @@ final class TailoredAudience extends Resource
         throw new InvalidType(
             sprintf('"%s" is not a valid type for %s', $type, TailoredAudience::class)
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

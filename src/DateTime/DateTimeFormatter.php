@@ -3,6 +3,8 @@
 namespace Hborras\TwitterAdsSDK\DateTime;
 
 use DateTime;
+use Exception;
+use DateTimeZone;
 use DateTimeImmutable;
 
 /**
@@ -18,11 +20,11 @@ trait DateTimeFormatter
      * @param $datestr
      * @param string $timezone
      * @return DateTime
-     * @throws \Exception
+     * @throws Exception
      */
     public function toDateTime($datestr, $timezone = 'UTC')
     {
-        return (new \DateTime($datestr))->setTimezone(new \DateTimeZone($timezone));
+        return (new DateTime($datestr))->setTimezone(new DateTimeZone($timezone));
     }
 
     /**
@@ -31,10 +33,10 @@ trait DateTimeFormatter
      * @param $datestr
      * @param string $timezone
      * @return DateTimeImmutable
-     * @throws \Exception
+     * @throws Exception
      */
     public function toDateTimeImmutable($datestr, $timezone = 'UTC')
     {
-        return (new \DateTimeImmutable($datestr))->setTimezone(new \DateTimeZone($timezone));
+        return (new DateTimeImmutable($datestr))->setTimezone(new DateTimeZone($timezone));
     }
 }

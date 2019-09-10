@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class CampaignFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class CampaignFields extends Fields
 {
     const ID                              = 'id';

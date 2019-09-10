@@ -2,7 +2,13 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Errors;
 
-final class BatchLimitExceeded extends \DomainException
+use DomainException;
+
+/**
+ * Class BatchLimitExceeded
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Errors
+ */
+final class BatchLimitExceeded extends DomainException
 {
     //noop
 }
