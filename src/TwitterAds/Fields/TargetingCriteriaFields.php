@@ -2,10 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Class TargetingCriteriaFields
- * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
- */
 class TargetingCriteriaFields
 {
     const ID                          = 'id';

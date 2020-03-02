@@ -2,23 +2,19 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use DateTimeImmutable;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
-use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\AppList;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
-use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
+use Hborras\TwitterAdsSDK\TwitterAds\Creative\Video;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AccountFields;
 
-/**
- * Class Account
- * @package Hborras\TwitterAdsSDK\TwitterAds
- */
 class Account extends Analytics
 {
     const RESOURCE_REPLACE          = '{account_id}';
@@ -49,14 +45,6 @@ class Account extends Analytics
      * @param array $params
      * @param bool $async
      * @return mixed
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function stats($metricGroups, $params = [], $async = false)
     {
@@ -67,14 +55,6 @@ class Account extends Analytics
     /**
      * @param array $params
      * @return Account
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function read($params = [])
     {
@@ -106,14 +86,6 @@ class Account extends Analytics
      *
      * @param array $params
      * @return PromotableUser|Cursor
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getPromotableUsers($id = '', $params = [])
     {
@@ -129,14 +101,6 @@ class Account extends Analytics
      *
      * @param array $params
      * @return FundingInstrument|Cursor
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getFundingInstruments($id = '', $params = [])
     {
@@ -152,14 +116,6 @@ class Account extends Analytics
      *
      * @param array $params
      * @return Campaign|Cursor
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getCampaigns($id = '', $params = [])
     {
@@ -175,14 +131,6 @@ class Account extends Analytics
      *
      * @param array $params
      * @return LineItem|Cursor
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getLineItems($id = '', $params = [])
     {
@@ -198,14 +146,6 @@ class Account extends Analytics
      *
      * @param array $params
      * @return AppList|Cursor
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getAppLists($id = '', $params = [])
     {
@@ -219,14 +159,6 @@ class Account extends Analytics
      *
      * @param array $params
      * @return Cursor|Resource
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getJobs($params = [])
     {
@@ -239,14 +171,6 @@ class Account extends Analytics
     /**
      * @param array $params
      * @return Cursor|Resource
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getTailoredAudiences($params = [])
     {
@@ -274,15 +198,6 @@ class Account extends Analytics
      *
      * @param $ids
      * @param $params
-     * @return
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
      */
     public function getScopedTimeline($ids, $params)
     {
@@ -324,7 +239,7 @@ class Account extends Analytics
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return \DateTimeImmutable
      */
     public function getTimezoneSwitchAt()
     {
@@ -332,7 +247,7 @@ class Account extends Analytics
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return \DateTimeImmutable
      */
     public function getCreatedAt()
     {
@@ -340,7 +255,7 @@ class Account extends Analytics
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return \DateTimeImmutable
      */
     public function getUpdatedAt()
     {

@@ -2,10 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Class LineItemFields
- * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
- */
 class LineItemFields
 {
     const ID                              = 'id';

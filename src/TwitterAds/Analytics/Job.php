@@ -2,22 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\JobFields;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
 
-/**
- * Class Job
- * @package Hborras\TwitterAdsSDK\TwitterAds\Analytics
- */
 class Job extends Analytics
 {
     const RESOURCE_COLLECTION = 'stats/jobs/accounts/{account_id}';
@@ -45,18 +32,6 @@ class Job extends Analytics
     protected $properties = [];
 
 
-    /**
-     * @param array $params
-     * @return $this|Job|Resource
-     * @throws TwitterAdsException
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotAuthorized
-     * @throws NotFound
-     * @throws RateLimit
-     * @throws ServerError
-     * @throws ServiceUnavailable
-     */
     public function read($params = [])
     {
         if (isset($params[JobFields::ACCOUNT_ID])) {
@@ -70,9 +45,9 @@ class Job extends Analytics
         $response = $this->getTwitterAds()->get($resource, $params);
         if (isset($response->getBody()->data[0])) {
             return $this->fromResponse($response->getBody()->data[0]);
+        } else {
+            return $this;
         }
-
-        return $this;
     }
 
     /**
@@ -203,4 +178,11 @@ class Job extends Analytics
         return $this->metric_groups;
     }
 
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
 }

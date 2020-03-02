@@ -2,10 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-/**
- * Class Enumerations
- * @package Hborras\TwitterAdsSDK\TwitterAds
- */
 class Enumerations
 {
     const BID_UNIT_APP_CLICK   = 'APP_CLICK';
@@ -48,7 +44,7 @@ class Enumerations
     const OBJECTIVE_WEBSITE_CLICKS      = 'WEBSITE_CLICKS';
     const OBJECTIVE_CUSTOM              = 'CUSTOM';
 
-    const GRANULARITY_HOUR  = 'HOUR';
-    const GRANULARITY_DAY   = 'DAY';
-    const GRANULARITY_TOTAL = 'TOTAL';
+    const GRANULARITY_HOUR  = "HOUR";
+    const GRANULARITY_DAY   = "DAY";
+    const GRANULARITY_TOTAL = "TOTAL";
 }

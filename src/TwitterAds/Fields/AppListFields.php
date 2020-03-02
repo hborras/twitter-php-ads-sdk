@@ -2,10 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Class AppListFields
- * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
- */
 class AppListFields
 {
     const ID                    = 'id';

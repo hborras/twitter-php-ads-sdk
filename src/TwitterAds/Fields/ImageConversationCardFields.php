@@ -2,10 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Class ImageConversationCardFields
- * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
- */
 class ImageConversationCardFields
 {
     const ID               = 'id';

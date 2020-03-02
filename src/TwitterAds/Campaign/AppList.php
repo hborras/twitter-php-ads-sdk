@@ -2,21 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AppListFields;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
-/**
- * Class AppList
- * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
- */
 class AppList extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/app_lists';
@@ -30,19 +18,6 @@ class AppList extends Resource
     protected $properties = [
     ];
 
-    /**
-     * @param $name
-     * @param array $ids
-     * @return AppList
-     * @throws TwitterAdsException
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotAuthorized
-     * @throws NotFound
-     * @throws RateLimit
-     * @throws ServerError
-     * @throws ServiceUnavailable
-     */
     public function create($name, $ids = [])
     {
         if (is_array($ids)) {
@@ -82,4 +57,11 @@ class AppList extends Resource
         return $this->apps;
     }
 
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
 }

@@ -47,7 +47,7 @@ abstract class SignatureMethod
         $built = $this->buildSignature($request, $consumer, $token);
 
         // Check for zero length, although unlikely here
-        if ($built === '' || $signature === '') {
+        if (strlen($built) == 0 || strlen($signature) == 0) {
             return false;
         }
 
@@ -57,7 +57,7 @@ abstract class SignatureMethod
 
         // Avoid a timing leak with a (hopefully) time insensitive compare
         $result = 0;
-        for ($i = 0, $iMax = strlen($signature); $i < $iMax; ++$i) {
+        for ($i = 0; $i < strlen($signature); ++$i) {
             $result |= ord($built{$i}) ^ ord($signature{$i});
         }
 
