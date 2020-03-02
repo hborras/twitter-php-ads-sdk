@@ -2,20 +2,25 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
-use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemFields;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
+/**
+ * Class LineItem
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
+ */
 class LineItem extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/line_items';
     const RESOURCE            = 'accounts/{account_id}/line_items/{id}';
 
-    const ENTITY = "LINE_ITEM";
+    const ENTITY = 'LINE_ITEM';
 
     /** Read Only */
     protected $id;
@@ -71,6 +76,18 @@ class LineItem extends Analytics
     protected $advertiser_user_id;
     protected $categories;
 
+    /**
+     * @param array $params
+     * @return Cursor|\Hborras\TwitterAdsSDK\TwitterAds\Resource
+     * @throws BadRequest
+     * @throws TwitterAdsException
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable
+     */
     public function getPromotedTweets($params = [])
     {
         $params[LineItemFields::LINE_ITEM_IDS] = $this->getId();
@@ -83,6 +100,14 @@ class LineItem extends Analytics
      * @param array $params
      * @param bool $async
      * @return Job| mixed
+     * @throws BadRequest
+     * @throws TwitterAdsException
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable
      */
     public function stats($metricGroups, $params = [], $async = false)
     {
@@ -145,14 +170,6 @@ class LineItem extends Analytics
     public function getDeleted()
     {
         return $this->deleted;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

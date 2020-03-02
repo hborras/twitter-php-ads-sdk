@@ -2,9 +2,14 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use Iterator;
+use Exception;
+use Countable;
+use arrayaccess;
+use ArrayIterator;
 use Hborras\TwitterAdsSDK\TwitterAds;
 
-class Cursor implements \Iterator, \Countable, \arrayaccess
+class Cursor implements Iterator, Countable, arrayaccess
 {
     /** @var Resource */
     private $resource;
@@ -38,7 +43,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     protected $useImplicitFetch;
 
     public function __construct(/* @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        \Hborras\TwitterAdsSDK\TwitterAds\Resource $resource,
+        Resource $resource,
         TwitterAds $twitterAds,
         $request,
         $params
@@ -74,7 +79,15 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     }
 
     /**
-     * @return Resource | 0
+     * @return void 0
+     * @throws Errors\BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServerError
+     * @throws Errors\ServiceUnavailable
+     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
      */
     public function next()
     {
@@ -97,6 +110,14 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     /**
      * @param array $params
      * @return Cursor
+     * @throws Errors\BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServerError
+     * @throws Errors\ServiceUnavailable
+     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
      */
     public function fetchNext($params = [])
     {
@@ -131,6 +152,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
     /**
      * @param $request
      * @return $this
+     * @throws Exception
      */
     public function fromResponse($request)
     {
@@ -140,7 +162,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
         }
         foreach ($request->data as $item) {
             if (method_exists($this->resource, 'fromResponse')) {
-                /** @var \Hborras\TwitterAdsSDK\TwitterAds\Resource $obj */
+                /** @var Resource $obj */
                 $obj = new $this->resource();
                 $this->collection[] = $obj->fromResponse($item);
             } else {
@@ -164,7 +186,7 @@ class Cursor implements \Iterator, \Countable, \arrayaccess
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->collection);
+        return new ArrayIterator($this->collection);
     }
 
     /**

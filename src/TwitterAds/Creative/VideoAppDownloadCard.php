@@ -2,9 +2,13 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\VideoAppDownloadCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\VideoAppDownloadCardFields;
 
+/**
+ * Class VideoAppDownloadCard
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
+ */
 class VideoAppDownloadCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/video_app_download';
@@ -75,14 +79,6 @@ class VideoAppDownloadCard extends Resource
     public function getDeleted()
     {
         return $this->deleted;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**
