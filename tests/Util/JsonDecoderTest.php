@@ -2,13 +2,18 @@
 
 namespace Hborras\TwitterAdsSDK\Tests;
 
+use Closure;
 use Hborras\TwitterAdsSDK\Util\JsonDecoder;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class JsonDecoderTest extends TestCase
 {
     /**
      * @dataProvider jsonProvider
+     * @param $input
+     * @param $asArray
+     * @param $expected
      */
     public function testDecode($input, $asArray, $expected)
     {
@@ -38,13 +43,13 @@ class JsonDecoderTest extends TestCase
     }
 
     /**
-     * @param callable $callable
+     * @param Closure $callable $callable
      *
      * @return stdClass
      */
-    private function getClass(\Closure $callable)
+    private function getClass(Closure $callable)
     {
-        $object = new \stdClass();
+        $object = new stdClass();
 
         return $callable($object);
     }

@@ -2,9 +2,13 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\ImageAppDownloadCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\ImageAppDownloadCardFields;
 
+/**
+ * Class ImageAppDownloadCard
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
+ */
 class ImageAppDownloadCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/image_app_download';
@@ -71,14 +75,6 @@ class ImageAppDownloadCard extends Resource
     public function getDeleted()
     {
         return $this->deleted;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

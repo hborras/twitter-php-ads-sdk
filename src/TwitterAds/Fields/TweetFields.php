@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class TweetFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class TweetFields
 {
     const MEDIA_IDS = 'media_ids';
