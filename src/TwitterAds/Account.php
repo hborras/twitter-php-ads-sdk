@@ -270,36 +270,6 @@ class Account extends Analytics
     }
 
     /**
-     * Returns the most recent promotable Tweets created by one or more specified Twitter users.
-     *
-     * @param $ids
-     * @param $params
-     * @return
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws TwitterAdsException
-     */
-    public function getScopedTimeline($ids, $params)
-    {
-        $this->validateLoaded();
-
-        if (is_array($ids)) {
-            $ids = implode(',', $ids);
-        }
-        $params[] = [AccountFields::USER_IDS => $ids];
-
-        $resource = str_replace(self::RESOURCE_REPLACE, $this->getId(), self::SCOPED_TIMELINE);
-        $response = $this->getTwitterAds()->get($resource, $params);
-
-        return $response->getBody()->data;
-    }
-
-    /**
      * @return string
      */
     public function getId()
