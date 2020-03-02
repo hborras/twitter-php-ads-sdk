@@ -2,10 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Class ScheduledPromotedTweetFields
- * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
- */
 class ScheduledPromotedTweetFields extends Fields
 {
     const APPROVAL_STATUS = 'approval_status';

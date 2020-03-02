@@ -2,7 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
-use DateTimeInterface;
+use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\Arrayable;
 
 /**
@@ -40,123 +40,76 @@ final class TailoredAudienceMember implements Arrayable
         return null;
     }
 
-    /**
-     * @return mixed
-     */
     public function getAdvertiserAccountId()
     {
         return $this->advertiser_account_id;
     }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
     public function setAdvertiserAccountId($id)
     {
         return $this->advertiser_account_id = $id;
     }
 
-    /**
-     * @return mixed
-     */
     public function getUserIdentifier()
     {
         return $this->user_identifier;
     }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
     public function setUserIdentifier($id)
     {
         return $this->user_identifier = $id;
     }
 
-    /**
-     * @return string
-     */
     public function getUserIdentifierType()
     {
         return $this->user_identifier_type;
     }
 
-    /**
-     * @param $type
-     */
     public function setUserIdentifierType($type)
     {
         $this->user_identifier_type = $type;
     }
 
-    /**
-     * @return int
-     */
     public function getScore()
     {
         return $this->score;
     }
 
-    /**
-     * @param $score
-     */
     public function setScore($score)
     {
         $this->score = $score;
     }
 
-    /**
-     * @return string
-     */
     public function getAudienceNames()
     {
         return implode(', ', $this->audience_names);
     }
 
-    /**
-     * @param array $names
-     */
     public function setAudienceNames(array $names)
     {
         $this->audience_names = explode(', ', $names);
     }
 
-    /**
-     * @return mixed
-     */
     public function getEffectiveAt()
     {
         return $this->effective_at;
     }
 
-    /**
-     * @param DateTimeInterface $date
-     */
-    public function setEffectiveAt(DateTimeInterface $date)
+    public function setEffectiveAt(\DateTimeInterface $date)
     {
         $this->effective_at = $date;
     }
 
-    /**
-     * @return mixed
-     */
     public function getExpiresAt()
     {
         return $this->expires_at;
     }
 
-    /**
-     * @param DateTimeInterface $date
-     */
-    public function setExpiresAt(DateTimeInterface $date)
+    public function setExpiresAt(\DateTimeInterface $date)
     {
         $this->expires_at = $date;
     }
 
-    /**
-     * @return array
-     */
     public function toArray()
     {
         return [

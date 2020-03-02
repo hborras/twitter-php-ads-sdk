@@ -2,13 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\PromotedAccountFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
-/**
- * Class PromotedAccount
- * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
- */
 class PromotedAccount extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/promoted_accounts';
@@ -101,6 +97,14 @@ class PromotedAccount extends Resource
     public function setUserId($user_id)
     {
         $this->user_id = $user_id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 
     /**

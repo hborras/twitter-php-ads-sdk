@@ -9,9 +9,6 @@ class TokenTest extends TestCase
 {
     /**
      * @dataProvider tokenProvider
-     * @param $expected
-     * @param $key
-     * @param $secret
      */
     public function testToString($expected, $key, $secret)
     {

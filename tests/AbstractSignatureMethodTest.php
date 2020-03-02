@@ -23,10 +23,6 @@ abstract class AbstractSignatureMethodTest extends TestCase
 
     /**
      * @dataProvider signatureDataProvider
-     * @param $expected
-     * @param $request
-     * @param $consumer
-     * @param $token
      */
     public function testBuildSignature($expected, $request, $consumer, $token)
     {

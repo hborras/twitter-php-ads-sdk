@@ -2,6 +2,11 @@
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
+use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
+use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
 require '../autoload.php';
 

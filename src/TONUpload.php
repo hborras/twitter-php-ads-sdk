@@ -50,31 +50,31 @@ class TONUpload
         if ($this->fileSize < self::MIN_FILE_SIZE) {
             $response = $this->upload();
             return $response->getsHeaders()['location'];
+        } else {
+            $response = $this->initChunkedUpload();
+            $responseHeaders = $response->getsHeaders();
+            $chunkSize = intval($responseHeaders['x_ton_min_chunk_size']);
+            $location = $responseHeaders['location'];
+
+            $file = fopen($this->filePath, 'rb');
+            $bytesRead = 0;
+            while (!feof($file)) {
+                $bytes = fread($file, $chunkSize);
+                $bytesStart = $bytesRead;
+                $bytesRead += strlen($bytes);
+                $this->uploadChunk($location, $chunkSize, $bytes, $bytesStart, $bytesRead);
+            }
+            fclose($file);
+
+            return $location;
         }
-
-        $response = $this->initChunkedUpload();
-        $responseHeaders = $response->getsHeaders();
-        $chunkSize = intval($responseHeaders['x_ton_min_chunk_size']);
-        $location = $responseHeaders['location'];
-
-        $file = fopen($this->filePath, 'rb');
-        $bytesRead = 0;
-        while (!feof($file)) {
-            $bytes = fread($file, $chunkSize);
-            $bytesStart = $bytesRead;
-            $bytesRead += strlen($bytes);
-            $this->uploadChunk($location, $chunkSize, $bytes, $bytesStart, $bytesRead);
-        }
-        fclose($file);
-
-        return $location;
     }
 
     public function upload()
     {
         /** Here you can add any header you want to the request*/
         $headers = [
-            'x-ton-expires: ' . gmdate('D, d M Y H:i:s T', strtotime('+10 day')),
+            'x-ton-expires: ' . gmdate('D, d M Y H:i:s T', strtotime("+10 day")),
             'content-type: ' . $this->getContentType(),
             'Content-Length: ' . $this->fileSize
         ];
@@ -99,13 +99,14 @@ class TONUpload
         $headers = [
             'X-Ton-Content-Type: ' . $this->getContentType(),
             'X-Ton-Content-Length: ' . $this->fileSize,
-            'X-Ton-Expires: ' . gmdate('D, d M Y H:i:s T', strtotime('+6 day')),
+            'X-Ton-Expires: ' . gmdate('D, d M Y H:i:s T', strtotime("+6 day")),
             'Content-Type: ' . $this->getContentType(),
             'Content-Length: ' . strval(0)
         ];
 
         $resource = self::DEFAULT_DOMAIN . self::DEFAULT_RESOURCE . self::DEFAULT_BUCKET . '?resumable=true';
-        return $this->getTwitterAds()->post($resource, [], $headers);
+        $response = $this->getTwitterAds()->post($resource, [], $headers);
+        return $response;
     }
 
     /**
