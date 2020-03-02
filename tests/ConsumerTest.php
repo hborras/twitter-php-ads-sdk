@@ -9,8 +9,8 @@ class ConsumerTest extends TestCase
 {
     public function testToString()
     {
-        $key = uniqid('', true);
-        $secret = uniqid('', true);
+        $key = uniqid();
+        $secret = uniqid();
         $consumer = new Consumer($key, $secret);
 
         $this->assertEquals("Consumer[key=$key,secret=$secret]", $consumer->__toString());

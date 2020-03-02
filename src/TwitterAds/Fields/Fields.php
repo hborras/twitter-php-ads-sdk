@@ -2,10 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
-/**
- * Class Fields
- * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
- */
 class Fields
 {
     const COUNT = 'count';

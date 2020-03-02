@@ -3,21 +3,9 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\TweetFields;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
-/**
- * Class Tweet
- * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
- */
 class Tweet
 {
     const TWEET_PREVIEW    = 'accounts/{account_id}/tweet/preview';
@@ -31,14 +19,6 @@ class Tweet
      * @param array $params
      *
      * @return mixed
-     * @throws TwitterAdsException
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotAuthorized
-     * @throws NotFound
-     * @throws RateLimit
-     * @throws ServerError
-     * @throws ServiceUnavailable
      */
     public static function preview(Account $account, $params = [])
     {
@@ -64,14 +44,6 @@ class Tweet
      * @param array $params
      *
      * @return mixed
-     * @throws TwitterAdsException
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotAuthorized
-     * @throws NotFound
-     * @throws RateLimit
-     * @throws ServerError
-     * @throws ServiceUnavailable
      */
     public static function create(Account $account, $text, $params = [])
     {

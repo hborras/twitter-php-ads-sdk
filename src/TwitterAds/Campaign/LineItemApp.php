@@ -2,13 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemAppFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
-/**
- * Class LineItemApp
- * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
- */
 class LineItemApp extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/line_item_apps';
@@ -31,9 +27,6 @@ class LineItemApp extends Resource
     protected $app_store_identifier;
     protected $os_type;
 
-    /**
-     * @return mixed
-     */
     public function getId()
     {
         return $this->id;
@@ -61,6 +54,14 @@ class LineItemApp extends Resource
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 
     /**

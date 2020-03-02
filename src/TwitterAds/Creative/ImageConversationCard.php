@@ -2,13 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\ImageConversationCardFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 
-/**
- * Class ImageConversationCard
- * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
- */
 class ImageConversationCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/image_conversation';
@@ -73,6 +69,14 @@ class ImageConversationCard extends Resource
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 
     /**

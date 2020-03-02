@@ -4,7 +4,7 @@
  */
 namespace Hborras\TwitterAdsSDK\Test;
 
-use DateTimeInterface;
+use Hborras\TwitterAdsSDK\Response;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use PHPUnit\Framework\TestCase;
@@ -78,6 +78,7 @@ class TwitterAdsTest extends TestCase
      */
     public function testOauthRequestTokenException()
     {
+
         $twitter = new TwitterAds('CONSUMER_KEY', 'CONSUMER_SECRET');
         $result = $twitter->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
         return $result;
@@ -99,7 +100,7 @@ class TwitterAdsTest extends TestCase
             $requestToken['oauth_token'],
             $requestToken['oauth_token_secret']
         );
-        $twitter->oauth('oauth/access_token', array('oauth_verifier' => 'fake_oauth_verifier'));
+        $twitter->oauth("oauth/access_token", array("oauth_verifier" => "fake_oauth_verifier"));
     }
 
     public function testUrl()
@@ -124,13 +125,13 @@ class TwitterAdsTest extends TestCase
                 return is_string($v);
             },
             'timezone_switch_at' => function ($v) {
-                return $v instanceof DateTimeInterface;
+                return $v instanceof \DateTimeInterface;
             },
             'created_at' => function ($v) {
-                return $v instanceof DateTimeInterface;
+                return $v instanceof \DateTimeInterface;
             },
             'updated_at' => function ($v) {
-                return $v instanceof DateTimeInterface;
+                return $v instanceof \DateTimeInterface;
             },
             'deleted' => function ($v) {
                 return is_bool($v);
