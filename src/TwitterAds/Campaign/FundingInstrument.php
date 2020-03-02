@@ -3,9 +3,14 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
 
+/**
+ * Class FundingInstrument
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
+ */
 class FundingInstrument extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/funding_instruments';
@@ -30,6 +35,14 @@ class FundingInstrument extends Analytics
      * @param array $params
      * @param bool $async
      * @return mixed
+     * @throws BadRequest
+     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable
      */
     public function stats($metricGroups, $params = [], $async = false)
     {

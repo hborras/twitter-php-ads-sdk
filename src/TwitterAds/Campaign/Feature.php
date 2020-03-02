@@ -2,9 +2,15 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
+use InvalidArgumentException;
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 
+/**
+ * Class Feature
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
+ */
 class Feature
 {
     const RESOURCE_COLLECTION = 'features';
@@ -22,11 +28,15 @@ class Feature
         $this->twitterAds = static::assureApi($twitterAds);
     }
 
+    /**
+     * @param TwitterAds|null $instance
+     * @return TwitterAds|null
+     */
     protected static function assureApi(TwitterAds $instance = null)
     {
         $instance = $instance ?: TwitterAds::instance();
         if (!$instance) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'An Api instance must be provided as argument or ' .
                 'set as instance in the \TwitterAds\Api'
             );
@@ -37,9 +47,17 @@ class Feature
     /**
      * Returns a Cursor instance for a given resource.
      *
-     * @param $params
+     * @param array $params
      *
      * @return Cursor
+     * @throws TwitterAds\Errors\BadRequest
+     * @throws TwitterAds\Errors\Forbidden
+     * @throws TwitterAds\Errors\NotAuthorized
+     * @throws TwitterAds\Errors\NotFound
+     * @throws TwitterAds\Errors\RateLimit
+     * @throws TwitterAds\Errors\ServerError
+     * @throws TwitterAds\Errors\ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function all($params = [])
     {

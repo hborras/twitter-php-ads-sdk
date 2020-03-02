@@ -2,11 +2,11 @@
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\Campaign;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Enumerations;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 require '../autoload.php';
 
@@ -36,11 +36,11 @@ $i = 1;
 $j = 1;
 $l = 1;
 foreach ($campaignsData as $campaign) {
-    echo $i . ": " . $campaign->getId() . " " . $campaign->getName() . " " . $campaign->getStartTime()->format('Y-m-d') . " - " . $campaign->getEntityStatus() . PHP_EOL;
+    echo $i . ': ' . $campaign->getId() . ' ' . $campaign->getName() . ' ' . $campaign->getStartTime()->format('Y-m-d') . ' - ' . $campaign->getEntityStatus() . PHP_EOL;
     $lineItems = $campaign->getLineItems([TwitterAds\Fields\LineItemFields::COUNT => 2]);
     /** @var LineItem $lineItem */
     foreach ($lineItems as $lineItem) {
-        echo "\t" . $j . ": " . $lineItem->getId() . " " . $lineItem->getName() . " " . PHP_EOL;
+        echo "\t" . $j . ': ' . $lineItem->getId() . ' ' . $lineItem->getName() . ' ' . PHP_EOL;
         echo "\t\tBid: " . ($lineItem->getBidAmountLocalMicro() / 1000000) . PHP_EOL;
         echo "\t\tObjective: " . $lineItem->getObjective() . PHP_EOL;
         echo "\t\tCharge By: " . $lineItem->getChargeBy() . PHP_EOL;
@@ -50,17 +50,17 @@ foreach ($campaignsData as $campaign) {
         $targetingCriterias = $lineItem->getTargetingCriteria();
         /** @var TwitterAds\Campaign\TargetingCriteria $targetingCriteria */
         foreach ($targetingCriterias as $targetingCriteria) {
-            echo "\t\t" . $l . ": " . $targetingCriteria->getId() . " " . $targetingCriteria->getName() . " " .
+            echo "\t\t" . $l . ': ' . $targetingCriteria->getId() . ' ' . $targetingCriteria->getName() . ' ' .
 
-                $targetingCriteria->getTargetingType() . " " . $targetingCriteria->getTargetingValue() . PHP_EOL;
+                $targetingCriteria->getTargetingType() . ' ' . $targetingCriteria->getTargetingValue() . PHP_EOL;
 
             $l++;
         }
         $l = 1;
         try {
             $async = true;
-            $startDate = new \DateTime($campaign->getStartTime()->format('Y-m-d 00:00:00'));
-            $endDate = new \DateTime('now');
+            $startDate = new DateTime($campaign->getStartTime()->format('Y-m-d 00:00:00'));
+            $endDate = new DateTime('now');
             $dates = dateRanges($startDate, $endDate);
             foreach ($dates as $date) {
                 $job = $lineItem->stats(
@@ -77,20 +77,20 @@ foreach ($campaignsData as $campaign) {
                     ], $async
                 );
                 while($job->getStatus() == TwitterAds\Fields\JobFields::PROCESSING){
-                    echo "Job is still processing. Waiting 5 more seconds".PHP_EOL;
+                    echo 'Job is still processing. Waiting 5 more seconds' .PHP_EOL;
                     $job->read();
                     sleep(5);
                 }
 
                 if($job->getStatus() == TwitterAds\Fields\JobFields::SUCCESS){
                     $result = gzfile($job->getUrl());
-                    $result = implode("", $result);
+                    $result = implode('', $result);
                     $stats = json_decode($result)->data;
                     $stats = $stats[0]->id_data[0]->metrics;
                     if (!is_null($stats->billed_charge_local_micro)) {
                         echo "\t\t\t Start: " . $date[0]->format('Y-m-d H:i:s') . PHP_EOL;
                         echo "\t\t\t End: " . $date[1]->format('Y-m-d H:i:s') . PHP_EOL;
-                        echo "\t\t\t " . ($stats->billed_charge_local_micro[0] / 1000000) . "€" . PHP_EOL;
+                        echo "\t\t\t " . ($stats->billed_charge_local_micro[0] / 1000000) . '€' . PHP_EOL;
                         echo "\t\t\t\t App clicks: ";
                         getStats($stats->app_clicks);
                         echo "\t\t\t\t Installs:" . PHP_EOL;
@@ -101,7 +101,7 @@ foreach ($campaignsData as $campaign) {
                 }
             }
     
-        } catch (\Hborras\TwitterAdsSDK\TwitterAdsException $e) {
+        } catch (TwitterAdsException $e) {
             print_r($e->getErrors());
         }
 
@@ -116,9 +116,9 @@ function getStats($stat)
     if ($stat instanceof stdClass) {
         foreach (get_object_vars($stat) as $key => $val) {
             if (is_array($val)) {
-                echo "\t\t\t\t\t " . $key . ": " . $val[0] . PHP_EOL;
+                echo "\t\t\t\t\t " . $key . ': ' . $val[0] . PHP_EOL;
             } else {
-                echo "\t\t\t\t\t " . $key . " 0" . PHP_EOL;
+                echo "\t\t\t\t\t " . $key . ' 0' . PHP_EOL;
             }
         }
     } else if (is_array($stat)) {
@@ -133,11 +133,12 @@ function getStats($stat)
  * @param $startTime
  * @param $endTime
  * @return array
+ * @throws Exception
  */
 function dateRanges($startTime, $endTime)
 {
-    $interval = new \DateInterval('P60D');
-    $dateRange = new \DatePeriod($startTime, $interval, $endTime);
+    $interval = new DateInterval('P60D');
+    $dateRange = new DatePeriod($startTime, $interval, $endTime);
 
     $previous = null;
     $dates = array();

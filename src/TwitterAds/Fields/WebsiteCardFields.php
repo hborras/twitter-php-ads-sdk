@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class WebsiteCardFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class WebsiteCardFields
 {
     const ID                 = 'id';
