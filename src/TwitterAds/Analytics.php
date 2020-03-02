@@ -58,9 +58,9 @@ class Analytics extends Resource
     public function all_stats($ids, $metricGroups, $params = [], $async = false)
     {
         $endTime = isset($params[AnalyticsFields::END_TIME]) ? $params[AnalyticsFields::END_TIME] : new DateTime('now');
-        $endTime->setTime($endTime->format('H'), 0, 0);
+        // $endTime->setTime($endTime->format('H'), 0, 0);
         $startTime = isset($params[AnalyticsFields::START_TIME]) ? $params[AnalyticsFields::START_TIME] : new DateTime($endTime->format('c') . ' - 7 days');
-        $startTime->setTime($startTime->format('H'), 0, 0);
+        // $startTime->setTime($startTime->format('H'), 0, 0);
         $granularity = isset($params[AnalyticsFields::GRANULARITY]) ? $params[AnalyticsFields::GRANULARITY] : Enumerations::GRANULARITY_TOTAL;
         $placement = isset($params[AnalyticsFields::PLACEMENT]) ? $params[AnalyticsFields::PLACEMENT] : Enumerations::PLACEMENT_ALL_ON_TWITTER;
         if (isset($params[AnalyticsFields::ENTITY])) {
@@ -77,11 +77,11 @@ class Analytics extends Resource
 
         $params = [
             AnalyticsFields::METRIC_GROUPS => implode(',', $metricGroups),
-            AnalyticsFields::START_TIME => $startTime->format('c'),
-            AnalyticsFields::END_TIME => $endTime->format('c'),
+            AnalyticsFields::START_TIME => $startTime,
+            AnalyticsFields::END_TIME => $endTime,
             AnalyticsFields::GRANULARITY => $granularity,
             AnalyticsFields::ENTITY => $entity,
-            AnalyticsFields::ENTITY_IDS => implode(',', $ids),
+            AnalyticsFields::ENTITY_IDS => implode(',', array_filter($ids)),
             AnalyticsFields::PLACEMENT => $placement,
         ];
 
