@@ -2,10 +2,21 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
-use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
 
+/**
+ * Class TailoredAudiencePermission
+ * @package Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience
+ */
 final class TailoredAudiencePermission extends Resource
 {
     const RESOURCE_COLLECTION                   = 'accounts/{account_id}/tailored_audiences/{tailored_audience_id/permissions}';
@@ -36,6 +47,14 @@ final class TailoredAudiencePermission extends Resource
      * @param array $tailoredAudienceId
      * @param array $params
      * @return Cursor
+     * @throws TwitterAdsException
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
      */
     public function all($tailoredAudienceId, $params = [])
     {
@@ -51,6 +70,14 @@ final class TailoredAudiencePermission extends Resource
      * Saves or updates the current tailored audience permission.
      *
      * @return $this
+     * @throws TwitterAdsException
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
      */
     public function save()
     {
@@ -72,6 +99,14 @@ final class TailoredAudiencePermission extends Resource
      * Saves or updates the current tailored audience permission.
      *
      * @return $this
+     * @throws TwitterAdsException
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
      */
     public function delete()
     {

@@ -2,10 +2,17 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
+use DateTime;
+use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 
+/**
+ * Class Campaign
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
+ */
 class Campaign extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/campaigns';
@@ -48,7 +55,15 @@ class Campaign extends Analytics
 
     /**
      * @param array $params
-     * @return \Hborras\TwitterAdsSDK\TwitterAds\Cursor|Resource
+     * @return Cursor|Resource
+     * @throws BadRequest
+     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable
      */
     public function getLineItems($params = [])
     {
@@ -62,6 +77,14 @@ class Campaign extends Analytics
      * @param array $params
      * @param bool $async
      * @return mixed
+     * @throws BadRequest
+     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError
+     * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable
      */
     public function stats($metricGroups, $params = [], $async = false)
     {
@@ -94,7 +117,7 @@ class Campaign extends Analytics
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -259,14 +282,6 @@ class Campaign extends Analytics
     public function setTotalBudgetAmountLocalMicro($total_budget_amount_local_micro)
     {
         $this->total_budget_amount_local_micro = $total_budget_amount_local_micro;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

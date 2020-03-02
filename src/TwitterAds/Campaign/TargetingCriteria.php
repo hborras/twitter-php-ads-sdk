@@ -3,10 +3,22 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\MethodNotAllowedException;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\TargetingCriteriaFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\RateLimit;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServerError;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotAuthorized;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\TargetingCriteriaFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\MethodNotAllowedException;
 
+/**
+ * Class TargetingCriteria
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
+ */
 class TargetingCriteria extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/targeting_criteria';
@@ -39,6 +51,14 @@ class TargetingCriteria extends Resource
      * @param array $params
      *
      * @return Cursor
+     * @throws TwitterAdsException
+     * @throws BadRequest
+     * @throws Forbidden
+     * @throws NotAuthorized
+     * @throws NotFound
+     * @throws RateLimit
+     * @throws ServerError
+     * @throws ServiceUnavailable
      */
     public function line_item_all($line_item_id, $params = [])
     {
@@ -50,14 +70,18 @@ class TargetingCriteria extends Resource
         return new Cursor($this, $this->getTwitterAds(), $request->getBody(), $params);
     }
 
-    
+
+    /**
+     * @return Resource
+     * @throws MethodNotAllowedException
+     */
     public function save()
     {
         if ($this->getId()) {
             throw new MethodNotAllowedException();
-        } else {
-            return parent::save();
         }
+
+        return parent::save();
     }
 
     /**
@@ -106,14 +130,6 @@ class TargetingCriteria extends Resource
     public function getDeleted()
     {
         return $this->deleted;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**
