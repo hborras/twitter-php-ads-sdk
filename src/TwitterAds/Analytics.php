@@ -16,8 +16,10 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
 class Analytics extends Resource
 {
     const ENTITY              = '';
-    const RESOURCE_STATS      = 'stats/accounts/{account_id}/';
-    const RESOURCE_STATS_JOBS = 'stats/jobs/accounts/{account_id}/';
+    //const RESOURCE_STATS      = 'stats/accounts/{account_id}/';
+    //const RESOURCE_STATS_JOBS = 'stats/jobs/accounts/{account_id}/';
+    const RESOURCE_STATS      = 'stats/accounts/18ce53wogw7/';
+    const RESOURCE_STATS_JOBS = 'stats/jobs/accounts/18ce53wogw7/';
 
     /**
      * Pulls a list of metrics for the current object instance.

@@ -11,6 +11,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\WebsiteCardFields;
  */
 class WebsiteCard extends Resource
 {
+    // const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/website';
+    // const RESOURCE            = 'accounts/{account_id}/cards/website/{id}';
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/website';
     const RESOURCE            = 'accounts/{account_id}/cards/website/{id}';
 
