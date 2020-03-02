@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class FundingInstrumentFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class FundingInstrumentFields
 {
     const ID                        = 'id';

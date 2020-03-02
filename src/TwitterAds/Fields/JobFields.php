@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class JobFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class JobFields
 {
     const ID                = 'id';
