@@ -2,9 +2,13 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\WebsiteCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\WebsiteCardFields;
 
+/**
+ * Class WebsiteCard
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
+ */
 class WebsiteCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/website';
@@ -36,14 +40,6 @@ class WebsiteCard extends Resource
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**

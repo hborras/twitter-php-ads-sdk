@@ -2,7 +2,6 @@
 
 use Hborras\TwitterAdsSDK\TwitterAds;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
-use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\TailoredAudience;
 
 
 require '../autoload.php';
