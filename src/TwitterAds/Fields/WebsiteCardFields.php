@@ -15,6 +15,6 @@ class WebsiteCardFields
     const DELETED            = 'deleted';
     const WEBSITE_TITLE      = 'website_title';
     const WEBSITE_URL        = 'website_url';
-    const IMAGE_MEDIA_ID     = 'image_media_id';
+    const MEDIA_KEY          = 'media_key';
     const WITH_TOTAL_COUNT   = 'with_total_count';
 }
