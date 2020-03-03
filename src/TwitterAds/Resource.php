@@ -167,11 +167,15 @@ abstract class Resource implements Arrayable
      */
     public function fromResponse($response)
     {
-        if ($this instanceof Account) {
-            $timezone = $response->timezone;
-        } else {
-            $timezone = $this->getTwitterAds()->getAccountTimezone();
-        }
+        // if ($this instanceof Account) {
+        //    $timezone = $response->timezone;
+        // } else {
+        //    $timezone = $this->getTwitterAds()->getAccountTimezone();
+        // }
+        
+        // $timezoneが入らずエラーになるので固定する
+        $timezone = 'Asia/Tokyo';
+        
         foreach (get_object_vars($response) as $key => $value) {
             if (($key == 'created_at' || $key == 'updated_at' || $key == 'start_time' || $key == 'end_time' || $key == 'timezone_switch_at') && !is_null($value)) {
                 $this->$key = $this->toDateTimeImmutable($value, $timezone);
