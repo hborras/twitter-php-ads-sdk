@@ -237,7 +237,7 @@ class TwitterAds extends Config
         $request = Request::fromConsumerAndToken($this->consumer, $this->token, $method, $url, $parameters);
         $authorization = 'Authorization: Basic ' . $this->encodeAppAuthorization($this->consumer);
         $result = $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters);
-        $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
+        $response = json_decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
 
         return $response;
@@ -504,7 +504,7 @@ class TwitterAds extends Config
 
         $this->response->setApiPath($path);
         $result = $this->oAuthRequest($url, $method, $parameters, $headers);
-        $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
+        $response = json_decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
         if ($this->getLastHttpCode() > 399) {
             $this->manageErrors($response);
