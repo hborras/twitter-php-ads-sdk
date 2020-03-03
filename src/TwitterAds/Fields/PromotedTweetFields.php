@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
+/**
+ * Class PromotedTweetFields
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
+ */
 class PromotedTweetFields extends Fields
 {
     const DELETED            = 'deleted';

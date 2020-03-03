@@ -2,9 +2,13 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Creative;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\WebsiteCardFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\WebsiteCardFields;
 
+/**
+ * Class WebsiteCard
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
+ */
 class WebsiteCard extends Resource
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/cards/website';
@@ -21,14 +25,14 @@ class WebsiteCard extends Resource
         WebsiteCardFields::NAME,
         WebsiteCardFields::WEBSITE_TITLE,
         WebsiteCardFields::WEBSITE_URL,
-        WebsiteCardFields::IMAGE_MEDIA_ID,
+        WebsiteCardFields::MEDIA_KEY,
     ];
 
     /** Writable */
     protected $name;
     protected $website_title;
     protected $website_url;
-    protected $image_media_id;
+    protected $media_key;
 
     /**
      * @return mixed
@@ -36,14 +40,6 @@ class WebsiteCard extends Resource
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**
@@ -107,15 +103,15 @@ class WebsiteCard extends Resource
      */
     public function getImageMediaId()
     {
-        return $this->image_media_id;
+        return $this->media_key;
     }
 
     /**
      * @param mixed $image_media_id
      */
-    public function setImageMediaId($image_media_id)
+    public function setImageMediaId($media_key)
     {
-        $this->image_media_id = $image_media_id;
+        $this->media_key = $media_key;
     }
 
     /**

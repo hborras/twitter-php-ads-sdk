@@ -2,17 +2,22 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
+use DateTime;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\JobFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\JobFields;
 
+/**
+ * Class Analytics
+ * @package Hborras\TwitterAdsSDK\TwitterAds
+ */
 class Analytics extends Resource
 {
-    const ENTITY                    = "";
-    const RESOURCE_STATS            = 'stats/accounts/{account_id}/';
-    const RESOURCE_STATS_JOBS       = 'stats/jobs/accounts/{account_id}/';
-    const RESOURCE_STATS_CAMPAIGN   = 'stats/accounts/{account_id}/reach/campaigns';
+    const ENTITY              = '';
+    const RESOURCE_STATS      = 'stats/accounts/{account_id}/';
+    const RESOURCE_STATS_JOBS = 'stats/jobs/accounts/{account_id}/';
 
     /**
      * Pulls a list of metrics for the current object instance.
@@ -21,34 +26,41 @@ class Analytics extends Resource
      * @param bool $async
      * @return $this
      * @throws BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServerError
+     * @throws Errors\ServiceUnavailable
+     * @throws TwitterAdsException
      */
     public function stats($metricGroups, $params = [], $async = false)
     {
         return $this->all_stats([$this->getId()], $metricGroups, $params, $async);
     }
 
-    public function stats_campaign($campaignIds, $params)
-    {
-        $endTime = isset($params[AnalyticsFields::END_TIME]) ? $params[AnalyticsFields::END_TIME] : new \DateTime('now');
-        $endTime->setTime($endTime->format('H'), 0, 0);
-        $startTime = isset($params[AnalyticsFields::START_TIME]) ? $params[AnalyticsFields::START_TIME] : new \DateTime($endTime->format('c') . " - 7 days");
-        $startTime->setTime($startTime->format('H'), 0, 0);
-        $params = [
-            AnalyticsFields::CAMPAIGN_IDS => implode(",", $campaignIds),
-            AnalyticsFields::START_TIME => $startTime->format('c'),
-            AnalyticsFields::END_TIME => $endTime->format('c'),
-        ];
-        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS_CAMPAIGN);
-        $response = $this->getTwitterAds()->get($resource, $params);
-    }
 
-
-    public function all_stats($ids, $metricGroups, $params = [], $async = false, $reachCampaign = false)
+    /**
+     * @param $ids
+     * @param $metricGroups
+     * @param array $params
+     * @param bool $async
+     * @return Job
+     * @throws BadRequest
+     * @throws Errors\Forbidden
+     * @throws Errors\NotAuthorized
+     * @throws Errors\NotFound
+     * @throws Errors\RateLimit
+     * @throws Errors\ServerError
+     * @throws Errors\ServiceUnavailable
+     * @throws TwitterAdsException
+     */
+    public function all_stats($ids, $metricGroups, $params = [], $async = false)
     {
-        $endTime = isset($params[AnalyticsFields::END_TIME]) ? $params[AnalyticsFields::END_TIME] : new \DateTime('now');
-        $endTime->setTime($endTime->format('H'), 0, 0);
-        $startTime = isset($params[AnalyticsFields::START_TIME]) ? $params[AnalyticsFields::START_TIME] : new \DateTime($endTime->format('c') . " - 7 days");
-        $startTime->setTime($startTime->format('H'), 0, 0);
+        $endTime = isset($params[AnalyticsFields::END_TIME]) ? $params[AnalyticsFields::END_TIME] : new DateTime('now');
+        // $endTime->setTime($endTime->format('H'), 0, 0);
+        $startTime = isset($params[AnalyticsFields::START_TIME]) ? $params[AnalyticsFields::START_TIME] : new DateTime($endTime->format('c') . ' - 7 days');
+        // $startTime->setTime($startTime->format('H'), 0, 0);
         $granularity = isset($params[AnalyticsFields::GRANULARITY]) ? $params[AnalyticsFields::GRANULARITY] : Enumerations::GRANULARITY_TOTAL;
         $placement = isset($params[AnalyticsFields::PLACEMENT]) ? $params[AnalyticsFields::PLACEMENT] : Enumerations::PLACEMENT_ALL_ON_TWITTER;
         if (isset($params[AnalyticsFields::ENTITY])) {
@@ -64,12 +76,12 @@ class Analytics extends Resource
         $platform = isset($params[JobFields::PLATFORM]) ? $params[JobFields::PLATFORM] : null;
 
         $params = [
-            AnalyticsFields::METRIC_GROUPS => implode(",", $metricGroups),
-            AnalyticsFields::START_TIME => $startTime->format('c'),
-            AnalyticsFields::END_TIME => $endTime->format('c'),
+            AnalyticsFields::METRIC_GROUPS => implode(',', $metricGroups),
+            AnalyticsFields::START_TIME => $startTime,
+            AnalyticsFields::END_TIME => $endTime,
             AnalyticsFields::GRANULARITY => $granularity,
             AnalyticsFields::ENTITY => $entity,
-            AnalyticsFields::ENTITY_IDS => implode(",", $ids),
+            AnalyticsFields::ENTITY_IDS => implode(',', array_filter($ids)),
             AnalyticsFields::PLACEMENT => $placement,
         ];
 
@@ -78,26 +90,30 @@ class Analytics extends Resource
             $response = $this->getTwitterAds()->get($resource, $params);
 
             return $response->getBody()->data;
-        } else {
-            if (!is_null($segmentationType)) {
-                $params[AnalyticsFields::SEGMENTATION_TYPE] = $segmentationType;
-            }
-
-            if (!is_null($country)) {
-                $params[JobFields::COUNTRY] = $country;
-            }
-
-            if (!is_null($platform)) {
-                $params[JobFields::PLATFORM] = $platform;
-            }
-
-            $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS_JOBS);
-            $response = $this->getTwitterAds()->post($resource, $params);
-            $job = new Job();
-            return $job->fromResponse($response->getBody()->data);
         }
+
+        if (!is_null($segmentationType)) {
+            $params[AnalyticsFields::SEGMENTATION_TYPE] = $segmentationType;
+        }
+
+        if (!is_null($country)) {
+            $params[JobFields::COUNTRY] = $country;
+        }
+
+        if (!is_null($platform)) {
+            $params[JobFields::PLATFORM] = $platform;
+        }
+
+        $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_STATS_JOBS);
+        $response = $this->getTwitterAds()->post($resource, $params);
+        $job = new Job();
+        return $job->fromResponse($response->getBody()->data);
     }
 
+    /**
+     * @param $entity
+     * @return bool
+     */
     public static function inAvailableEntities($entity)
     {
         $availableEntities = [
@@ -112,8 +128,11 @@ class Analytics extends Resource
         return in_array($entity, $availableEntities);
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
-        return $this->id;
+        return parent::getId();
     }
 }
