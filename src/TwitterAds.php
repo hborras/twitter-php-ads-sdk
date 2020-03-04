@@ -3,7 +3,6 @@
 namespace Hborras\TwitterAdsSDK;
 
 use Exception;
-use Hborras\TwitterAdsSDK\Util\JsonDecoder;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
@@ -21,7 +20,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
  */
 class TwitterAds extends Config
 {
-    const API_VERSION      = '7';
+    const API_VERSION      = '6';
     const API_REST_VERSION = '1.1';
     const API_HOST = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';

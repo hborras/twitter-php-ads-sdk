@@ -1,9 +1,8 @@
 <?php
-/**
- * The MIT License
- * Copyright (c) 2007 Andy Smith.
- */
-namespace Hborras\TwitterAdsSDK;
+
+namespace Hborras\TwitterAdsSDK\TwitterAds;
+
+use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 
 /**
  * The HMAC-SHA1 signature method uses the HMAC-SHA1 signature algorithm as defined in [RFC2104]
@@ -25,7 +24,7 @@ class HmacSha1 extends SignatureMethod
     /**
      * {@inheritdoc}
      */
-    public function buildSignature(Request $request, Consumer $consumer, Token $token = null)
+    public function buildSignature(RequestInterface $request, Consumer $consumer, Token $token = null)
     {
         $signatureBase = $request->getSignatureBaseString();
 

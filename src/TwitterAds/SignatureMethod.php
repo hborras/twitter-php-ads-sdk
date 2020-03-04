@@ -1,9 +1,8 @@
 <?php
-/**
- * The MIT License
- * Copyright (c) 2007 Andy Smith.
- */
-namespace Hborras\TwitterAdsSDK;
+
+namespace Hborras\TwitterAdsSDK\TwitterAds;
+
+use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 
 /**
  * A class for implementing a Signature Method
@@ -24,18 +23,18 @@ abstract class SignatureMethod
      * the encoding is handled in OAuthRequest when the final
      * request is serialized.
      *
-     * @param Request $request
+     * @param RequestInterface $request
      * @param Consumer $consumer
      * @param Token $token
      *
      * @return string
      */
-    abstract public function buildSignature(Request $request, Consumer $consumer, Token $token = null);
+    abstract public function buildSignature(RequestInterface $request, Consumer $consumer, Token $token = null);
 
     /**
      * Verifies that a given signature is correct.
      *
-     * @param Request $request
+     * @param RequestInterface $request
      * @param Consumer $consumer
      * @param Token $token
      * @param string $signature
