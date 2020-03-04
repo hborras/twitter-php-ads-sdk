@@ -134,14 +134,24 @@ interface RequestInterface {
    */
   public function setFileParams(Parameters $params);
 
-  /**
-   * @return ResponseInterface
-   */
-  public function execute();
+    /**
+     * @return ResponseInterface
+     */
+    public function execute();
 
-  /**
-   * Required for Mocking request/response chaining
-   * @return RequestInterface
-   */
-  public function createClone();
+    /**
+     * Required for Mocking request/response chaining
+     * @return RequestInterface
+     */
+    public function createClone();
+
+    /**
+     * @return string
+     */
+    public function getSignatureBaseString();
+
+    /**
+     * @return string
+     */
+    public function getSignableParameters();
 }

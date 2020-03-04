@@ -298,4 +298,29 @@ class Request implements RequestInterface
     {
         return clone $this;
     }
+
+    public function getSignatureBaseString()
+    {
+        $parts = [
+            $this->method,
+            $this->getUrl(),
+            $this->getSignableParameters(),
+        ];
+
+        $parts = Util::urlencodeRfc3986($parts);
+
+        return implode('&', $parts);
+    }
+
+    public function getSignableParameters()
+    {
+        // Grab all parameters
+        $params = $this->getQueryParams()->getArrayCopy();
+
+        if (isset($params['oauth_signature'])) {
+            unset($params['oauth_signature']);
+        }
+
+        return Util::buildHttpQuery($params);
+    }
 }

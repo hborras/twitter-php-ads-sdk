@@ -131,19 +131,6 @@ class Api
         $request->setVersion($this->getDefaultVersion());
         $request->setPath($path);
 
-        $defaults = [
-            'oauth_version' => '1.0',
-            'oauth_nonce' => md5(microtime() . mt_rand()),
-            'oauth_timestamp' => time(),
-            'oauth_consumer_key' => $this->session->consumer()->key,
-            'oauth_signature_method' => $this->signatureMethod->getName()
-        ];
-        $defaults['oauth_signature'] = $this->signatureMethod->buildSignature(, $this->session->consumer(), $this->session->token());
-
-        if (null !== $this->session->token()) {
-            $defaults['oauth_token'] = $this->session->token()->key;
-        }
-
         if ($method === RequestInterface::METHOD_GET) {
             $params_ref = $request->getQueryParams();
         } else {
@@ -153,11 +140,8 @@ class Api
         if (!empty($params)) {
             $params_ref->enhance($params);
         }
-        $params_ref->enhance($defaults);
 
         $params_ref->enhance($this->getSession()->getRequestParameters());
-
-        $this->signRequest($request, $this->signatureMethod, $this->session->consumer(), $this->session->token());
 
         return $request;
     }
@@ -215,6 +199,19 @@ class Api
             foreach ($file_params as $key => $value) {
                 $request->getFileParams()->offsetSet($key, $value);
             }
+        }
+
+        $defaults = [
+            'oauth_version' => '1.0',
+            'oauth_nonce' => md5(microtime() . mt_rand()),
+            'oauth_timestamp' => time(),
+            'oauth_consumer_key' => $this->session->consumer()->key,
+            'oauth_signature_method' => $this->signatureMethod->getName()
+        ];
+        $defaults['oauth_signature'] = $this->signatureMethod->buildSignature($request, $this->session->consumer(), $this->session->token());
+
+        if (null !== $this->session->token()) {
+            $defaults['oauth_token'] = $this->session->token()->key;
         }
 
         return $this->executeRequest($request);
