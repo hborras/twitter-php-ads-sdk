@@ -138,6 +138,7 @@ class Api
             'oauth_consumer_key' => $this->session->consumer()->key,
             'oauth_signature_method' => $this->signatureMethod->getName()
         ];
+        $defaults['oauth_signature'] = $this->signatureMethod->buildSignature(, $this->session->consumer(), $this->session->token());
 
         if (null !== $this->session->token()) {
             $defaults['oauth_token'] = $this->session->token()->key;
