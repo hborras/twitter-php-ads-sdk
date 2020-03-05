@@ -2,6 +2,8 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Http;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\OAuth;
+
 interface RequestInterface {
 
   /**
@@ -154,4 +156,9 @@ interface RequestInterface {
      * @return string
      */
     public function getSignableParameters();
+
+    /**
+     * @return OAuth
+     */
+    public function getOAuth();
 }

@@ -339,10 +339,9 @@ class Request implements RequestInterface
     {
         // Grab all parameters
         $params = $this->getQueryParams()->getArrayCopy();
+        $oAuthParams = $this->getOAuth()->toArray();
 
-        if (isset($params['oauth_signature'])) {
-            unset($params['oauth_signature']);
-        }
+        $params = array_merge($params, $oAuthParams);
 
         return Util::buildHttpQuery($params);
     }
@@ -354,5 +353,6 @@ class Request implements RequestInterface
     public function signRequest($session, $params)
     {
         $this->oAuth->buildSignature($this, $session, $params);
+        $this->setHeaders($this->oAuth->toHeader());
     }
 }

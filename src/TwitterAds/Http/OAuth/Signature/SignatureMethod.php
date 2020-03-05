@@ -32,7 +32,7 @@ abstract class SignatureMethod
      *
      * @return string
      */
-    abstract public function buildSignature(RequestInterface $request, $auth, Consumer $consumer, Token $token = null);
+    abstract public function buildSignature(RequestInterface $request, $params, Consumer $consumer, Token $token = null);
 
     /**
      * Verifies that a given signature is correct.
@@ -45,7 +45,7 @@ abstract class SignatureMethod
      *
      * @return bool
      */
-    public function checkSignature(Request $request, $auth, Consumer $consumer, Token $token, $signature)
+    public function checkSignature(Request $request, $params, Consumer $consumer, Token $token, $signature)
     {
         $built = $this->buildSignature($request, $auth, $consumer, $token);
 
