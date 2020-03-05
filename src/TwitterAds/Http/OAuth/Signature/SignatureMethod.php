@@ -2,7 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\Signature;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Consumer;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\Request;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
+use Hborras\TwitterAdsSDK\TwitterAds\Token;
 
 /**
  * A class for implementing a Signature Method
@@ -34,16 +37,17 @@ abstract class SignatureMethod
     /**
      * Verifies that a given signature is correct.
      *
-     * @param RequestInterface $request
+     * @param Request $request
+     * @param $auth
      * @param Consumer $consumer
      * @param Token $token
      * @param string $signature
      *
      * @return bool
      */
-    public function checkSignature(Request $request, Consumer $consumer, Token $token, $signature)
+    public function checkSignature(Request $request, $auth, Consumer $consumer, Token $token, $signature)
     {
-        $built = $this->buildSignature($request, $consumer, $token);
+        $built = $this->buildSignature($request, $auth, $consumer, $token);
 
         // Check for zero length, although unlikely here
         if ($built === '' || $signature === '') {

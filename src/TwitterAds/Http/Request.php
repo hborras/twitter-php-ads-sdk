@@ -2,9 +2,9 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Http;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Exception\Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\Exception\RequestException;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\OAuth;
+use Hborras\TwitterAdsSDK\TwitterAds\SessionInterface;
 
 class Request implements RequestInterface
 {
@@ -347,8 +347,12 @@ class Request implements RequestInterface
         return Util::buildHttpQuery($params);
     }
 
-    public function signRequest($params)
+    /**
+     * @param SessionInterface $session
+     * @param array $params
+     */
+    public function signRequest($session, $params)
     {
-        $this->oAuth->buildSignature($params);
+        $this->oAuth->buildSignature($this, $session, $params);
     }
 }

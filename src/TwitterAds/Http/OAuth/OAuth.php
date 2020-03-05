@@ -5,6 +5,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\Signature\SignatureMethod;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\Util;
+use Hborras\TwitterAdsSDK\TwitterAds\SessionInterface;
 
 class OAuth
 {
@@ -54,9 +55,9 @@ class OAuth
         return md5(microtime() . mt_rand());
     }
 
-    public function buildSignature(RequestInterface $request, array $params)
+    public function buildSignature(RequestInterface $request, SessionInterface $session, array $params)
     {
-        $this->signatureMethod->buildSignature();
+        $this->signatureMethod->buildSignature($request, $params, $session->consumer(), $session->token());
     }
 
     public function toArray()

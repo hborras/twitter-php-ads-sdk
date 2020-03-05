@@ -2,7 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\Signature;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Consumer;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\Util;
+use Hborras\TwitterAdsSDK\TwitterAds\Token;
 
 /**
  * The HMAC-SHA1 signature method uses the HMAC-SHA1 signature algorithm as defined in [RFC2104]
@@ -30,7 +33,7 @@ class HmacSha1 extends SignatureMethod
 
         $parts = [$consumer->secret, null !== $token ? $token->secret : ''];
 
-        //$parts = Util::urlencodeRfc3986($parts);
+        $parts = Util::urlencodeRfc3986($parts);
         $key = implode('&', $parts);
 
         return base64_encode(hash_hmac('sha1', $signatureBase, $key, true));

@@ -198,7 +198,7 @@ class Api
                 $request->getFileParams()->offsetSet($key, $value);
             }
         }
-        $request->signRequest($params);
+        $request->signRequest($this->session, $params);
         return $this->executeRequest($request);
     }
 
