@@ -63,24 +63,6 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
-     * @throws TwitterAds\Errors\BadRequest
-     * @throws TwitterAds\Errors\Forbidden
-     * @throws TwitterAds\Errors\NotAuthorized
-     * @throws TwitterAds\Errors\NotFound
-     * @throws TwitterAds\Errors\RateLimit
-     * @throws TwitterAds\Errors\ServerError
-     * @throws TwitterAds\Errors\ServiceUnavailable
-     * @throws TwitterAdsException
-     */
-    public function testScopedTimeline(Account $account)
-    {
-        $scopedTimeline = $account->getScopedTimeline(null, null);
-        $this->assertGreaterThan(0, count($scopedTimeline));
-    }
-
-    /**
-     * @depends testGetAccount
-     * @param Account $account
      * @return Cursor
      */
     public function testGetFundingInstruments(Account $account)

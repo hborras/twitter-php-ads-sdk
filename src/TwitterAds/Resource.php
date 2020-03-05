@@ -25,7 +25,7 @@ abstract class Resource implements Arrayable
     const RESOURCE_ID_REPLACE = '{id}';
     const RESOURCE_REPLACE = '{account_id}';
 
-    private $properties = [];
+    protected $properties = [];
 
     /** @var  TwitterAds $twitterAds */
     private $twitterAds;
