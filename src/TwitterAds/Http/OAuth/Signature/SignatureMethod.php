@@ -1,6 +1,6 @@
 <?php
 
-namespace Hborras\TwitterAdsSDK\TwitterAds;
+namespace Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\Signature;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 
@@ -29,7 +29,7 @@ abstract class SignatureMethod
      *
      * @return string
      */
-    abstract public function buildSignature(RequestInterface $request, Consumer $consumer, Token $token = null);
+    abstract public function buildSignature(RequestInterface $request, $auth, Consumer $consumer, Token $token = null);
 
     /**
      * Verifies that a given signature is correct.

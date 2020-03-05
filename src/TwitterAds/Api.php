@@ -3,6 +3,8 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Http\Client;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\OAuth;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\Signature\HmacSha1;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\ResponseInterface;
 use Hborras\TwitterAdsSDK\TwitterAds\Logger\LoggerInterface;
@@ -40,9 +42,6 @@ class Api
      */
     protected $defaultVersion;
 
-    /** @var HmacSha1 */
-    private $signatureMethod;
-
     /**
      * @param Client $http_client
      * @param SessionInterface $session A TwitterAds API session
@@ -51,7 +50,6 @@ class Api
     {
         $this->httpClient = $http_client;
         $this->session = $session;
-        $this->signatureMethod = new HmacSha1();
     }
 
     /**
@@ -130,6 +128,7 @@ class Api
         $request->setMethod($method);
         $request->setVersion($this->getDefaultVersion());
         $request->setPath($path);
+        $request->setOAuth(new OAuth($this->session->consumer()->key, new HmacSha1(), $this->session->token()->key));
 
         if ($method === RequestInterface::METHOD_GET) {
             $params_ref = $request->getQueryParams();
@@ -194,26 +193,12 @@ class Api
     public function call($path, $method = RequestInterface::METHOD_GET, array $params = [], array $file_params = [])
     {
         $request = $this->prepareRequest($path, $method, $params);
-
         if (!empty($file_params)) {
             foreach ($file_params as $key => $value) {
                 $request->getFileParams()->offsetSet($key, $value);
             }
         }
-
-        $defaults = [
-            'oauth_version' => '1.0',
-            'oauth_nonce' => md5(microtime() . mt_rand()),
-            'oauth_timestamp' => time(),
-            'oauth_consumer_key' => $this->session->consumer()->key,
-            'oauth_signature_method' => $this->signatureMethod->getName()
-        ];
-        $defaults['oauth_signature'] = $this->signatureMethod->buildSignature($request, $this->session->consumer(), $this->session->token());
-
-        if (null !== $this->session->token()) {
-            $defaults['oauth_token'] = $this->session->token()->key;
-        }
-
+        $request->signRequest($params);
         return $this->executeRequest($request);
     }
 

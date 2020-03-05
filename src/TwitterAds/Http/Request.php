@@ -2,6 +2,10 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Http;
 
+use Hborras\TwitterAdsSDK\TwitterAds\Exception\Exception;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\Exception\RequestException;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\OAuth;
+
 class Request implements RequestInterface
 {
 
@@ -65,6 +69,9 @@ class Request implements RequestInterface
      */
     protected $fileParams;
 
+    /** @var OAuth */
+    protected $oAuth;
+
     /**
      * @param Client $client
      */
@@ -86,6 +93,22 @@ class Request implements RequestInterface
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * @return OAuth
+     */
+    public function getOAuth(): OAuth
+    {
+        return $this->oAuth;
+    }
+
+    /**
+     * @param OAuth $oAuth
+     */
+    public function setOAuth(OAuth $oAuth): void
+    {
+        $this->oAuth = $oAuth;
     }
 
     /**
@@ -283,7 +306,7 @@ class Request implements RequestInterface
 
     /**
      * @return ResponseInterface
-     * @throws Exception\RequestException
+     * @throws RequestException
      */
     public function execute()
     {
@@ -322,5 +345,10 @@ class Request implements RequestInterface
         }
 
         return Util::buildHttpQuery($params);
+    }
+
+    public function signRequest($params)
+    {
+        $this->oAuth->buildSignature($params);
     }
 }

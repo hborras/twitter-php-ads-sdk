@@ -1,6 +1,6 @@
 <?php
 
-namespace Hborras\TwitterAdsSDK\TwitterAds;
+namespace Hborras\TwitterAdsSDK\TwitterAds\Http\OAuth\Signature;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 
@@ -24,7 +24,7 @@ class HmacSha1 extends SignatureMethod
     /**
      * {@inheritdoc}
      */
-    public function buildSignature(RequestInterface $request, Consumer $consumer, Token $token = null)
+    public function buildSignature(RequestInterface $request, $auth, Consumer $consumer, Token $token = null)
     {
         $signatureBase = $request->getSignatureBaseString();
 
