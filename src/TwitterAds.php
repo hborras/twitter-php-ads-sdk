@@ -627,8 +627,10 @@ class TwitterAds extends Config
                 $options[CURLOPT_POST] = true;
                 if (isset($postfields['raw'])) {
                     $options[CURLOPT_POSTFIELDS] = $postfields['raw'];
-                } else if (isset($postfields['batch'])) {
-                    $options[CURLOPT_POSTFIELDS] = $postfields['batch'];
+                    $options[CURLOPT_HTTPHEADER] = array_merge($options[CURLOPT_HTTPHEADER], [
+                        'Content-Type: application/json',
+                        'Content-Length: '. strlen($postfields['raw'])
+                    ]);
                 } else {
                     $options[CURLOPT_POSTFIELDS] = Util::buildHttpQuery($postfields);
                 }
