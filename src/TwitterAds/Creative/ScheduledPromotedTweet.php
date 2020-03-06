@@ -11,7 +11,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Fields\ScheduledPromotedTweetFields;
  * Class ScheduledTweet
  * @package Hborras\TwitterAdsSDK\TwitterAds\Creative
  */
-class ScheduledTweet extends Analytics
+class ScheduledPromotedTweet extends Analytics
 {
     const RESOURCE_COLLECTION = 'accounts/{account_id}/scheduled_promoted_tweets';
     const RESOURCE            = 'accounts/{account_id}/scheduled_promoted_tweets/{id}';
