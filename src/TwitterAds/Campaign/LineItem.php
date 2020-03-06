@@ -2,7 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
@@ -78,7 +78,7 @@ class LineItem extends Analytics
 
     /**
      * @param array $params
-     * @return Cursor|\Hborras\TwitterAdsSDK\TwitterAds\Resource
+     * @return CursorBack|\Hborras\TwitterAdsSDK\TwitterAds\Resource
      * @throws BadRequest
      * @throws TwitterAdsException
      * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden
@@ -122,7 +122,7 @@ class LineItem extends Analytics
      * @param string $id
      * @param array $params
      *
-     * @return Cursor | Resource
+     * @return CursorBack | Resource
      *
      * @throws TwitterAdsException
      */

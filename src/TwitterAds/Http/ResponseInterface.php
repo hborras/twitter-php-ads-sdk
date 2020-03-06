@@ -48,4 +48,9 @@ interface ResponseInterface {
    * @return array|null
    */
   public function getContent();
+
+  /**
+   * @return array|null
+   */
+  public function getData();
 }

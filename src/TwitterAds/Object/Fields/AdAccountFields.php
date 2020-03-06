@@ -4,24 +4,20 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Object\Fields;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Enum\AbstractEnum;
 
-class AccountFields extends AbstractEnum
+class AdAccountFields extends AbstractEnum
 {
-    const ID                 = 'id';
-    const SALT               = 'salt';
     const NAME               = 'name';
+    const BUSINESS_NAME      = 'business_name';
     const TIMEZONE           = 'timezone';
     const TIMEZONE_SWITCH_AT = 'timezone_switch_at';
+    const ID                 = 'id';
     const CREATED_AT         = 'created_at';
+    const SALT               = 'salt';
     const UPDATED_AT         = 'updated_at';
-    const DELETED            = 'deleted';
-    const APPROVAL_STATUS    = 'approval_status';
-    const USER_IDS           = 'user_ids';
-    const WITH_TOTAL_COUNT   = 'with_total_count';
-    const BUSINESS_NAME      = 'business_name';
-    const BUSINESS_ID        = 'business_id';
     const INDUSTRY_TYPE      = 'industry_type';
-
-    const ACCOUNT_IDS        = 'account_ids';
+    const BUSINESS_ID        = 'business_id';
+    const APPROVAL_STATUS    = 'approval_status';
+    const DELETED            = 'deleted';
 
     public function getFieldTypes()
     {

@@ -68,7 +68,7 @@ abstract class Resource implements Arrayable
      *
      * @param array $params
      *
-     * @return Cursor
+     * @return CursorBack
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -83,7 +83,7 @@ abstract class Resource implements Arrayable
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
         $response = $this->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->getTwitterAds(), $response->getBody(), $params);
+        return new CursorBack($this, $this->getTwitterAds(), $response->getBody(), $params);
     }
 
     /**
@@ -239,7 +239,7 @@ abstract class Resource implements Arrayable
     /**
      * @param string $id
      * @param array $params
-     * @return Cursor|Resource
+     * @return CursorBack|Resource
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized

@@ -2,7 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
@@ -50,7 +50,7 @@ class TargetingCriteria extends Resource
      * @param $line_item_id
      * @param array $params
      *
-     * @return Cursor
+     * @return CursorBack
      * @throws TwitterAdsException
      * @throws BadRequest
      * @throws Forbidden
@@ -67,7 +67,7 @@ class TargetingCriteria extends Resource
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
         $request = $this->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->getTwitterAds(), $request->getBody(), $params);
+        return new CursorBack($this, $this->getTwitterAds(), $request->getBody(), $params);
     }
 
 

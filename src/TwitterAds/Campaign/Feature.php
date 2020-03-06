@@ -4,7 +4,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use InvalidArgumentException;
 use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 /**
@@ -49,7 +49,7 @@ class Feature
      *
      * @param array $params
      *
-     * @return Cursor
+     * @return CursorBack
      * @throws TwitterAds\Errors\BadRequest
      * @throws TwitterAds\Errors\Forbidden
      * @throws TwitterAds\Errors\NotAuthorized
@@ -64,7 +64,7 @@ class Feature
         $resource = str_replace(static::RESOURCE_REPLACE, $this->getTwitterAds()->getAccountId(), static::RESOURCE_COLLECTION);
         $response = $this->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($response->getBody()->data, $this->getTwitterAds(), $response->getBody(), $params);
+        return new CursorBack($response->getBody()->data, $this->getTwitterAds(), $response->getBody(), $params);
     }
 
     /**

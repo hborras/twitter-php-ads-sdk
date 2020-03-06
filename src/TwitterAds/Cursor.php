@@ -1,26 +1,35 @@
 <?php
 
+
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
-use Iterator;
-use Exception;
+
+use ArrayAccess;
 use Countable;
-use arrayaccess;
-use ArrayIterator;
-use Hborras\TwitterAdsSDK\TwitterAds;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\ResponseInterface;
+use Hborras\TwitterAdsSDK\TwitterAds\Http\Util;
+use Hborras\TwitterAdsSDK\TwitterAds\Object\AbstractCrudObject;
+use Hborras\TwitterAdsSDK\TwitterAds\Object\AbstractObject;
+use InvalidArgumentException;
+use Iterator;
 
 class Cursor implements Iterator, Countable, arrayaccess
 {
-    /** @var Resource */
-    private $resource;
-    private $params;
-    private $next_cursor = null;
-    private $current_index = 0;
-    private $total_count = 0;
-    /** @var  array */
-    private $collection;
-    /** @var  TwitterAds */
-    private $twitterAds;
+    /**
+     * @var ResponseInterface
+     */
+    protected $response;
+
+    /**
+     * @var Api
+     */
+    protected $api;
+
+    /**
+     * @var AbstractObject[]
+     */
+    protected $objects = array();
 
     /**
      * @var int|null
@@ -33,6 +42,16 @@ class Cursor implements Iterator, Countable, arrayaccess
     protected $indexRight;
 
     /**
+     * @var int|null
+     */
+    protected $position;
+
+    /**
+     * @var AbstractObject
+     */
+    protected $objectPrototype;
+
+    /**
      * @var bool
      */
     protected static $defaultUseImplicitFetch = false;
@@ -42,296 +61,149 @@ class Cursor implements Iterator, Countable, arrayaccess
      */
     protected $useImplicitFetch;
 
-    public function __construct(/* @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-        Resource $resource,
-        TwitterAds $twitterAds,
-        $request,
-        $params
-    ) {
-        $this->resource = $resource;
-        $this->params = $params;
-        $this->twitterAds = $twitterAds;
-        $this->fromResponse($request);
+    public function __construct(
+        ResponseInterface $response,
+        AbstractObject $object_prototype,
+        Api $api = null)
+    {
+        $this->response = $response;
+        $this->objectPrototype = $object_prototype;
+        $this->api = $api !== null ? $api : Api::instance();
+        $this->appendResponse($response);
     }
 
     /**
-     * @return bool
+     * @param array $object_data
+     * @return AbstractObject
      */
-    public function isExhausted()
+    protected function createObject(array $object_data)
     {
-        return is_null($this->next_cursor) ? true : false;
+        $object = clone $this->objectPrototype;
+        $object->setDataWithoutValidation($object_data);
+        if ($object instanceof AbstractCrudObject) {
+            $object->setApi($this->api);
+        }
+        return $object;
     }
 
     /**
-     * @return integer
+     * @param ResponseInterface $response
+     * @return array
+     * @throws InvalidArgumentException
      */
-    public function count()
+    protected function assureResponseData(ResponseInterface $response)
     {
-        return max($this->total_count, count($this->collection));
-    }
+        $content = $response->getContent();
 
-    /**
-     * @return int
-     */
-    public function fetched()
-    {
-        return count($this->collection);
-    }
+        // First, check if the content contains data
+        if (isset($content['data']) && is_array($content['data'])) {
+            $data = $content['data'];
 
-    /**
-     * @return void 0
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
-     */
-    public function next()
-    {
-        if ($this->current_index == $this->getIndexRight() && !is_null($this->next_cursor)) {
-            if ($this->getUseImplicitFetch()) {
-                $this->fetchNext();
-                if ($this->current_index == $this->getIndexRight()) {
-                    $this->current_index = null;
-                } else {
-                    ++$this->current_index;
+            // If data is an object wrap the object into an array
+            if ($this->isJsonObject($data)) {
+                $data = array($data);
+            }
+            return $data;
+        }
+
+        // Second, check if the content contains special entries
+        if (isset($content['targetingsentencelines'])) {
+            return $content['targetingsentencelines'];
+        }
+        if (isset($content['adaccounts'])) {
+            return $content['adaccounts'];
+        }
+        if (isset($content['users'])) {
+            return $content['users'];
+        }
+
+        // Third, check if the content is an array of objects indexed by id
+        $is_id_indexed_array = true;
+        $objects = array();
+        if (is_array($content) && count($content) >= 1) {
+            foreach ($content as $key => $value) {
+                if ($key === '__fb_trace_id__') {
+                    continue;
                 }
-            } else {
-                $this->current_index = null;
+
+                if ($value !== null &&
+                    $this->isJsonObject($value) &&
+                    isset($value['id']) &&
+                    $value['id'] !== null &&
+                    $value['id'] === $key) {
+                    $objects[] = $value;
+                } else {
+                    $is_id_indexed_array = false;
+                    break;
+                }
             }
         } else {
-            ++$this->current_index;
+            $is_id_indexed_array = false;
+        }
+        if ($is_id_indexed_array) {
+            return $objects;
+        }
+
+        throw new InvalidArgumentException("Malformed response data");
+    }
+
+    private function isJsonObject($object)
+    {
+        if (!is_array($object)) {
+            return false;
+        }
+
+        // Consider an empty array as not object
+        if (empty($object)) {
+            return false;
+        }
+
+        // A json object is represented by a map instead of a pure list
+        return array_keys($object) !== range(0, count($object) - 1);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    protected function prependResponse(ResponseInterface $response)
+    {
+        $this->response = $response;
+        $data = $this->assureResponseData($response);
+        if (empty($data)) {
+            return;
+        }
+
+        $left_index = $this->indexLeft;
+        $count = count($data);
+        $position = $count - 1;
+        for ($i = $left_index - 1; $i >= $left_index - $count; $i--) {
+            $this->objects[$i] = $this->createObject($data[$position--]);
+            --$this->indexLeft;
         }
     }
 
     /**
-     * @param array $params
-     * @return Cursor
-     * @throws Errors\BadRequest
-     * @throws Errors\Forbidden
-     * @throws Errors\NotAuthorized
-     * @throws Errors\NotFound
-     * @throws Errors\RateLimit
-     * @throws Errors\ServerError
-     * @throws Errors\ServiceUnavailable
-     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @param ResponseInterface $response
      */
-    public function fetchNext($params = [])
+    protected function appendResponse(ResponseInterface $response)
     {
-        $requestParams = $this->params;
-        if (count($params) > 0) {
-            foreach ($params as $key => $value) {
-                $requestParams[$key] = $value;
-            }
-        }
-        $requestParams['cursor'] = $this->next_cursor;
-        switch ($this->getTwitterAds()->getMethod()) {
-            case 'GET':
-                $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $requestParams);
-                break;
-            case 'POST':
-                $response = $this->getTwitterAds()->post($this->getTwitterAds()->getResource(), $params);
-                break;
-            case 'PUT':
-                $response = $this->getTwitterAds()->put($this->getTwitterAds()->getResource(), $params);
-                break;
-            case 'DELETE':
-                $response = $this->getTwitterAds()->delete($this->getTwitterAds()->getResource());
-                break;
-            default:
-                $response = $this->getTwitterAds()->get($this->getTwitterAds()->getResource(), $params);
-                break;
-        }
-
-        return $this->fromResponse($response->getBody());
-    }
-
-    /**
-     * @param $request
-     * @return $this
-     * @throws Exception
-     */
-    public function fromResponse($request)
-    {
-        $this->next_cursor = isset($request->next_cursor) ? $request->next_cursor : null;
-        if (isset($request->total_count)) {
-            $this->total_count = intval($request->total_count);
-        }
-        foreach ($request->data as $item) {
-            if (method_exists($this->resource, 'fromResponse')) {
-                /** @var Resource $obj */
-                $obj = new $this->resource();
-                $this->collection[] = $obj->fromResponse($item);
-            } else {
-                $this->collection[] = $item;
-            }
+        $this->response = $response;
+        $data = $this->assureResponseData($response);
+        if (empty($data)) {
+            return;
         }
 
         if ($this->indexRight === null) {
             $this->indexLeft = 0;
             $this->indexRight = -1;
-            $this->current_index = 0;
+            $this->position = 0;
         }
 
-        $this->indexRight += count($request->data);
+        $this->indexRight += count($data);
 
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->collection);
-    }
-
-    /**
-     * @return array
-     */
-    public function getCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
-     * @param array $collection
-     */
-    public function setCollection($collection)
-    {
-        $this->collection = $collection;
-    }
-
-    /**
-     * @return TwitterAds
-     */
-    public function getTwitterAds()
-    {
-        return $this->twitterAds;
-    }
-
-    /**
-     * @param TwitterAds $twitterAds
-     */
-    public function setTwitterAds($twitterAds)
-    {
-        $this->twitterAds = $twitterAds;
-    }
-
-    /**
-     * Return the current element
-     * @link http://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
-     * @since 5.0.0
-     */
-    public function current()
-    {
-        return isset($this->collection[$this->current_index])
-            ? $this->collection[$this->current_index]
-            : false;
-    }
-
-    /**
-     * Return the key of the current element
-     * @link http://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
-     * @since 5.0.0
-     */
-    public function key()
-    {
-        return $this->current_index;
-    }
-
-    /**
-     * Checks if current position is valid
-     * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
-     * @since 5.0.0
-     */
-    public function valid()
-    {
-        return isset($this->collection[$this->current_index]);
-    }
-
-    /**
-     * Rewind the Iterator to the first element
-     * @link http://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
-     * @since 5.0.0
-     */
-    public function rewind()
-    {
-        $this->current_index = $this->current_index--;
-    }
-
-    /**
-     * Whether a offset exists
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset <p>
-     * An offset to check for.
-     * </p>
-     * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
-     * @since 5.0.0
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->collection[$offset]);
-    }
-
-    /**
-     * Offset to retrieve
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset <p>
-     * The offset to retrieve.
-     * </p>
-     * @return mixed Can return all value types.
-     * @since 5.0.0
-     */
-    public function offsetGet($offset)
-    {
-        return isset($this->collection[$offset]) ? $this->collection[$offset] : null;
-    }
-
-    /**
-     * Offset to set
-     * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset <p>
-     * The offset to assign the value to.
-     * </p>
-     * @param mixed $value <p>
-     * The value to set.
-     * </p>
-     * @return void
-     * @since 5.0.0
-     */
-    public function offsetSet($offset, $value)
-    {
-        if ($offset === null) {
-            $this->collection[] = $value;
-        } else {
-            $this->collection[$offset] = $value;
+        foreach ($data as $object_data) {
+            $this->objects[] = $this->createObject($object_data);
         }
-    }
-
-    /**
-     * Offset to unset
-     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset <p>
-     * The offset to unset.
-     * </p>
-     * @return void
-     * @since 5.0.0
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->collection[$offset]);
     }
 
     /**
@@ -361,15 +233,190 @@ class Cursor implements Iterator, Countable, arrayaccess
     }
 
     /**
-     * @param bool $useImplicitFetch
+     * @param bool $use_implicit_fetch
      */
-    public function setUseImplicitFetch($useImplicitFetch)
+    public function setUseImplicitFetch($use_implicit_fetch)
     {
-        $this->useImplicitFetch = $useImplicitFetch;
+        $this->useImplicitFetch = $use_implicit_fetch;
     }
 
     /**
-     * @return int|null
+     * @return string|null
+     */
+    public function getBefore()
+    {
+        $content = $this->getLastResponse()->getContent();
+        return isset($content['paging']['cursors']['before'])
+            ? $content['paging']['cursors']['before']
+            : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAfter()
+    {
+        $content = $this->getLastResponse()->getContent();
+        return isset($content['paging']['cursors']['after'])
+            ? $content['paging']['cursors']['after']
+            : null;
+    }
+
+    /**
+     * @return RequestInterface
+     */
+    protected function createUndirectionalizedRequest()
+    {
+        $request = $this->getLastResponse()->getRequest()->createClone();
+        $params = $request->getQueryParams();
+        if (isset($params['before'])) {
+            unset($params['before']);
+        }
+        if (isset($params['after'])) {
+            unset($params['after']);
+        }
+
+        return $request;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPrevious()
+    {
+        $content = $this->getLastResponse()->getContent();
+        if (isset($content['paging']['previous'])) {
+            return $content['paging']['previous'];
+        }
+
+        $before = $this->getBefore();
+        if ($before !== null) {
+            $request = $this->createUndirectionalizedRequest();
+            $request->getQueryParams()->offsetSet('before', $before);
+            return $request->getUrl();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNext()
+    {
+        $content = $this->getLastResponse()->getContent();
+        if (isset($content['paging']['next'])) {
+            return $content['paging']['next'];
+        }
+
+        $after = $this->getAfter();
+        if ($after !== null) {
+            $request = $this->createUndirectionalizedRequest();
+            $request->getQueryParams()->offsetSet('after', $after);
+            return $request->getUrl();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $url
+     * @return RequestInterface
+     */
+    protected function createRequestFromUrl($url)
+    {
+        $components = parse_url($url);
+        $request = $this->getLastResponse()->getRequest()->createClone();
+        $request->setDomain($components['host']);
+        $query = isset($components['query'])
+            ? Util::parseUrlQuery($components['query'])
+            : array();
+        $request->getQueryParams()->enhance($query);
+
+        return $request;
+    }
+
+    /**
+     * @return RequestInterface|null
+     */
+    public function createBeforeRequest()
+    {
+        $url = $this->getPrevious();
+        return $url !== null ? $this->createRequestFromUrl($url) : null;
+    }
+
+    /**
+     * @return RequestInterface|null
+     */
+    public function createAfterRequest()
+    {
+        $url = $this->getNext();
+        return $url !== null ? $this->createRequestFromUrl($url) : null;
+    }
+
+    public function fetchBefore()
+    {
+        $request = $this->createBeforeRequest();
+        if (!$request) {
+            return;
+        }
+
+        $this->prependResponse($request->execute());
+    }
+
+    public function fetchAfter()
+    {
+        $request = $this->createAfterRequest();
+        if (!$request) {
+            return;
+        }
+
+        $this->appendResponse($request->execute());
+    }
+
+    /**
+     * @return AbstractObject[]
+     * @deprecated Use getArrayCopy()
+     */
+    public function getObjects()
+    {
+        return $this->objects;
+    }
+
+    /**
+     * @param bool $ksort
+     * @return AbstractObject[]
+     */
+    public function getArrayCopy($ksort = false)
+    {
+        if ($ksort) {
+            // Sort the main array to improve best case performance in future
+            // invocations
+            ksort($this->objects);
+        }
+
+        return $this->objects;
+    }
+
+    /**
+     * @return ResponseInterface
+     * @deprecated Use getLastResponse()
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function getLastResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * @return int
      */
     public function getIndexLeft()
     {
@@ -377,25 +424,138 @@ class Cursor implements Iterator, Countable, arrayaccess
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getIndexRight()
     {
         return $this->indexRight;
     }
 
+    public function rewind()
+    {
+        $this->position = $this->indexLeft;
+    }
+
+    public function end()
+    {
+        $this->position = $this->indexRight;
+    }
+
     /**
+     * @param int $position
+     */
+    public function seekTo($position)
+    {
+        $position = array_key_exists($position, $this->objects) ? $position : null;
+        $this->position = $position;
+    }
+
+    /**
+     * @return AbstractObject|bool
+     */
+    public function current()
+    {
+        return isset($this->objects[$this->position])
+            ? $this->objects[$this->position]
+            : false;
+    }
+
+    /**
+     * @return int
+     */
+    public function key()
+    {
+        return $this->position;
+    }
+
+    public function prev()
+    {
+        if ($this->position == $this->getIndexLeft()) {
+            if ($this->getUseImplicitFetch()) {
+                $this->fetchBefore();
+                if ($this->position == $this->getIndexLeft()) {
+                    $this->position = null;
+                } else {
+                    --$this->position;
+                }
+            } else {
+                $this->position = null;
+            }
+        } else {
+            --$this->position;
+        }
+    }
+
+    public function next()
+    {
+        if ($this->position == $this->getIndexRight()) {
+            if ($this->getUseImplicitFetch()) {
+                $this->fetchAfter();
+                if ($this->position == $this->getIndexRight()) {
+                    $this->position = null;
+                } else {
+                    ++$this->position;
+                }
+            } else {
+                $this->position = null;
+            }
+        } else {
+            ++$this->position;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function valid()
+    {
+        return isset($this->objects[$this->position]);
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->objects);
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        if ($offset === null) {
+            $this->objects[] = $value;
+        } else {
+            $this->objects[$offset] = $value;
+        }
+    }
+
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->objects[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->objects[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
      * @return mixed
      */
-    public function getParams()
+    public function offsetGet($offset)
     {
-        return $this->params;
-    }
-    /**
-     * @param mixed $params
-     */
-    public function setParams($params)
-    {
-        $this->params = $params;
+        return isset($this->objects[$offset]) ? $this->objects[$offset] : null;
     }
 }

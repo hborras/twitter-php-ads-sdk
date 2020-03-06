@@ -326,13 +326,30 @@ class Request implements RequestInterface
     {
         $parts = [
             $this->method,
-            $this->getUrl(),
+            $this->getNormalizedHttpUrl(),
             $this->getSignableParameters(),
         ];
 
         $parts = Util::urlencodeRfc3986($parts);
 
         return implode('&', $parts);
+    }
+
+    /**
+     * parses the url and rebuilds it to be
+     * scheme://host/path.
+     *
+     * @return string
+     */
+    public function getNormalizedHttpUrl()
+    {
+        $parts = parse_url($this->getUrl());
+
+        $scheme = $parts['scheme'];
+        $host = strtolower($parts['host']);
+        $path = $parts['path'];
+
+        return "$scheme://$host$path";
     }
 
     public function getSignableParameters()

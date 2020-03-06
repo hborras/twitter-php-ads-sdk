@@ -3,7 +3,7 @@
 namespace Hborras\TwitterAdsSDK;
 
 use Exception;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden;
@@ -110,7 +110,7 @@ class TwitterAds extends Config
     }
 
     /**
-     * @return Account|Cursor
+     * @return Account|CursorBack
      * @throws BadRequest
      * @throws Forbidden
      * @throws NotAuthorized

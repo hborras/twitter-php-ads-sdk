@@ -4,7 +4,7 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Object;
 
 use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds\Api;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\ResponseInterface;
 use InvalidArgumentException;
@@ -264,7 +264,7 @@ class AbstractCrudObject extends AbstractObject
      * @param array $fields Fields to request
      * @param array $params Additional filters for the reading
      * @param string|null $endpoint
-     * @return Cursor
+     * @return CursorBack
      * @throws Exception
      */
     protected function getManyByConnection(
@@ -275,7 +275,7 @@ class AbstractCrudObject extends AbstractObject
     {
         $response = $this->fetchConnection(
             $fields, $params, $prototype_class, $endpoint);
-        return new Cursor(
+        return new CursorBack(
             $response,
             new $prototype_class(null, null, $this->getApi()));
     }
@@ -343,7 +343,7 @@ class AbstractCrudObject extends AbstractObject
      * @param array $fields Array of field names to read
      * @param array $params Additional filters for the reading, in assoc
      * @param Api $api Api Object to use
-     * @return Cursor
+     * @return CursorBack
      */
     public static function readIds(
         array $ids,

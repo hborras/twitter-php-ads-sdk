@@ -2,7 +2,7 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAds\Resource;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
@@ -46,7 +46,7 @@ final class TailoredAudiencePermission extends Resource
      *
      * @param array $tailoredAudienceId
      * @param array $params
-     * @return Cursor
+     * @return CursorBack
      * @throws TwitterAdsException
      * @throws BadRequest
      * @throws Forbidden
@@ -63,7 +63,7 @@ final class TailoredAudiencePermission extends Resource
 
         $response = $this->getTwitterAds()->get($resource, $params);
 
-        return new Cursor($this, $this->getTwitterAds(), $response->getBody(), $params);
+        return new CursorBack($this, $this->getTwitterAds(), $response->getBody(), $params);
     }
 
     /**

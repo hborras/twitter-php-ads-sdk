@@ -5,19 +5,19 @@ namespace Hborras\TwitterAdsSDK\TwitterAds\Object;
 
 
 use Hborras\TwitterAdsSDK\TwitterAds\ApiRequest;
-use Hborras\TwitterAdsSDK\TwitterAds\Object\Fields\AccountFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Object\Fields\AdAccountFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Http\RequestInterface;
 use Hborras\TwitterAdsSDK\TwitterAds\TypeChecker;
 
-final class Account extends AbstractCrudObject
+final class AdAccount extends AbstractCrudObject
 {
 
     public static function getFieldsEnum()
     {
-        return AccountFields::getInstance();
+        return AdAccountFields::getInstance();
     }
 
-    public function getSelf($fields = [], $params = [], $pending = false)
+    public function getSelf($params = [], $pending = false)
     {
         $this->assureId();
 
@@ -29,13 +29,12 @@ final class Account extends AbstractCrudObject
             $this->data['id'],
             RequestInterface::METHOD_GET,
             '/',
-            new Account(),
+            new AdAccount(),
             'NODE',
-            Account::getFieldsEnum()->getValues(),
+            AdAccount::getFieldsEnum()->getValues(),
             new TypeChecker($paramTypes, $enums)
         );
         $request->addParams($params);
-        $request->addFields($fields);
         return $pending ? $request : $request->execute();
     }
 }

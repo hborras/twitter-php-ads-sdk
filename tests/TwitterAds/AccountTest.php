@@ -6,7 +6,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Campaign\FundingInstrument;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\LineItem;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\PromotableUser;
 use Hborras\TwitterAdsSDK\TwitterAds\Campaign\TargetingCriteria;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAdsException;
 use PHPUnit\Framework\TestCase;
 
@@ -16,19 +16,19 @@ class AccountTest extends TestCase
     protected $api;
 
     /**
-     * @return Account|Cursor
+     * @return Account|CursorBack
      */
     public function testGetAccounts()
     {
         $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, ACCOUNT_ID, false);
         $cursor = $this->api->getAccounts();
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(CursorBack::class, $cursor);
         return $cursor;
     }
 
     /**
      * @depends testGetAccounts
-     * @param Cursor $accounts
+     * @param CursorBack $accounts
      * @return Account
      * @throws TwitterAdsException
      * @throws TwitterAds\Errors\BadRequest
@@ -63,18 +63,18 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
-     * @return Cursor
+     * @return CursorBack
      */
     public function testGetFundingInstruments(Account $account)
     {
         $cursor = $account->getFundingInstruments();
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(CursorBack::class, $cursor);
         return $cursor;
     }
 
     /**
      * @depends testGetFundingInstruments
-     * @param Cursor $fundingInstruments
+     * @param CursorBack $fundingInstruments
      * @return Account
      * @throws TwitterAdsException
      * @throws TwitterAds\Errors\BadRequest
@@ -99,18 +99,18 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
-     * @return Cursor
+     * @return CursorBack
      */
     public function testGetCampaigns(Account $account)
     {
         $cursor = $account->getCampaigns();
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(CursorBack::class, $cursor);
         return $cursor;
     }
 
     /**
      * @depends testGetCampaigns
-     * @param Cursor $campaigns
+     * @param CursorBack $campaigns
      * @return Campaign
      * @throws TwitterAdsException
      * @throws TwitterAds\Errors\BadRequest
@@ -135,18 +135,18 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
-     * @return Cursor
+     * @return CursorBack
      */
     public function testGetPromotableUsers(Account $account)
     {
         $cursor = $account->getPromotableUsers();
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(CursorBack::class, $cursor);
         return $cursor;
     }
 
     /**
      * @depends testGetPromotableUsers
-     * @param Cursor $promotableUsers
+     * @param CursorBack $promotableUsers
      * @return PromotableUser
      * @throws TwitterAdsException
      * @throws TwitterAds\Errors\BadRequest
@@ -157,7 +157,7 @@ class AccountTest extends TestCase
      * @throws TwitterAds\Errors\ServerError
      * @throws TwitterAds\Errors\ServiceUnavailable
      */
-    public function testGetPromotableUser(Cursor $promotableUsers)
+    public function testGetPromotableUser(CursorBack $promotableUsers)
     {
         /** @var PromotableUser $firstPromotableUser */
         $firstPromotableUser = $promotableUsers->current();
@@ -171,18 +171,18 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
-     * @return Cursor
+     * @return CursorBack
      */
     public function testGetLineItems(Account $account)
     {
         $cursor = $account->getLineItems();
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(CursorBack::class, $cursor);
         return $cursor;
     }
 
     /**
      * @depends testGetLineItems
-     * @param Cursor $lineItems
+     * @param CursorBack $lineItems
      * @return LineItem
      * @throws TwitterAdsException
      * @throws TwitterAds\Errors\BadRequest
@@ -207,21 +207,21 @@ class AccountTest extends TestCase
     /**
      * @depends testGetLineItem
      * @param LineItem $lineItem
-     * @return Cursor
+     * @return CursorBack
      * @throws TwitterAdsException
      */
     public function testGetTargetingCriterias($lineItem)
     {
-        /** @var Cursor $cursor */
+        /** @var CursorBack $cursor */
         $cursor = $lineItem->getTargetingCriteria();
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(CursorBack::class, $cursor);
         return $cursor;
     }
 
 
     /**
      * @depends testGetTargetingCriterias
-     * @param Cursor $targetingCriterias
+     * @param CursorBack $targetingCriterias
      * @return TargetingCriteria
      * @throws TwitterAds\Errors\BadRequest
      * @throws TwitterAds\Errors\Forbidden
@@ -245,12 +245,12 @@ class AccountTest extends TestCase
     /**
      * @depends testGetAccount
      * @param Account $account
-     * @return Cursor
+     * @return CursorBack
      */
     public function testGetAppLists(Account $account)
     {
         $cursor = $account->getAppLists();
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(CursorBack::class, $cursor);
         return $cursor;
     }
 }

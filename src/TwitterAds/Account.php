@@ -105,7 +105,7 @@ class Account extends Analytics
      * @param string $id
      *
      * @param array $params
-     * @return PromotableUser|Cursor
+     * @return PromotableUser|CursorBack
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -128,7 +128,7 @@ class Account extends Analytics
      * @param string $id
      *
      * @param array $params
-     * @return FundingInstrument|Cursor
+     * @return FundingInstrument|CursorBack
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -151,7 +151,7 @@ class Account extends Analytics
      * @param string $id
      *
      * @param array $params
-     * @return Campaign|Cursor
+     * @return Campaign|CursorBack
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -174,7 +174,7 @@ class Account extends Analytics
      * @param string $id
      *
      * @param array $params
-     * @return LineItem|Cursor
+     * @return LineItem|CursorBack
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -197,7 +197,7 @@ class Account extends Analytics
      * @param string $id
      *
      * @param array $params
-     * @return AppList|Cursor
+     * @return AppList|CursorBack
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -218,7 +218,7 @@ class Account extends Analytics
      * Returns a collection of jobs. Can specify job_ids parameter to filter
      *
      * @param array $params
-     * @return Cursor|Resource
+     * @return CursorBack|Resource
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -238,7 +238,7 @@ class Account extends Analytics
 
     /**
      * @param array $params
-     * @return Cursor|Resource
+     * @return CursorBack|Resource
      * @throws Errors\BadRequest
      * @throws Errors\Forbidden
      * @throws Errors\NotAuthorized
@@ -260,7 +260,7 @@ class Account extends Analytics
      *
      * @param string $id
      * @param array $params
-     * @return Cursor|Video
+     * @return CursorBack|Video
      */
     public function getVideos($id = '', $params = [])
     {

@@ -3,7 +3,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
 use DateTime;
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\CursorBack;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\CampaignFields;
@@ -55,7 +55,7 @@ class Campaign extends Analytics
 
     /**
      * @param array $params
-     * @return Cursor|Resource
+     * @return CursorBack|Resource
      * @throws BadRequest
      * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
      * @throws \Hborras\TwitterAdsSDK\TwitterAds\Errors\Forbidden

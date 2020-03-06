@@ -155,6 +155,11 @@ interface RequestInterface {
     /**
      * @return string
      */
+    public function getNormalizedHttpUrl();
+
+    /**
+     * @return string
+     */
     public function getSignableParameters();
 
     /**
