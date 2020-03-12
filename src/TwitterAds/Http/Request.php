@@ -355,7 +355,7 @@ class Request implements RequestInterface
     public function getSignableParameters()
     {
         // Grab all parameters
-        $params = $this->getQueryParams()->getArrayCopy();
+        $params = $this->getQueryParams()->export();
         $oAuthParams = $this->getOAuth()->toArray();
 
         $params = array_merge($params, $oAuthParams);

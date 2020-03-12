@@ -27,16 +27,10 @@ class AbstractCrudObject extends AbstractObject
      * @var Api instance of the Api used by this object
      */
     protected $api;
-    /**
-     * @var string ID of the adaccount this object belongs to
-     */
-    protected $parentId;
 
     /**
      * @param string $id Optional (do not set for new objects)
-     * @param string $parent_id Optional, needed for creating new objects.
      * @param Api $api The Api instance this object should use to make calls
-     * @deprecated deprecate constructor with null and parent_id
      */
     public function __construct($id = null, Api $api = null)
     {
@@ -70,15 +64,6 @@ class AbstractCrudObject extends AbstractObject
     }
 
     /**
-     * @return string
-     * @deprecated getEndpoint function is deprecated
-     */
-    protected function getEndpoint()
-    {
-        return null;
-    }
-
-    /**
      * @param Api|null $instance
      * @return Api
      * @throws InvalidArgumentException
@@ -89,21 +74,9 @@ class AbstractCrudObject extends AbstractObject
         if (!$instance) {
             throw new InvalidArgumentException(
                 'An Api instance must be provided as argument or ' .
-                'set as instance in the \FacebookAds\Api');
+                'set as instance in the \TwitterAds\Api');
         }
         return $instance;
-    }
-
-    /**
-     * @return string|null
-     * @deprecated deprecate parent_id in AbstractCrudObject
-     */
-    public function getParentId()
-    {
-        $warning_message = sprintf('%s is being deprecated, please try not to use' .
-            ' this in new code.', __FUNCTION__);
-        trigger_error($warning_message, E_USER_DEPRECATED);
-        return $this->parentId;
     }
 
     /**

@@ -2,6 +2,6 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Http\Exception;
 
-class ThrottleException extends RequestException {
+class RateLimitException extends RequestException {
 
 }

@@ -3,6 +3,7 @@
 namespace Hborras\TwitterAdsSDK\TwitterAds;
 
 use Hborras\TwitterAdsSDK\TwitterAds\Object\AbstractCrudObject;
+use InvalidArgumentException;
 use LogicException;
 
 class ApiRequest
@@ -169,7 +170,19 @@ class ApiRequest
      */
     public function execute()
     {
-        $url_path = '/accounts/' . $this->id . $this->endpoint;
+        $base = '/accounts/';
+        if ($this->endpoint !== '') {
+            $accountId = $this->api->getSession()->getAccountId();
+            if ($accountId === '') {
+                throw new InvalidArgumentException("Account Id is mandatory");
+            }
+            $base .= $accountId;
+        }
+        $url_path = $base . $this->endpoint . $this->id;
+        if ($this->endpoint === '/stats') {
+            $url_path = $this->endpoint . $base . $this->id;
+        }
+
         $updated_params = $this->params;
         if (!empty($this->fields)) {
             $fields = implode(',', $this->fields);

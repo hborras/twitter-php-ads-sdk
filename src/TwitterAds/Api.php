@@ -57,23 +57,21 @@ class Api
      * @param string $consumerSecret
      * @param string $oauthToken
      * @param string $oauthTokenSecret
-     * @param bool $logCrash
+     * @param string $accountId
      * @return static
      */
     public static function init(string $consumerKey, string $consumerSecret, string $oauthToken = '', string $oauthTokenSecret = '',
-                                $logCrash = true)
+                                string $accountId = '')
     {
         $consumer = new Consumer($consumerKey, $consumerSecret);
         $token = new Token('','');
         if (!empty($oauthToken) && !empty($oauthTokenSecret)) {
             $token = new Token($oauthToken, $oauthTokenSecret);
         }
-        $session = new Session($consumer, $token);
+
+        $session = new Session($consumer, $token, $accountId);
         $api = new static(new Client(), $session);
         static::setInstance($api);
-        if ($logCrash) {
-            //CrashReporter::enable();
-        }
         return $api;
     }
 
@@ -103,6 +101,14 @@ class Api
         $api->setDefaultVersion($this->getDefaultVersion());
         $api->setLogger($this->getLogger());
         return $api;
+    }
+
+    /**
+     * @param string $accountId
+     */
+    public function updateAccountId(string $accountId)
+    {
+        $this->session->setAccountId($accountId);
     }
 
     /**

@@ -14,15 +14,20 @@ class Session implements SessionInterface {
    */
   protected $token;
 
+  /** @var string  */
+  protected $accountId;
+
     /**
      * Session constructor.
      * @param Consumer $consumer
      * @param Token $token
+     * @param string $accountId
      */
-    public function __construct(Consumer $consumer, Token $token)
+    public function __construct(Consumer $consumer, Token $token, string $accountId = '')
     {
         $this->consumer = $consumer;
         $this->token = $token;
+        $this->accountId = $accountId;
     }
 
     /**
@@ -39,6 +44,22 @@ class Session implements SessionInterface {
     public function token(): Token
     {
         return $this->token;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountId(): string
+    {
+        return $this->accountId;
+    }
+
+    /**
+     * @param string $accountId
+     */
+    public function setAccountId(string $accountId)
+    {
+        $this->accountId = $accountId;
     }
 
   /**

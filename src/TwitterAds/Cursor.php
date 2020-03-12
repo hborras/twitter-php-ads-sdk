@@ -105,45 +105,6 @@ class Cursor implements Iterator, Countable, arrayaccess
             }
             return $data;
         }
-
-        // Second, check if the content contains special entries
-        if (isset($content['targetingsentencelines'])) {
-            return $content['targetingsentencelines'];
-        }
-        if (isset($content['adaccounts'])) {
-            return $content['adaccounts'];
-        }
-        if (isset($content['users'])) {
-            return $content['users'];
-        }
-
-        // Third, check if the content is an array of objects indexed by id
-        $is_id_indexed_array = true;
-        $objects = array();
-        if (is_array($content) && count($content) >= 1) {
-            foreach ($content as $key => $value) {
-                if ($key === '__fb_trace_id__') {
-                    continue;
-                }
-
-                if ($value !== null &&
-                    $this->isJsonObject($value) &&
-                    isset($value['id']) &&
-                    $value['id'] !== null &&
-                    $value['id'] === $key) {
-                    $objects[] = $value;
-                } else {
-                    $is_id_indexed_array = false;
-                    break;
-                }
-            }
-        } else {
-            $is_id_indexed_array = false;
-        }
-        if ($is_id_indexed_array) {
-            return $objects;
-        }
-
         throw new InvalidArgumentException("Malformed response data");
     }
 
@@ -243,22 +204,11 @@ class Cursor implements Iterator, Countable, arrayaccess
     /**
      * @return string|null
      */
-    public function getBefore()
+    public function getNextCursor()
     {
         $content = $this->getLastResponse()->getContent();
-        return isset($content['paging']['cursors']['before'])
-            ? $content['paging']['cursors']['before']
-            : null;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAfter()
-    {
-        $content = $this->getLastResponse()->getContent();
-        return isset($content['paging']['cursors']['after'])
-            ? $content['paging']['cursors']['after']
+        return isset($content['next_cursor'])
+            ? $content['next_cursor']
             : null;
     }
 
@@ -267,36 +217,7 @@ class Cursor implements Iterator, Countable, arrayaccess
      */
     protected function createUndirectionalizedRequest()
     {
-        $request = $this->getLastResponse()->getRequest()->createClone();
-        $params = $request->getQueryParams();
-        if (isset($params['before'])) {
-            unset($params['before']);
-        }
-        if (isset($params['after'])) {
-            unset($params['after']);
-        }
-
-        return $request;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPrevious()
-    {
-        $content = $this->getLastResponse()->getContent();
-        if (isset($content['paging']['previous'])) {
-            return $content['paging']['previous'];
-        }
-
-        $before = $this->getBefore();
-        if ($before !== null) {
-            $request = $this->createUndirectionalizedRequest();
-            $request->getQueryParams()->offsetSet('before', $before);
-            return $request->getUrl();
-        }
-
-        return null;
+        return $this->getLastResponse()->getRequest()->createClone();
     }
 
     /**
@@ -304,15 +225,10 @@ class Cursor implements Iterator, Countable, arrayaccess
      */
     public function getNext()
     {
-        $content = $this->getLastResponse()->getContent();
-        if (isset($content['paging']['next'])) {
-            return $content['paging']['next'];
-        }
-
-        $after = $this->getAfter();
-        if ($after !== null) {
+        $nextCursor = $this->getNextCursor();
+        if ($nextCursor !== null) {
             $request = $this->createUndirectionalizedRequest();
-            $request->getQueryParams()->offsetSet('after', $after);
+            $request->getQueryParams()->offsetSet('cursor', $nextCursor);
             return $request->getUrl();
         }
 
@@ -339,29 +255,10 @@ class Cursor implements Iterator, Countable, arrayaccess
     /**
      * @return RequestInterface|null
      */
-    public function createBeforeRequest()
-    {
-        $url = $this->getPrevious();
-        return $url !== null ? $this->createRequestFromUrl($url) : null;
-    }
-
-    /**
-     * @return RequestInterface|null
-     */
     public function createAfterRequest()
     {
         $url = $this->getNext();
         return $url !== null ? $this->createRequestFromUrl($url) : null;
-    }
-
-    public function fetchBefore()
-    {
-        $request = $this->createBeforeRequest();
-        if (!$request) {
-            return;
-        }
-
-        $this->prependResponse($request->execute());
     }
 
     public function fetchAfter()
@@ -371,16 +268,8 @@ class Cursor implements Iterator, Countable, arrayaccess
             return;
         }
 
+        $request->signRequest($this->api->getSession(), $request->getQueryParams()->getArrayCopy());
         $this->appendResponse($request->execute());
-    }
-
-    /**
-     * @return AbstractObject[]
-     * @deprecated Use getArrayCopy()
-     */
-    public function getObjects()
-    {
-        return $this->objects;
     }
 
     /**
@@ -396,15 +285,6 @@ class Cursor implements Iterator, Countable, arrayaccess
         }
 
         return $this->objects;
-    }
-
-    /**
-     * @return ResponseInterface
-     * @deprecated Use getLastResponse()
-     */
-    public function getResponse()
-    {
-        return $this->response;
     }
 
     /**
@@ -466,24 +346,6 @@ class Cursor implements Iterator, Countable, arrayaccess
     public function key()
     {
         return $this->position;
-    }
-
-    public function prev()
-    {
-        if ($this->position == $this->getIndexLeft()) {
-            if ($this->getUseImplicitFetch()) {
-                $this->fetchBefore();
-                if ($this->position == $this->getIndexLeft()) {
-                    $this->position = null;
-                } else {
-                    --$this->position;
-                }
-            } else {
-                $this->position = null;
-            }
-        } else {
-            --$this->position;
-        }
     }
 
     public function next()
