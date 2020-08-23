@@ -55,9 +55,7 @@ class Request
             $defaults['oauth_token'] = $token->key;
         }
 
-        if (isset($parameters['batch'])) {
-            $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1($parameters['batch'], true))]);
-        } elseif (isset($parameters['raw'])) {
+        if (isset($parameters['raw'])) {
             $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1($parameters['raw'], true))]);
         } elseif (empty($parameters)) {
             $parameters = array_merge($defaults, ['oauth_body_hash' => base64_encode(sha1('', true))]);
