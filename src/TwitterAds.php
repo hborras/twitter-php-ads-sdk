@@ -3,7 +3,6 @@
 namespace Hborras\TwitterAdsSDK;
 
 use Exception;
-use Hborras\TwitterAdsSDK\Util\JsonDecoder;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
