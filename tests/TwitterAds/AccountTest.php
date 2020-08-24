@@ -43,9 +43,9 @@ class AccountTest extends TestCase
     {
         /** @var Account $firstAccount */
         $firstAccount = $accounts->current();
-        $account = new Account($firstAccount->getId());
+        $account = new Account(ACCOUNT_ID);
         $account->read();
-        $this->assertEquals($firstAccount->getId(), $account->getId());
+        $this->assertEquals(ACCOUNT_ID, $account->getId());
         return $account;
     }
 
