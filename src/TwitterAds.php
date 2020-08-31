@@ -3,7 +3,6 @@
 namespace Hborras\TwitterAdsSDK;
 
 use Exception;
-use Hborras\TwitterAdsSDK\Util\JsonDecoder;
 use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
 use Hborras\TwitterAdsSDK\TwitterAds\Account;
 use Hborras\TwitterAdsSDK\TwitterAds\Errors\NotFound;
@@ -21,7 +20,7 @@ use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
  */
 class TwitterAds extends Config
 {
-    const API_VERSION      = '6';
+    const API_VERSION      = '7';
     const API_REST_VERSION = '1.1';
     const API_HOST = 'https://ads-api.twitter.com';
     const API_HOST_SANDBOX = 'https://ads-api-sandbox.twitter.com';
@@ -237,7 +236,7 @@ class TwitterAds extends Config
         $request = Request::fromConsumerAndToken($this->consumer, $this->token, $method, $url, $parameters);
         $authorization = 'Authorization: Basic ' . $this->encodeAppAuthorization($this->consumer);
         $result = $this->request($request->getNormalizedHttpUrl(), $method, $authorization, $parameters);
-        $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
+        $response = json_decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
 
         return $response;
@@ -504,7 +503,7 @@ class TwitterAds extends Config
 
         $this->response->setApiPath($path);
         $result = $this->oAuthRequest($url, $method, $parameters, $headers);
-        $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
+        $response = json_decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
         if ($this->getLastHttpCode() > 399) {
             $this->manageErrors($response);
@@ -627,8 +626,10 @@ class TwitterAds extends Config
                 $options[CURLOPT_POST] = true;
                 if (isset($postfields['raw'])) {
                     $options[CURLOPT_POSTFIELDS] = $postfields['raw'];
-                } else if (isset($postfields['batch'])) {
-                    $options[CURLOPT_POSTFIELDS] = $postfields['batch'];
+                    $options[CURLOPT_HTTPHEADER] = array_merge($options[CURLOPT_HTTPHEADER], [
+                        'Content-Type: application/json',
+                        'Content-Length: '. strlen($postfields['raw'])
+                    ]);
                 } else {
                     $options[CURLOPT_POSTFIELDS] = Util::buildHttpQuery($postfields);
                 }

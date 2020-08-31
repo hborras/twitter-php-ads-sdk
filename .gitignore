@@ -1,6 +1,6 @@
 .DS_Store
 composer.lock
 vendor
-tests/env
+tests/.env
 .idea
 private_examples/*
