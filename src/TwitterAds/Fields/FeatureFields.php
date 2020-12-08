@@ -1,10 +1,10 @@
 <?php
 
-namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
+namespace Hborras\TwitterAdsSDK\TwitterAds\Fields;
 
 /**
  * Class FeatureFields
- * @package Hborras\TwitterAdsSDK\TwitterAds\Campaign
+ * @package Hborras\TwitterAdsSDK\TwitterAds\Fields
  */
 class FeatureFields
 {
