@@ -13,14 +13,14 @@ class TokenTest extends TestCase
      * @param $key
      * @param $secret
      */
-    public function testToString($expected, $key, $secret)
+    public function testToString($expected, $key, $secret): void
     {
         $token = new Token($key, $secret);
 
-        $this->assertEquals($expected, $token->__toString());
+        self::assertEquals($expected, $token->__toString());
     }
 
-    public function tokenProvider()
+    public function tokenProvider(): array
     {
         return array(
             array('oauth_token=key&oauth_token_secret=secret', 'key', 'secret'),

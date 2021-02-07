@@ -4,9 +4,9 @@
  */
 namespace Hborras\TwitterAdsSDK\Test;
 
-use DateTimeInterface;
+use Exception;
 use Hborras\TwitterAdsSDK\TwitterAds;
-use Hborras\TwitterAdsSDK\TwitterAds\Account;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 use PHPUnit\Framework\TestCase;
 
 class TwitterAdsTest extends TestCase
@@ -14,67 +14,67 @@ class TwitterAdsTest extends TestCase
     /** @var TwitterAds */
     protected $api;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->api = TwitterAds::init(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, null, false);
     }
 
-    public function testBuildClient()
+    public function testBuildClient(): void
     {
-        $this->assertObjectHasAttribute('consumer', $this->api);
-        $this->assertObjectHasAttribute('token', $this->api);
+        self::assertObjectHasAttribute('consumer', $this->api);
+        self::assertObjectHasAttribute('token', $this->api);
     }
 
-    public function testSetOauthToken()
+    public function testSetOauthToken(): void
     {
         $this->api->setOauthToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
-        $this->assertObjectHasAttribute('consumer', $this->api);
-        $this->assertObjectHasAttribute('token', $this->api);
+        self::assertObjectHasAttribute('consumer', $this->api);
+        self::assertObjectHasAttribute('token', $this->api);
         $this->api->get('accounts');
-        $this->assertEquals(200, $this->api->getLastHttpCode());
+        self::assertEquals(200, $this->api->getLastHttpCode());
     }
 
     public function testOauth2Token()
     {
         $result = $this->api->oauth2('oauth2/token', array('grant_type' => 'client_credentials'));
-        $this->assertEquals(200, $this->api->getLastHttpCode());
-        $this->assertObjectHasAttribute('token_type', $result);
-        $this->assertObjectHasAttribute('access_token', $result);
-        $this->assertEquals('bearer', $result->token_type);
+        self::assertEquals(200, $this->api->getLastHttpCode());
+        self::assertObjectHasAttribute('token_type', $result);
+        self::assertObjectHasAttribute('access_token', $result);
+        self::assertEquals('bearer', $result->token_type);
         return $result;
     }
 
     public function testOauthRequestToken()
     {
         $result = $this->api->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
-        $this->assertEquals(200, $this->api->getLastHttpCode());
-        $this->assertArrayHasKey('oauth_token', $result);
-        $this->assertArrayHasKey('oauth_token_secret', $result);
-        $this->assertArrayHasKey('oauth_callback_confirmed', $result);
-        $this->assertEquals('true', $result['oauth_callback_confirmed']);
+        self::assertEquals(200, $this->api->getLastHttpCode());
+        self::assertArrayHasKey('oauth_token', $result);
+        self::assertArrayHasKey('oauth_token_secret', $result);
+        self::assertArrayHasKey('oauth_callback_confirmed', $result);
+        self::assertEquals('true', $result['oauth_callback_confirmed']);
         return $result;
     }
 
-    /**
-     * @expectedException \Hborras\TwitterAdsSDK\TwitterAdsException
-     * @expectedExceptionMessage Could not authenticate you
-     */
-    public function testOauthRequestTokenException()
+    public function testOauthRequestTokenException(): array
     {
+        $this->expectExceptionMessage("Could not authenticate you");
+        $this->expectException(TwitterAdsException::class);
         $twitter = new TwitterAds('CONSUMER_KEY', 'CONSUMER_SECRET');
         $result = $twitter->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
         return $result;
     }
 
     /**
-     * @expectedException \Hborras\TwitterAdsSDK\TwitterAdsException
-     * @expectedExceptionMessage Error processing your OAuth request: Invalid oauth_verifier parameter
+     *
+     *
      * @depends testOauthRequestToken
      * @param array $requestToken
-     * @throws \Hborras\TwitterAdsSDK\TwitterAdsException
+     * @throws Exception
      */
-    public function testOauthAccessTokenTokenException(array $requestToken)
+    public function testOauthAccessTokenTokenException(array $requestToken): void
     {
+        $this->expectExceptionMessage("Error processing your OAuth request: Invalid oauth_verifier parameter");
+        $this->expectException(TwitterAdsException::class);
         // Can't test this without a browser logging into Twitter so check for the correct error instead.
         $twitter = new TwitterAds(
             CONSUMER_KEY,
@@ -85,9 +85,9 @@ class TwitterAdsTest extends TestCase
         $twitter->oauth('oauth/access_token', array('oauth_verifier' => 'fake_oauth_verifier'));
     }
 
-    public function testUrl()
+    public function testUrl(): void
     {
         $url = $this->api->url('oauth/authorize', array('foo' => 'bar', 'baz' => 'qux'));
-        $this->assertEquals('https://api.twitter.com/oauth/authorize?foo=bar&baz=qux', $url);
+        self::assertEquals('https://api.twitter.com/oauth/authorize?foo=bar&baz=qux', $url);
     }
 }

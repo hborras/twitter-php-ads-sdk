@@ -7,12 +7,12 @@ use PHPUnit\Framework\TestCase;
 
 class ConsumerTest extends TestCase
 {
-    public function testToString()
+    public function testToString(): void
     {
         $key = uniqid('', true);
         $secret = uniqid('', true);
         $consumer = new Consumer($key, $secret);
 
-        $this->assertEquals("Consumer[key=$key,secret=$secret]", $consumer->__toString());
+        self::assertEquals("Consumer[key=$key,secret=$secret]", $consumer->__toString());
     }
 }
