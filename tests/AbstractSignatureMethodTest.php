@@ -4,21 +4,21 @@ namespace Hborras\TwitterAdsSDK\Tests;
 
 use Hborras\TwitterAdsSDK\SignatureMethod;
 use PHPUnit\Framework\TestCase;
+use Hborras\TwitterAdsSDK\Consumer;
+use Hborras\TwitterAdsSDK\Token;
+use Hborras\TwitterAdsSDK\Request;
 
 abstract class AbstractSignatureMethodTest extends TestCase
 {
     protected $name;
 
-    /**
-     * @return SignatureMethod
-     */
-    abstract public function getClass();
+    abstract public function getClass(): SignatureMethod;
 
     abstract protected function signatureDataProvider();
 
-    public function testGetName()
+    public function testGetName(): void
     {
-        $this->assertEquals($this->name, $this->getClass()->getName());
+        self::assertEquals($this->name, $this->getClass()->getName());
     }
 
     /**
@@ -28,28 +28,28 @@ abstract class AbstractSignatureMethodTest extends TestCase
      * @param $consumer
      * @param $token
      */
-    public function testBuildSignature($expected, $request, $consumer, $token)
+    public function testBuildSignature($expected, $request, $consumer, $token): void
     {
-        $this->assertEquals($expected, $this->getClass()->buildSignature($request, $consumer, $token));
+        self::assertEquals($expected, $this->getClass()->buildSignature($request, $consumer, $token));
     }
 
     protected function getRequest()
     {
-        return $this->getMockBuilder('Hborras\TwitterAdsSDK\Request')
+        return $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getConsumer($key = null, $secret = null, $callbackUrl = null)
     {
-        return $this->getMockBuilder('Hborras\TwitterAdsSDK\Consumer')
+        return $this->getMockBuilder(Consumer::class)
             ->setConstructorArgs(array($key, $secret, $callbackUrl))
             ->getMock();
     }
 
     protected function getToken($key = null, $secret = null)
     {
-        return $this->getMockBuilder('Hborras\TwitterAdsSDK\Token')
+        return $this->getMockBuilder(Token::class)
             ->setConstructorArgs(array($key, $secret))
             ->getMock();
     }
