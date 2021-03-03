@@ -25,12 +25,11 @@
     "issues": "https://github.com/hborras/twitter-php-ads-sdk/issues"
   },
   "require": {
-    "php": ">=7.1",
+    "php": "^7.3 || ^8.0",
     "ext-curl": "*",
     "ext-json": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "6.5.*"
   },
   "autoload": {
     "psr-4": {
