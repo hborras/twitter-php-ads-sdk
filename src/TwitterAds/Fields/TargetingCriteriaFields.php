@@ -20,4 +20,5 @@ class TargetingCriteriaFields
     const TARGETING_VALUE             = 'targeting_value';
     const TAILORED_AUDIENCE_EXPANSION = 'tailored_audience_expansion';
     const TAILORED_AUDIENCE_TYPE      = 'tailored_audience_type';
+    const OPERATOR_TYPE               = 'operator_type';
 }

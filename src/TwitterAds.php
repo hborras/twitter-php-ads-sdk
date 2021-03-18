@@ -530,6 +530,8 @@ class TwitterAds extends Config
             $errors = $response->operation_errors;
         }
 
+        //error_log(print_r($errors, true), 3, '/var/www/src/vendor/socialwire/twitter-php-ads-sdk/debug.txt');
+
         switch ($this->getLastHttpCode()) {
             case 400:
                 throw new BadRequest(TwitterAdsException::BAD_REQUEST, 400, null, $errors);

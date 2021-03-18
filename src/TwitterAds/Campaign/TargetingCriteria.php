@@ -38,6 +38,7 @@ class TargetingCriteria extends Resource
         TargetingCriteriaFields::TARGETING_VALUE,
         TargetingCriteriaFields::TAILORED_AUDIENCE_EXPANSION,
         TargetingCriteriaFields::TAILORED_AUDIENCE_TYPE,
+        TargetingCriteriaFields::OPERATOR_TYPE,
     ];
 
     protected $line_item_id;
@@ -45,6 +46,7 @@ class TargetingCriteria extends Resource
     protected $targeting_value;
     protected $tailored_audience_expansion;
     protected $tailored_audience_type;
+    protected $operator_type;
 
     /**
      * @param $line_item_id
@@ -219,4 +221,22 @@ class TargetingCriteria extends Resource
     {
         $this->tailored_audience_type = $tailored_audience_type;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOperatorType()
+    {
+        return $this->operator_type;
+    }
+
+
+    /**
+     * @param mixed $operator_type
+     */
+    public function setOperatorType($operator_type)
+    {
+        $this->operator_type = $operator_type;
+    }
+
 }
