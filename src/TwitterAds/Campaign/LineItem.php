@@ -2,14 +2,14 @@
 
 namespace Hborras\TwitterAdsSDK\TwitterAds\Campaign;
 
-use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
-use Hborras\TwitterAdsSDK\TwitterAdsException;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics;
 use Hborras\TwitterAdsSDK\TwitterAds\Analytics\Job;
-use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
-use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemFields;
 use Hborras\TwitterAdsSDK\TwitterAds\Creative\PromotedTweet;
+use Hborras\TwitterAdsSDK\TwitterAds\Cursor;
+use Hborras\TwitterAdsSDK\TwitterAds\Errors\BadRequest;
 use Hborras\TwitterAdsSDK\TwitterAds\Fields\AnalyticsFields;
+use Hborras\TwitterAdsSDK\TwitterAds\Fields\LineItemFields;
+use Hborras\TwitterAdsSDK\TwitterAdsException;
 
 /**
  * Class LineItem
@@ -34,7 +34,7 @@ class LineItem extends Analytics
         LineItemFields::CAMPAIGN_ID,
         LineItemFields::BID_AMOUNT_LOCAL_MICRO,
         LineItemFields::NAME,
-        LineItemFields::BID_TYPE,
+        LineItemFields::BID_STRATEGY,
         LineItemFields::AUTOMATICALLY_SELECT_BID,
         LineItemFields::PRODUCT_TYPE,
         LineItemFields::PLACEMENTS,
@@ -45,9 +45,8 @@ class LineItem extends Analytics
         LineItemFields::START_TIME,
         LineItemFields::END_TIME,
         LineItemFields::PRIMARY_WEB_EVENT_TAG,
-        LineItemFields::OPTIMIZATION,
-        LineItemFields::BID_UNIT,
-        LineItemFields::CHARGE_BY,
+        LineItemFields::PAY_BY,
+        LineItemFields::GOAL,
         LineItemFields::ADVERTISER_DOMAIN,
         LineItemFields::ADVERTISER_USER_ID,
         LineItemFields::CATEGORIES
@@ -57,7 +56,7 @@ class LineItem extends Analytics
     protected $campaign_id;
     protected $bid_amount_local_micro;
     protected $name;
-    protected $bid_type;
+    protected $bid_strategy;
     protected $automatically_select_bid;
     protected $product_type;
     protected $placements;
@@ -68,9 +67,8 @@ class LineItem extends Analytics
     protected $start_time;
     protected $end_time;
     protected $primary_web_event_tag;
-    protected $optimization;
-    protected $bid_unit;
-    protected $charge_by;
+    protected $pay_by;
+    protected $goal;
     protected $advertiser_domain;
     protected $tracking_tags;
     protected $advertiser_user_id;
@@ -91,8 +89,16 @@ class LineItem extends Analytics
     public function getPromotedTweets($params = [])
     {
         $params[LineItemFields::LINE_ITEM_IDS] = $this->getId();
-        $promotedTweetClass = new PromotedTweet();
+        $promotedTweetClass                    = new PromotedTweet();
         return $promotedTweetClass->loadResource('', $params);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -138,14 +144,6 @@ class LineItem extends Analytics
         }
 
         return $cursor;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -231,17 +229,17 @@ class LineItem extends Analytics
     /**
      * @return mixed
      */
-    public function getBidType()
+    public function getBidStrategy()
     {
-        return $this->bid_type;
+        return $this->bid_strategy;
     }
 
     /**
-     * @param mixed $bid_type
+     * @param mixed $bid_strategy
      */
-    public function setBidType($bid_type)
+    public function setBidStrategy($bidStrategy)
     {
-        $this->bid_type = $bid_type;
+        $this->bid_strategy = $bidStrategy;
     }
 
     /**
@@ -250,14 +248,6 @@ class LineItem extends Analytics
     public function getAutomaticallySelectdBid()
     {
         return $this->automatically_select_bid;
-    }
-
-    /**
-     * @param mixed $automatically_select_bid
-     */
-    public function setAutomaticallySelectBid($automatically_select_bid)
-    {
-        $this->automatically_select_bid = $automatically_select_bid;
     }
 
     /**
@@ -407,49 +397,33 @@ class LineItem extends Analytics
     /**
      * @return mixed
      */
-    public function getOptimization()
+    public function getPayBy()
     {
-        return $this->optimization;
+        return $this->pay_by;
     }
 
     /**
-     * @param mixed $optimization
+     * @param mixed $pay_by
      */
-    public function setOptimization($optimization)
+    public function setPayBy($pay_by)
     {
-        $this->optimization = $optimization;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBidUnit()
-    {
-        return $this->bid_unit;
-    }
-
-    /**
-     * @param mixed $bid_unit
-     */
-    public function setBidUnit($bid_unit)
-    {
-        $this->bid_unit = $bid_unit;
+        $this->pay_by = $pay_by;
     }
 
     /**
      * @return mixed
      */
-    public function getChargeBy()
+    public function getGoal()
     {
-        return $this->charge_by;
+        return $this->goal;
     }
 
     /**
-     * @param mixed $charge_by
+     * @param mixed $goal
      */
-    public function setChargeBy($charge_by)
+    public function setGoal($goal)
     {
-        $this->charge_by = $charge_by;
+        $this->goal = $goal;
     }
 
     /**
@@ -514,6 +488,14 @@ class LineItem extends Analytics
     public function getAutomaticallySelectBid()
     {
         return $this->automatically_select_bid;
+    }
+
+    /**
+     * @param mixed $automatically_select_bid
+     */
+    public function setAutomaticallySelectBid($automatically_select_bid)
+    {
+        $this->automatically_select_bid = $automatically_select_bid;
     }
 
     /**

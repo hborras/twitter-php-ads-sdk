@@ -43,10 +43,8 @@ foreach ($campaignsData as $campaign) {
         echo "\t" . $j . ': ' . $lineItem->getId() . ' ' . $lineItem->getName() . ' ' . PHP_EOL;
         echo "\t\tBid: " . ($lineItem->getBidAmountLocalMicro() / 1000000) . PHP_EOL;
         echo "\t\tObjective: " . $lineItem->getObjective() . PHP_EOL;
-        echo "\t\tCharge By: " . $lineItem->getChargeBy() . PHP_EOL;
-        echo "\t\tBid Unit: " . $lineItem->getBidUnit() . PHP_EOL;
-        echo "\t\tOptimization: " . $lineItem->getOptimization() . PHP_EOL;
-        echo "\t\tBid Type: " . $lineItem->getBidType() . PHP_EOL;
+        echo "\t\tCharge By: " . $lineItem->getPayBy() . PHP_EOL;
+        echo "\t\tBid Strategy: " . $lineItem->getBidStrategy() . PHP_EOL;
         $targetingCriterias = $lineItem->getTargetingCriteria();
         /** @var TwitterAds\Campaign\TargetingCriteria $targetingCriteria */
         foreach ($targetingCriterias as $targetingCriteria) {
@@ -100,7 +98,7 @@ foreach ($campaignsData as $campaign) {
                     }
                 }
             }
-    
+
         } catch (TwitterAdsException $e) {
             print_r($e->getErrors());
         }
