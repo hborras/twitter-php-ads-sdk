@@ -15,8 +15,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\TailoredAudience\Exception\InvalidType;
  */
 final class TailoredAudience extends Resource
 {
-    const RESOURCE_COLLECTION = 'accounts/{account_id}/tailored_audiences';
-    const RESOURCE            = 'accounts/{account_id}/tailored_audiences/{id}';
+    const RESOURCE_COLLECTION = 'accounts/{account_id}/custom_audiences';
+    const RESOURCE            = 'accounts/{account_id}/custom_audiences/{id}';
 
     const LIST_TYPE_EMAIL        = 'EMAIL';
     const LIST_TYPE_DEVICE_ID    = 'DEVICE_ID';

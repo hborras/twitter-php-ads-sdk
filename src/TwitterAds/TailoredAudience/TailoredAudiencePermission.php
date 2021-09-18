@@ -19,8 +19,8 @@ use Hborras\TwitterAdsSDK\TwitterAds\Errors\ServiceUnavailable;
  */
 final class TailoredAudiencePermission extends Resource
 {
-    const RESOURCE_COLLECTION                   = 'accounts/{account_id}/tailored_audiences/{tailored_audience_id/permissions}';
-    const RESOURCE                              = 'accounts/{account_id}/tailored_audiences/{tailored_audience_id/permissions}/{id}';
+    const RESOURCE_COLLECTION                   = 'accounts/{account_id}/custom_audiences/{tailored_audience_id/permissions}';
+    const RESOURCE                              = 'accounts/{account_id}/custom_audiences/{tailored_audience_id/permissions}/{id}';
     const RESOURCE_TAILORED_AUDIENCE_ID_REPLACE = '{tailored_audience_id}';
 
 
