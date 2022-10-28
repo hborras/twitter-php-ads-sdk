@@ -30,8 +30,8 @@ class CampaignFields extends Fields
     const ENTITY_STATUS                   = 'entity_status';
     const WITH_TOTAL_COUNT                = 'with_total_count';
     const WITH_DRAFT                      = 'with_draft';
-
-    const ACCOUNT_ID = 'account_id';
+    const BUDGET_OPTIMIZATION             = 'budget_optimization';
+    const ACCOUNT_ID                      = 'account_id';
     const CAMPAIGN_IDS                    = 'campaign_ids';
     const FUNDING_INSTRUMENT_IDS          = 'funding_instrument_ids';
 }
