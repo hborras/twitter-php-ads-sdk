@@ -31,6 +31,7 @@ class Campaign extends Analytics
     protected $properties = [
         CampaignFields::NAME,
         CampaignFields::FUNDING_INSTRUMENT_ID,
+        CampaignFields::BUDGET_OPTIMIZATION,
         CampaignFields::START_TIME,
         CampaignFields::END_TIME,
         CampaignFields::ENTITY_STATUS,
@@ -51,6 +52,7 @@ class Campaign extends Analytics
     protected $daily_budget_amount_local_micro;
     protected $total_budget_amount_local_micro;
     protected $duration_in_days;
+    protected $budget_optimization;
     protected $frequency_cap;
 
     /**
@@ -250,6 +252,22 @@ class Campaign extends Analytics
     public function setStandardDelivery($standard_delivery)
     {
         $this->standard_delivery = $standard_delivery;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBudgetOptimization()
+    {
+        return $this->budget_optimization;
+    }
+
+    /**
+     * @param mixed $budget_optimization
+     */
+    public function setBudgetOptimization($budget_optimization)
+    {
+        $this->budget_optimization = $budget_optimization;
     }
 
     /**
