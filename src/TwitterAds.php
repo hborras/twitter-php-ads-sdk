@@ -488,7 +488,7 @@ class TwitterAds extends Config
      * @throws ServiceUnavailable
      * @throws TwitterAdsException
      */
-    private function http($method, $host, $path, array $parameters, $headers = [])
+    protected function http($method, $host, $path, array $parameters, $headers = [])
     {
         $this->method = $method;
         $this->resource = $path;
@@ -561,7 +561,7 @@ class TwitterAds extends Config
      * @return string
      * @throws TwitterAdsException
      */
-    private function oAuthRequest($url, $method, array $parameters, $headers = [])
+    protected function oAuthRequest($url, $method, array $parameters, $headers = [])
     {
         $request = Request::fromConsumerAndToken($this->consumer, $this->token, $method, $url, $parameters);
         if (array_key_exists('oauth_callback', $parameters)) {
@@ -593,7 +593,7 @@ class TwitterAds extends Config
      * @return string
      * @throws TwitterAdsException
      */
-    private function request($url, $method, $authorization, $postfields, $headers = [])
+    protected function request($url, $method, $authorization, $postfields, $headers = [])
     {
         /* Curl settings */
         $options = [
